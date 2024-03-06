@@ -1,0 +1,58 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+.main {
+  width: 100vw;
+  min-height: 100vh;
+  position: fixed;
+  display: flex;
+  justify-content: center;
+  padding: 120px 24px 160px 24px;
+  pointer-events: none;
+}
+
+
+@media screen and (max-width: 640px) {
+  .main {
+    padding: 0;
+  }
+}
+
+/* Tailwind Styles */
+
+.app {
+  @apply relative z-10 flex justify-center items-center flex-col max-w-7xl mx-auto sm:px-16 px-6;
+}
+
+.main_heading{
+  @apply mt-5 text-5xl leading-[1.15] text-black sm:text-6xl;
+}
+
+.sub_heading{
+  @apply mt-1 text-2xl leading-[1.15] sm:text-6xl;
+}
+
+.description{
+  @apply mt-5 text-lg text-gray-500 sm:text-xl max-w-2xl;
+}
+.green_purple_gradient {
+  @apply bg-gradient-to-r from-lime-600 from-10% via-green-800 via-50% to-purple-950 bg-clip-text text-transparent;
+}
+
+.nav_bar{
+  @apply bg-green-800/50 backdrop-blur-md backdrop-filter fixed top-0 left-0 right-0 z-50;
+}
+
+.logo_text {
+  @apply max-sm:hidden font-inter font-semibold text-lg text-black tracking-wide;
+}
+
+.nav_link {
+  @apply font-inter font-semibold text-black tracking-wide;
+}
+
+
