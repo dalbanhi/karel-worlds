@@ -56,7 +56,7 @@ const Nav = () => {
                         </button>
                         <Link href="/profile">
                             <Image 
-                                src = "/assets/images/karelWorldsLogo.jpg"
+                                src = {session?.user.image}
                                 alt="Profile"
                                 width={37}
                                 height={37}
@@ -87,10 +87,10 @@ const Nav = () => {
             {session?.user  ? (
                    <div className='flex'>
                         <Image 
-                            src = "/assets/images/karelWorldsLogo.jpg"
+                            src = {session?.user.image}
                             alt="Profile"
-                            width={37}
-                            height={37}
+                            width={35}
+                            height={35}
                             className='object-contain rounded-full'
                             onClick={() => setToggleDropdown((prev) => !prev)}
                         />
