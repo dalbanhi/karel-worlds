@@ -28,8 +28,9 @@
   @apply relative z-10 flex justify-center items-center flex-col max-w-7xl mx-auto sm:px-16 px-6;
 }
 
+/* Hero Section */
 .main_heading{
-  @apply mt-5 text-5xl leading-[1.15] text-black sm:text-6xl;
+  @apply mt-10 sm:mt-12 text-5xl leading-[1.15] text-black sm:text-6xl;
 }
 
 .sub_heading{
@@ -39,10 +40,12 @@
 .description{
   @apply mt-5 text-lg text-gray-500 sm:text-xl max-w-2xl;
 }
+
 .green_purple_gradient {
   @apply bg-gradient-to-r from-lime-600 from-10% via-green-800 via-50% to-purple-950 bg-clip-text text-transparent;
 }
 
+/* Navbar */
 .nav_bar{
   @apply bg-green-800/50 backdrop-blur-md backdrop-filter fixed top-0 left-0 right-0 z-50;
 }
@@ -51,8 +54,42 @@
   @apply max-sm:hidden font-inter font-semibold text-lg text-black tracking-wide;
 }
 
-.nav_link {
-  @apply font-inter font-semibold text-black tracking-wide;
+.nav_link{
+  @apply border border-green-800 bg-green-800 px-2 py-1 mx-1 my-1 rounded-md font-inter flex items-center justify-center transition-all text-center text-sm;
 }
+
+.main_nav_link {
+  @apply text-white hover:bg-white hover:text-green-800;
+}
+
+.opp_nav_link {
+  @apply bg-white text-green-800 hover:bg-green-800 hover:text-white;
+}
+
+/* NavBar on Mobile */
+.dropdown_menu {
+  @apply absolute right-0 top-full mt-3 w-full p-5 rounded-lg bg-green-800/95 min-w-[210px] flex flex-col gap-2 justify-end items-end;
+}
+
+
+
+.dropdown_link {
+  @apply text-sm font-inter font-medium;
+}
+
+.main_dropdown_link {
+  @apply  text-white hover:text-gray-300 ;
+}
+
+
+.opposite_dropdown_link {
+  @apply  mt-5 w-full px-1 py-1 rounded-full border border-green-800 bg-white text-green-800 hover:text-gray-500;
+}
+
+
+/* .outline_btn {
+  @apply rounded-full border border-black bg-transparent py-1.5 px-5 text-black transition-all hover:bg-black hover:text-white text-center text-sm font-inter flex items-center justify-center;
+} */
+
 
 

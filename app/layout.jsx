@@ -1,5 +1,6 @@
 import '@styles/globals.css';
 import Nav from '@/components/Nav';
+import Provider from '@/components/Provider';
 
 export const metadata = {
     title: 'KarelWorlds',
@@ -9,14 +10,13 @@ export const metadata = {
 const RootLayout = ({children}) => {
   return (
     <html lang="en">
-        <style lang="postcss"></style>
-
         <body>
-            
-            <main className="app">
-                <Nav />
-                {children}
-            </main>
+            <Provider>
+                <main className="app">
+                    <Nav />
+                    {children}
+                </main>
+            </Provider>
         </body>
     </html>
   )
