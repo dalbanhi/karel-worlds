@@ -11,10 +11,6 @@ import WorldsEditor from '@components/WorldsEditor';
 import EditableWorld from '@components/EditableWorld';
 // import {NextReactP5Wrapper} from '@p5-wrapper/next';
 
-
-
-
-
 function useWindowSize() {
     const [windowSize, setWindowSize] = useState({
         width: undefined,
@@ -82,14 +78,12 @@ const PuzzleCreator = () => {
         console.log('submit');
     };
 
-
     return (
         <section className="mt-12  w-full flex-center flex-col">
             <h1 className="main_heading text-center">Puzzle Creator</h1>
             <p>{size.width}px / {size.height}px</p>
             <section className="sm:hidden flex justify-center">
-                Puzzle Editing only available on Desktop
-                
+                Puzzle Editing only available on Desktop    
             </section>
             <section className="hidden sm:flex justify-between gap-4">
                 <WorldsEditor 
@@ -108,14 +102,11 @@ const PuzzleCreator = () => {
                     canvasSize={canvasSize}
                     interactableName="Ball"
                     worldDimensions={worldDimensions}
-                />
-                
+                />    
             </section>
             <section>
                 There is an end here.
             </section>
-
-            
         </section>
     )
 }
