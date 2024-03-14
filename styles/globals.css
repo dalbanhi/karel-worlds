@@ -71,8 +71,6 @@
   @apply absolute right-0 top-full mt-3 w-full p-5 rounded-lg bg-green-800/95 min-w-[210px] flex flex-col gap-2 justify-end items-end;
 }
 
-
-
 .dropdown_link {
   @apply text-sm font-inter font-medium;
 }
@@ -87,9 +85,27 @@
 }
 
 
-/* .outline_btn {
-  @apply rounded-full border border-black bg-transparent py-1.5 px-5 text-black transition-all hover:bg-black hover:text-white text-center text-sm font-inter flex items-center justify-center;
-} */
+/* Puzzle Creator Page */
+
+.form_header{
+  @apply mt-2 text-xl font-extrabold leading-[1.15] sm:text-2xl;
+}
+
+.form_instructions{
+  @apply mt-1 text-xs text-gray-500 sm:text-xs max-w-2xl;
+}
+
+.form_input{
+  @apply w-full flex rounded-lg mt-2 text-sm text-gray-500 outline-0 border border-gray-300;
+}
+
+.form_textarea{
+  @apply h-[100px];
+}
+
+.form_button{
+  @apply w-full bg-green-800 text-white rounded-full mt-2 py-2 text-sm font-inter font-semibold;
+}
 
 
 
