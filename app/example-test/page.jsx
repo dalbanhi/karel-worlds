@@ -10,7 +10,13 @@ import { BlocklyWorkspace } from 'react-blockly';
 import Blockly from 'blockly';
 import '@utils/custom-blocks/CustomBlocks';
 import { javascriptGenerator } from 'blockly/javascript';
-// import {NextReactP5Wrapper} from '@p5-wrapper/next';
+
+import AceEditor from "react-ace";
+
+import "ace-builds/src-noconflict/mode-javascript";
+import "ace-builds/src-noconflict/theme-monokai";
+import "ace-builds/src-noconflict/ext-language_tools";
+import RunnableWorld from '@components/RunnableWorld';
 
 
 const ExampleTest = () => {
@@ -60,7 +66,11 @@ const ExampleTest = () => {
         console.log(workspace);
         const code = javascriptGenerator.workspaceToCode(workspace);
         console.log(code);
-        // setUserJavaScriptCode(code);
+        setUserJavaScriptCode(code);
+    }
+
+    function onAceChange(value){
+        console.log(value);
     }
 
     return (
@@ -83,8 +93,32 @@ const ExampleTest = () => {
                         },
                     }}
                 />
-                <h1>Example Test</h1>
-                <h1>Example Test</h1>  
+                <AceEditor 
+                    mode="javascript"
+                    theme="monokai"
+                    name="userJavaScriptCodeonAce"
+                    onChange={(value) => onAceChange(value)}
+                    fontSize={14}
+                    showPrintMargin={true}
+                    showGutter={true}
+                    highlightActiveLine={true}
+                    value={userJavaScriptCode}
+                    setOptions={{
+                        enableBasicAutocompletion: true,
+                        enableLiveAutocompletion: true,
+                        enableSnippets: true,
+                        showLineNumbers: true,
+                        tabSize: 5,
+                    }}
+
+                />
+                <RunnableWorld
+                    name="Example Puzzle"
+                    canvasSize={{width: 300, height: 300}}
+                    interactableName="Ball"
+                    worldDimensions={{width: 10, height: 10}}
+                    rawCode={userJavaScriptCode}
+                />  
             </section>
 
         </section>
