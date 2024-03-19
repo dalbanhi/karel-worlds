@@ -13,6 +13,7 @@
     "@p5-wrapper/react": "^4.3.4",
     "bcrypt": "^5.1.1",
     "blockly": "^10.4.3",
+    "js-interpreter": "^5.1.0",
     "mongodb": "^6.4.0",
     "mongoose": "^8.2.1",
     "next": "^14.1.2",

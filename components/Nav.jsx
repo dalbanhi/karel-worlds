@@ -50,7 +50,7 @@ const Nav = () => {
                         <button
                             type="button"
                             className='nav_link opp_nav_link'
-                            // onClick={signOut}
+                            onClick={signOut}
                         >
                             Sign Out
                         </button>

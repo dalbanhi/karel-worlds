@@ -14,7 +14,7 @@ import { javascriptGenerator } from 'blockly/javascript';
 import AceEditor from "react-ace";
 
 import "ace-builds/src-noconflict/mode-javascript";
-import "ace-builds/src-noconflict/theme-monokai";
+import "ace-builds/src-noconflict/theme-github";
 import "ace-builds/src-noconflict/ext-language_tools";
 import RunnableWorld from '@components/RunnableWorld';
 
@@ -52,10 +52,10 @@ const ExampleTest = () => {
                 kind: "block",
                 type: "move_forward",
               },
-            //   {
-            //     kind: "block",
-            //     type: "turn_right",
-            //   },
+              {
+                kind: "block",
+                type: "turn_left",
+              },
             ],
           },
         ],
@@ -63,10 +63,15 @@ const ExampleTest = () => {
 
     
     function workspaceDidChange(workspace) {
-        console.log(workspace);
+        // console.log(workspace);
         const code = javascriptGenerator.workspaceToCode(workspace);
-        console.log(code);
+        // console.log(code);
         setUserJavaScriptCode(code);
+
+        const workSpaceState = Blockly.serialization.workspaces.save(workspace);
+        console.log(workSpaceState);
+        // Blockly.serialization.workspaces.load(state, myWorkspace);
+
     }
 
     function onAceChange(value){
@@ -95,7 +100,7 @@ const ExampleTest = () => {
                 />
                 <AceEditor 
                     mode="javascript"
-                    theme="monokai"
+                    theme="github"
                     name="userJavaScriptCodeonAce"
                     onChange={(value) => onAceChange(value)}
                     fontSize={14}
