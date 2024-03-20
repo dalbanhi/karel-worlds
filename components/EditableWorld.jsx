@@ -1,5 +1,4 @@
-'use client'
-import { Sketch } from '@p5-wrapper/react';
+// 'use client'
 import { NextReactP5Wrapper } from '@p5-wrapper/next';
 
 import Interactable from '@utils/p5-utils/Interactable';

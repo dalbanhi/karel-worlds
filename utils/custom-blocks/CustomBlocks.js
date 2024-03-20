@@ -1,40 +1,34 @@
 import Blockly from 'blockly';
 import { javascriptGenerator } from 'blockly/javascript';
 
-Blockly.Blocks['move_forward'] = {
-    init: function() {
-      this.appendDummyInput()
-          .appendField("moveForward");
-      this.setPreviousStatement(true, null);
-      this.setNextStatement(true, null);
-      this.setColour(330);
-   this.setTooltip("Move one step forward (direction you are facing)");
-   this.setHelpUrl("");
+Blockly.defineBlocksWithJsonArray([
+    {
+        "type": "move_forward",
+        "message0": "moveForward",
+        "previousStatement": null,
+        "nextStatement": null,
+        "colour": 330,
+        "tooltip": "Move one step forward (direction you are facing)",
+        "helpUrl": ""
+    },
+    {
+        "type": "turn_left",
+        "message0": "turnLeft",
+        "previousStatement": null,
+        "nextStatement": null,
+        "colour": 330,
+        "tooltip": "Turn 90° to the left from where you are facing",
+        "helpUrl": ""
     }
-  };
+
+]);
 
 javascriptGenerator.forBlock['move_forward'] = function(block, generator) {
-    // TODO: Assemble javascript into code variable.
-    var code = 'moveForward();\n';
+    let code = 'moveForward();\n';
     return code;
-  };
+};
 
-// Blockly.JavaScript['move_forward'] = function(block) {
-//     return 'moveForward();\n';
-// }
-
-// Blockly.Blocks['turn_right'] = {
-//     init: function() {
-//         this.appendDummyInput()
-//             .appendField("Turn Right");
-//         this.setPreviousStatement(true, null);
-//         this.setNextStatement(true, null);
-//         this.setColour(230);
-//         this.setTooltip("");
-//         this.setHelpUrl("");
-//     }
-// };
-
-// Blockly.JavaScript['turn_right'] = function(block) {
-//     return 'turnRight();\n';
-// }
+javascriptGenerator.forBlock['turn_left'] = function(block, generator) {
+    let code = 'turnLeft();\n';
+    return code;
+};

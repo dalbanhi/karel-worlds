@@ -1,10 +1,8 @@
 'use client'
 import {useState } from 'react';
-import { useEffect } from 'react';
 
 import { useSession } from 'next-auth/react';
-
-import {useRouter } from 'next/navigation';
+import {useRouter} from 'next/navigation';
 
 import { BlocklyWorkspace } from 'react-blockly';
 import Blockly from 'blockly';
@@ -12,10 +10,24 @@ import '@utils/custom-blocks/CustomBlocks';
 import { javascriptGenerator } from 'blockly/javascript';
 
 import AceEditor from "react-ace";
+import "ace-builds/src-noconflict/mode-jsx";
+const languages = ["javascript"];
+const themes = ["github"];
 
+import "ace-builds/src-noconflict/ace";
+import "ace-builds/webpack-resolver";
 import "ace-builds/src-noconflict/mode-javascript";
 import "ace-builds/src-noconflict/theme-github";
-import "ace-builds/src-noconflict/ext-language_tools";
+
+
+languages.forEach(lang => {
+    require(`ace-builds/src-noconflict/mode-${lang}`);
+    require(`ace-builds/src-noconflict/snippets/${lang}`);
+  });
+  
+themes.forEach(theme => require(`ace-builds/src-noconflict/theme-${theme}`));
+
+
 import RunnableWorld from '@components/RunnableWorld';
 
 
@@ -35,12 +47,21 @@ const ExampleTest = () => {
           {
             kind: "category",
             name: "Logic",
-            colour: "#5C81A6",
+            colour: "#5b80a5",
             contents: [
               {
                 kind: "block",
                 type: "controls_if",
               },
+              {
+                kind: "block",
+                type: "logic_operation",
+
+              },
+              {
+                kind: "block",
+                type: "logic_negate",
+              }
             ],
           },
           {
@@ -64,12 +85,20 @@ const ExampleTest = () => {
     
     function workspaceDidChange(workspace) {
         // console.log(workspace);
+        //TODO: Fix block highlighting
+        // function highlightBlock(id) {
+        //     workspace.highlightBlock(id);
+        //   }
+          
+        // javascriptGenerator.STATEMENT_PREFIX = 'highlightBlock(%1);\n';
+        // javascriptGenerator.addReservedWords('highlightBlock');
+
         const code = javascriptGenerator.workspaceToCode(workspace);
         // console.log(code);
         setUserJavaScriptCode(code);
 
         const workSpaceState = Blockly.serialization.workspaces.save(workspace);
-        console.log(workSpaceState);
+        // console.log(workSpaceState);
         // Blockly.serialization.workspaces.load(state, myWorkspace);
 
     }
@@ -90,10 +119,23 @@ const ExampleTest = () => {
                     onWorkspaceChange={workspaceDidChange}
                     className="w-1/3 h-96 border-2 border-gray-300"
                     workspaceConfiguration={{
+                        collapse: true,
+                        comments: false,
+                        disable: false,
+                        maxBlocks: Infinity,
+                        trashcan: true,
+                        horizontalLayout: false,
+                        toolboxPosition: 'start',
+                        css: true,
+                        media: 'https://blockly-demo.appspot.com/static/media/',
+                        rtl: false,
+                        scrollbars: true,
+                        sounds: true,
+                        oneBasedIndex: false,
                         grid: {
                             spacing: 20,
                             length: 3,
-                            colour: '#ccc',
+                            colour: '#888',
                             snap: true,
                         },
                     }}

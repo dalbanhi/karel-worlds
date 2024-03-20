@@ -1,12 +1,10 @@
 'use client'
-import { Sketch } from '@p5-wrapper/react';
 import { isValidElement, useState } from 'react';
 import { NextReactP5Wrapper } from '@p5-wrapper/next';
 
 import Interactable from '@utils/p5-utils/Interactable';
 import Grid from '@utils/p5-utils/Grid';
 import Interpreter from 'js-interpreter';
-import { set } from 'mongoose';
 
 const RunnableWorld = ({name, canvasSize, interactableName, worldDimensions, rawCode}) => {
 
@@ -20,16 +18,23 @@ const RunnableWorld = ({name, canvasSize, interactableName, worldDimensions, raw
 
         // 'global' p5 functions
         function moveForward(){
-            interactable.x += 50;
+            interactable.moveForward();
+        }
+
+        function turnLeft(){
+            interactable.turnLeft();
         }
 
         //js-interpreter api
         function initApi(interpreter, globalObject){
             var wrapper = function(){
                 return moveForward();
-            }
-
+            };
             interpreter.setProperty(globalObject, 'moveForward', interpreter.createNativeFunction(wrapper));
+            var wrapper = function(){
+                return turnLeft();
+            }
+            interpreter.setProperty(globalObject, 'turnLeft', interpreter.createNativeFunction(wrapper));
         }
         //js-interpreter to run code
         let interpreter = new Interpreter(rawCode, initApi);
@@ -39,6 +44,7 @@ const RunnableWorld = ({name, canvasSize, interactableName, worldDimensions, raw
         //js-interpreter functions to step through code
         function stepCode(){
             stack = interpreter.getStateStack();
+            console.log(stack);
             // let node;
             // let start;
             // let end;
@@ -130,16 +136,6 @@ const RunnableWorld = ({name, canvasSize, interactableName, worldDimensions, raw
 
                 interactable.display();
                 stepCode();
-                // moveForward();
-                // try {
-                //     eval(rawCode);
-                // } catch (error) {
-                //     console.error(error);
-                    
-                // }
-                // if(!ok){
-                //     setRunDrawLoop(false);
-                // }
                 console.log("ENDED ONE DRAW LOOP <----------------->");
             }
             
