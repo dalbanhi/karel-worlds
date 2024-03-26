@@ -2,7 +2,7 @@
 import { isValidElement, useState } from 'react';
 import { NextReactP5Wrapper } from '@p5-wrapper/next';
 
-import Interactable from '@utils/p5-utils/Interactable';
+import Karel from '@utils/p5-utils/Karel';
 import Grid from '@utils/p5-utils/Grid';
 import Interpreter from 'js-interpreter';
 
@@ -13,16 +13,16 @@ const RunnableWorld = ({name, canvasSize, interactableName, worldDimensions, raw
     const sketch = (p5) => {
 
         // 'global' p5 variables
-        let interactable;
+        let karel;
         let grid;
 
         // 'global' p5 functions
         function moveForward(){
-            interactable.moveForward();
+            karel.moveForward();
         }
 
         function turnLeft(){
-            interactable.turnLeft();
+            karel.turnLeft();
         }
 
         //js-interpreter api
@@ -123,8 +123,8 @@ const RunnableWorld = ({name, canvasSize, interactableName, worldDimensions, raw
             p5.background(200);
             grid = new Grid(p5, canvasSize.width, canvasSize.height, worldDimensions.width, worldDimensions.height, "black");
             grid.display();
-            interactable = new Interactable(p5, 100, 100, 50, 50, "interactable");
-            interactable.display();
+            karel = new Karel(p5, 100, 100, 50, 50, "karel");
+            karel.display();
             p5.frameRate(1);
         };
       
@@ -134,7 +134,7 @@ const RunnableWorld = ({name, canvasSize, interactableName, worldDimensions, raw
                 p5.background(200);
                 grid.display();
 
-                interactable.display();
+                karel.display();
                 stepCode();
                 console.log("ENDED ONE DRAW LOOP <----------------->");
             }

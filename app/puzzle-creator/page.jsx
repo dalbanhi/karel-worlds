@@ -68,6 +68,7 @@ const PuzzleCreator = () => {
 
     const size = useWindowSize();
     const canvasSize = setCanvasSize(size);
+    const [karelImg, setKarelImg] = useState("/assets/images/karel/karel.png")
     const [worldDimensions, setWorldDimensions] = useState({
         width: 10,
         height: 10
@@ -90,19 +91,23 @@ const PuzzleCreator = () => {
                     handleSubmit={handleSubmit}
                     worldDimensions={worldDimensions}
                     setWorldDimensions={setWorldDimensions}
+                    setKarelImg={setKarelImg}
                 />
                 <EditableWorld
                     name="Start World"
                     canvasSize={canvasSize}
                     interactableName="Ball"
                     worldDimensions={worldDimensions}
+                    karelImg={karelImg}
                 />
                 <EditableWorld
                     name="End World"
                     canvasSize={canvasSize}
                     interactableName="Ball"
                     worldDimensions={worldDimensions}
+                    karelImg={karelImg}
                 />    
+
             </section>
             <section>
                 There is an end here.
