@@ -44,7 +44,7 @@ const RunnableWorld = ({name, canvasSize, interactableName, worldDimensions, raw
         //js-interpreter functions to step through code
         function stepCode(){
             stack = interpreter.getStateStack();
-            console.log(stack);
+            // console.log(stack);
             // let node;
             // let start;
             // let end;
