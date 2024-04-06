@@ -67,6 +67,7 @@ const PuzzleCreator = () => {
     const router = useRouter();
 
     const size = useWindowSize();
+    const maxWorldWH = 50;
     const canvasSize = setCanvasSize(size);
     const [karelImg, setKarelImg] = useState("/assets/images/karel/karel.png")
     const [worldDimensions, setWorldDimensions] = useState({
@@ -92,6 +93,7 @@ const PuzzleCreator = () => {
                     worldDimensions={worldDimensions}
                     setWorldDimensions={setWorldDimensions}
                     setKarelImg={setKarelImg}
+                    maxWorldWH={maxWorldWH}
                 />
                 <EditableWorld
                     name="Start World"
@@ -99,6 +101,7 @@ const PuzzleCreator = () => {
                     interactableName="Ball"
                     worldDimensions={worldDimensions}
                     karelImg={karelImg}
+                    maxWorldWH={maxWorldWH}
                 />
                 <EditableWorld
                     name="End World"
@@ -106,6 +109,7 @@ const PuzzleCreator = () => {
                     interactableName="Ball"
                     worldDimensions={worldDimensions}
                     karelImg={karelImg}
+                    maxWorldWH={maxWorldWH}
                 />    
 
             </section>

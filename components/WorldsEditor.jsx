@@ -2,9 +2,14 @@
 
 import {useState } from 'react';
 
-const WorldsEditor = ({handleSubmit, worldDimensions, setWorldDimensions, setKarelImg}) => {
+const WorldsEditor = ({handleSubmit, worldDimensions, setWorldDimensions, setKarelImg, maxWorldWH}) => {
+
+    const minWorldWH = 1;
+    const defaultWorldWH = 10;
 
     const [customKarel, setCustomKarel] = useState(false);
+
+    const [customKarelUploadOption, setcustomKarelUploadOption] = useState(null);
 
     // const [worldWidth, setWorldWidth] = useState(worldDimensions.width);
     // const [worldHeight, setWorldHeight] = useState(worldDimensions.height);
@@ -25,8 +30,8 @@ const WorldsEditor = ({handleSubmit, worldDimensions, setWorldDimensions, setKar
                         World Width: <span>{worldDimensions.width}</span>
                 </label>
                 <input type="range" id="worldWidth" name="worldWidth" 
-                    min="1" max="50" 
-                    value={worldDimensions.width || 10}
+                    min={`${minWorldWH}`} max={`${maxWorldWH}`} 
+                    value={worldDimensions.width || defaultWorldWH}
                     className='form_range' 
                     onChange={(e) => {setWorldDimensions({
                             width: Number(e.target.value),
@@ -38,8 +43,8 @@ const WorldsEditor = ({handleSubmit, worldDimensions, setWorldDimensions, setKar
                     World Height: <span>{worldDimensions.height}</span>
                 </label>
                 <input type="range" id="worldHeight" name="worldHeight"
-                    min="1" max="50" 
-                    value={worldDimensions.height || 10} 
+                    min={`${minWorldWH}`} max={`${maxWorldWH}`} 
+                    value={worldDimensions.height || defaultWorldWH} 
                     className='form_range'
                     onChange={(e) => 
                         setWorldDimensions({
@@ -60,8 +65,27 @@ const WorldsEditor = ({handleSubmit, worldDimensions, setWorldDimensions, setKar
                 </select>
                 {customKarel &&
                     <>
-                        <label htmlFor="customKarel" className='form_label'>Upload an Image for your Karel:</label>
-                        <input className='form_input' type="text" id="karelImage" name="karelImage" placeholder='Karel Image URL' required/>
+                        <label htmlFor="customKarelUploadOption" className='form_label'>Upload from your computer or by URL:</label>
+                        <select
+                            className='form_input'
+                            id="customKarelUploadOption"
+                            name="customKarelUploadOption"
+                            required
+                            onChange={(e) => setcustomKarelUploadOption(e.target.value)}
+                        >
+                            <option value="url">URL</option>
+                            <option value="file">File</option>
+                        </select>
+                        {customKarelUploadOption &&
+                            <label htmlFor="karelImage" className='form_label'>Upload an image (make sure it's dimensions are square for best results)</label>}
+                        {customKarelUploadOption === 'url' &&
+                            <input className='form_input' type="text" id="karelImage" name="karelImage" placeholder='Karel Image URL' required/>
+                        }
+                        {customKarelUploadOption === 'file' &&
+                            <input className='form_input' type="file" id="karelImage" name="karelImage" required/>
+                        }
+                        {/* <label htmlFor="customKarel" className='form_label'>Upload an Image for your Karel:</label> */}
+                        {/* <input className='form_input' type="text" id="karelImage" name="karelImage" placeholder='Karel Image URL' required/> */}
                     </>
                     
                 }
@@ -72,4 +96,4 @@ const WorldsEditor = ({handleSubmit, worldDimensions, setWorldDimensions, setKar
   )
 }
 
-export default WorldsEditor
+export default WorldsEditor;

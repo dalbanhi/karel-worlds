@@ -1,7 +1,7 @@
 // 'use client'
 import { NextReactP5Wrapper } from '@p5-wrapper/next';
 import { useMemo, useRef } from 'react';
-import Karel from '@utils/p5-utils/Karel';
+// import Karel from '@utils/p5-utils/Karel';
 // import Grid from '@utils/p5-utils/Grid';
 import { useEffect, useState, useCallback } from 'react';
 import { forwardRef } from 'react';
@@ -32,23 +32,35 @@ const Circle = forwardRef(function Circle(props, ref) {
 
 //grid would need to have the same dimensions as world and paint a rectangle just like it did in p5. then karel would be a sprite that moves around the grid. grid would also draw circles in each cell to represent a space. 
 
+const Karel = ({x, y, width, height, karel}) => {
 
+    const directions = {
+        "east": 0,
+        "south": 90,
+        "west": 180,
+        "north": 270
+    };
 
+    return (
+            <Sprite
+                x={x}
+                y={y}
+                width={width}
+                height={height}
+                image={karel.img}
+                anchor={0.5}
+                angle={directions[karel.direction]}
+            />
+    )
+}
 
-function Grid({pxWidth, pxHeight, rows, cols, internalGrid, karel}){
-
-    // const possibleObjects = {
-    //     "empty": 0,
-    //     "hWall": 1,
-    //     "vWall": 2,
-    //     "beeper": 3,
-    //     "karel": 4,
-    // }
-
+function Grid({pxWidth, pxHeight, rows, cols, internalGrid, karel, maxWorldWH}){
 
 
     const circle = useRef(null);
     const [mounted, setMounted] = useState(false);
+    const smCircleRadius = 1;
+    const mdCircleRadius = 2;
 
     useEffect(() => {
         setMounted(true);
@@ -62,7 +74,7 @@ function Grid({pxWidth, pxHeight, rows, cols, internalGrid, karel}){
     const xPxStep = currPxWidth / rows;
     const yPXStep = currPxHeight / cols;
 
-    const radius = rows >= 25 || cols >= 25 ? 1 : 2;
+    const radius = rows >= maxWorldWH/2 || cols >= maxWorldWH/2 ? smCircleRadius : mdCircleRadius;
 
     const draw = useCallback(
         (g) => {
@@ -74,16 +86,6 @@ function Grid({pxWidth, pxHeight, rows, cols, internalGrid, karel}){
         [pxWidth, pxHeight, rows, cols],
     )
 
-    //     <Sprite 
-//     // eventMode={"static"}
-//     click={() => console.log('clicked sprite')}
-//     image={karelImg} 
-//     x={karel.x} 
-//     y={karel.y} 
-//     anchor={0.5}
-//     width={50}
-//     height={50}
-// />
 
     return (
         <>
@@ -98,15 +100,15 @@ function Grid({pxWidth, pxHeight, rows, cols, internalGrid, karel}){
 
                                     if(row === "karel"){
                                         return (
-                                            <Sprite 
+                                            <Karel
                                                 key={rowIndex}
-                                                image={karel.img} 
-                                                x={colIndex * xPxStep + xPxStep / 2} 
-                                                y={rowIndex * yPXStep + yPXStep / 2} 
-                                                anchor={0.5}
+                                                x={colIndex * xPxStep + xPxStep / 2}
+                                                y={rowIndex * yPXStep + yPXStep / 2}
                                                 width={xPxStep}
                                                 height={yPXStep}
+                                                karel={karel}
                                             />
+
                                         )
                                     }
 
@@ -128,16 +130,11 @@ function Grid({pxWidth, pxHeight, rows, cols, internalGrid, karel}){
                 </>
             )}
         </>
-
     );
-
 }
 
 
-
-
-
-const EditableWorld = ({name, canvasSize, interactableName, worldDimensions, karelImg}) => {
+const EditableWorld = ({name, canvasSize, interactableName, worldDimensions, karelImg, maxWorldWH}) => {
 
     const [karel, setKarel] = useState({
         x: 0,
@@ -147,12 +144,15 @@ const EditableWorld = ({name, canvasSize, interactableName, worldDimensions, kar
         placedBeepers: [],
         img: karelImg
     });
-    // const bunnyUrl = 'https://pixijs.io/pixi-react/img/bunny.png';
 
 
     const [internalGrid, setInternalGrid] = useState(
         Array.from({length: worldDimensions.width}, () => Array.from({length: worldDimensions.height}, () => "empty"))
     );
+
+    function capitalizeFirstLetter(string) {
+        return string.charAt(0).toUpperCase() + string.slice(1);
+    }
     
     useEffect(() => {   
         if(karel.x >= worldDimensions.width){
@@ -181,7 +181,7 @@ const EditableWorld = ({name, canvasSize, interactableName, worldDimensions, kar
                 className='form_range'
                 onChange={(e) => {setKarel({...karel, x: e.target.value})}}
              />
-             <label htmlFor="karelY" className='form_label'>
+            <label htmlFor="karelY" className='form_label'>
                 Karel Y Position: <span>{karel.y}</span>
             </label>
             <input type="range" id="karelY" name="karelY"
@@ -191,6 +191,15 @@ const EditableWorld = ({name, canvasSize, interactableName, worldDimensions, kar
                 onChange={(e) => {setKarel({...karel, y: e.target.value})}}
                 
              />
+            <label htmlFor="Karel Direction" className='form_label'>
+                Karel is facing: <span>{capitalizeFirstLetter(karel.direction)}</span>
+            </label>
+            <select name="direction" id="direction" className='form_select' onChange={(e) => {setKarel({...karel, direction: e.target.value})}}>
+                <option value="north">North</option>
+                <option value="east" selected>East</option>
+                <option value="south">South</option>
+                <option value="west">West</option>
+            </select>
             <Stage 
                 width={canvasSize.width} height={canvasSize.height} options={{background: 0xFFFFFF}}>   
                 <Container 
@@ -202,6 +211,7 @@ const EditableWorld = ({name, canvasSize, interactableName, worldDimensions, kar
                         cols={worldDimensions.height} 
                         internalGrid={internalGrid}
                         karel={karel}
+                        maxWorldWH={maxWorldWH}
                     />
                 </Container>
             
