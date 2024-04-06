@@ -7,7 +7,7 @@ import { useSession } from 'next-auth/react';
 import {useRouter } from 'next/navigation';
 
 // import Form from '@components/Form';
-import WorldsEditor from '@components/WorldsEditor';
+import WorldsEditor from '@components/WorldsEditor/WorldsEditor';
 import EditableWorld from '@components/EditableWorld';
 // import {NextReactP5Wrapper} from '@p5-wrapper/next';
 
@@ -69,7 +69,9 @@ const PuzzleCreator = () => {
     const size = useWindowSize();
     const maxWorldWH = 50;
     const canvasSize = setCanvasSize(size);
-    const [karelImg, setKarelImg] = useState("/assets/images/karel/karel.png")
+    const originalKarelImg = "/assets/images/karel/karel.png";
+    const [karelImg, setKarelImg] = useState(originalKarelImg);
+    
     const [worldDimensions, setWorldDimensions] = useState({
         width: 10,
         height: 10
@@ -87,14 +89,16 @@ const PuzzleCreator = () => {
             <section className="sm:hidden flex justify-center">
                 Puzzle Editing only available on Desktop    
             </section>
-            <section className="hidden sm:flex justify-between gap-4">
-                <WorldsEditor 
+            <WorldsEditor 
                     handleSubmit={handleSubmit}
                     worldDimensions={worldDimensions}
                     setWorldDimensions={setWorldDimensions}
                     setKarelImg={setKarelImg}
+                    originalKarelImg={originalKarelImg}
                     maxWorldWH={maxWorldWH}
                 />
+            <section className="hidden sm:flex justify-evenly gap-4">
+                
                 <EditableWorld
                     name="Start World"
                     canvasSize={canvasSize}

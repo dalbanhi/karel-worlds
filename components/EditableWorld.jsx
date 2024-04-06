@@ -101,7 +101,7 @@ function Grid({pxWidth, pxHeight, rows, cols, internalGrid, karel, maxWorldWH}){
                                     if(row === "karel"){
                                         return (
                                             <Karel
-                                                key={rowIndex}
+                                                key={`${colIndex}-${rowIndex}`}
                                                 x={colIndex * xPxStep + xPxStep / 2}
                                                 y={rowIndex * yPXStep + yPXStep / 2}
                                                 width={xPxStep}
@@ -111,18 +111,19 @@ function Grid({pxWidth, pxHeight, rows, cols, internalGrid, karel, maxWorldWH}){
 
                                         )
                                     }
-
-                                    return (
-                                        <Graphics
-                                            key={rowIndex}
-                                            x={colIndex * xPxStep + xPxStep / 2}
-                                            y={rowIndex * yPXStep + yPXStep / 2}
-                                            radius={radius}
-                                            geometry={circle.current}
-                                            eventMode={"static"}
-                                            click={() => console.log('circle clicked')}
-                                        />
-                                    )
+                                    else{
+                                        return (
+                                            <Graphics
+                                                key={`${colIndex}-${rowIndex}`}
+                                                x={colIndex * xPxStep + xPxStep / 2}
+                                                y={rowIndex * yPXStep + yPXStep / 2}
+                                                radius={radius}
+                                                geometry={circle.current}
+                                                eventMode={"static"}
+                                                click={() => console.log('circle clicked')}
+                                            />
+                                        )
+                                    }
                                 })}
                             </>
                         )
@@ -162,16 +163,22 @@ const EditableWorld = ({name, canvasSize, interactableName, worldDimensions, kar
             setKarel({...karel, y: worldDimensions.height- 1});
         }
         
+        //update grid
         let newGrid = Array.from({length: worldDimensions.width}, () => Array.from({length: worldDimensions.height}, () => "empty"));
 
         newGrid[karel.x >= worldDimensions.width? worldDimensions.width-1: karel.x][karel.y >= worldDimensions.height? worldDimensions.height-1: karel.y] = "karel";
         setInternalGrid(newGrid);
-    }, [worldDimensions.width, worldDimensions.height, karel.x, karel.y])
+
+        //update Karel img
+        setKarel({...karel, img: karelImg});
+
+
+    }, [worldDimensions.width, worldDimensions.height, karel.x, karel.y, karel.direction, karel.beeperBag, karel.placedBeepers, karelImg])
     
     return (
-        <div>{name}, {interactableName}, {worldDimensions.width}, {worldDimensions.height}, {karelImg}
+        <div>{name}, {interactableName}, {worldDimensions.width}, {worldDimensions.height}, {/*karelImg*/}
         {canvasSize.width}, {canvasSize.height}
-        {console.log('internalGrid', internalGrid)}
+        {/* {console.log('internalGrid', internalGrid)} */}
             <label htmlFor="karelX" className='form_label'>
                 Karel X Position: <span>{karel.x}</span>
             </label>
@@ -194,9 +201,13 @@ const EditableWorld = ({name, canvasSize, interactableName, worldDimensions, kar
             <label htmlFor="Karel Direction" className='form_label'>
                 Karel is facing: <span>{capitalizeFirstLetter(karel.direction)}</span>
             </label>
-            <select name="direction" id="direction" className='form_select' onChange={(e) => {setKarel({...karel, direction: e.target.value})}}>
+            <select 
+                name="direction" id="direction" className='form_input_short' 
+                defaultValue={karel.direction}
+                onChange={(e) => {setKarel({...karel, direction: e.target.value})}}
+            >
                 <option value="north">North</option>
-                <option value="east" selected>East</option>
+                <option value="east">East</option>
                 <option value="south">South</option>
                 <option value="west">West</option>
             </select>
