@@ -8,7 +8,7 @@ import {useRouter } from 'next/navigation';
 
 // import Form from '@components/Form';
 import WorldsEditor from '@components/WorldsEditor/WorldsEditor';
-import EditableWorld from '@components/EditableWorld';
+import EditableWorld from '@components/EditableWorld/EditableWorld';
 // import {NextReactP5Wrapper} from '@p5-wrapper/next';
 
 function useWindowSize() {
@@ -85,7 +85,7 @@ const PuzzleCreator = () => {
     return (
         <section className="mt-12  w-full flex-center flex-col">
             <h1 className="main_heading text-center">Puzzle Creator</h1>
-            <p>{size.width}px / {size.height}px</p>
+            {/* <p>{size.width}px / {size.height}px</p> */}
             <section className="sm:hidden flex justify-center">
                 Puzzle Editing only available on Desktop    
             </section>
@@ -97,7 +97,7 @@ const PuzzleCreator = () => {
                     originalKarelImg={originalKarelImg}
                     maxWorldWH={maxWorldWH}
                 />
-            <section className="hidden sm:flex justify-evenly gap-4">
+            <section className="hidden sm:flex justify-evenly gap-4 my-4">
                 
                 <EditableWorld
                     name="Start World"
@@ -117,9 +117,7 @@ const PuzzleCreator = () => {
                 />    
 
             </section>
-            <section>
-                There is an end here.
-            </section>
+
         </section>
     )
 }

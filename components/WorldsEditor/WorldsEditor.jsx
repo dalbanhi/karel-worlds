@@ -31,7 +31,7 @@ const WorldsEditor = ({handleSubmit, worldDimensions, setWorldDimensions, setKar
             <p className='form_instructions'>Edit the start/end worlds individually with the buttons and widgets on top of each world.</p>
             <form
                 onSubmit={(e) => {handleSubmit(e)}}
-                className='flex flex-start flex-wrap justify-evenly gap-4 w-full max-w-full p-4 border-2 border-blue-400 rounded-md bg-blue-100'
+                className='flex flex-start flex-wrap my-1 justify-evenly gap-4 w-full max-w-full p-4 border-2 border-blue-400 rounded-md bg-blue-100'
             >
                 <BasePuzzleInfo
                     worldDimensions={worldDimensions}
