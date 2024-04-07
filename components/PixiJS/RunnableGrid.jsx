@@ -9,15 +9,10 @@ import Karel from './Karel';
 import '@pixi/events';
 
 const RunnableGrid = forwardRef(function RunnableGrid(props, ref) {
-    const {pxWidth, pxHeight, rows, cols, maxWorldWH} = props;
+    const {pxWidth, pxHeight, rows, cols, maxWorldWH, initialKarel} = props;
 
     const [karel, setKarel] = useState({
-        x: 0,
-        y: 0,
-        direction: "east",
-        beeperBag: 0,
-        placedBeepers: [],
-        img: "/assets/images/karel/karel.png"
+        ...initialKarel
     });
 
     const [internalGrid, setInternalGrid] = useState(
@@ -49,6 +44,16 @@ const RunnableGrid = forwardRef(function RunnableGrid(props, ref) {
     }, [karel.x, karel.y, karel.direction, karel.beeperBag, karel.placedBeepers, rows, cols])
 
     useImperativeHandle(ref, () => ({
+
+        resetGrid() {
+            console.log("Resetting the grid!!!!");
+            setKarel({
+                ...initialKarel
+            });
+            setInternalGrid(
+                Array.from({length: rows}, () => Array.from({length: cols}, () => "empty"))
+            );
+        },
 
         moveForward() {
             console.log("Moving forward in the grid!!!!");

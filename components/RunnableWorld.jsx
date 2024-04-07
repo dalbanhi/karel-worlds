@@ -11,15 +11,47 @@ import RunnableGrid from '@components/PixiJS/RunnableGrid';
 // import Karel from '@utils/p5-utils/Karel';
 // import Grid from '@utils/p5-utils/Grid';
 import Interpreter from 'js-interpreter';
+import { set } from 'mongoose';
+
+//from: https://overreacted.io/making-setinterval-declarative-with-react-hooks/ 
+function useInterval(callback, delay){
+    const savedCallback = useRef();
+
+    useEffect(() => {
+        savedCallback.current = callback;
+    }, [callback])
+
+    useEffect(() => {
+        function tick(){
+            savedCallback.current();
+        }
+        if(delay !== null){
+            let id = setInterval(tick, delay);
+            return () => clearInterval(id);
+        }
+    }, [delay])
+}
+
+
+
 
 const RunnableWorld = ({name, canvasSize, interactableName, worldDimensions, rawCode}) => {
 
     //temporary testing variables
     const temporaryCanvasSize = {width: 450, height: 450};
-    // const temporaryWorldDimensions = {width: 10, height: 10};
+    const tempInitialKarel = {
+        x: 0,
+        y: 0,
+        direction: "east",
+        beeperBag: 0,
+        placedBeepers: [],
+        img: "/assets/images/karel/karel.png"
+        
+    }
     
 
-    const [runDrawLoop, setRunDrawLoop] = useState(false);
+    // const [runDrawLoop, setRunDrawLoop] = useState(false);
+    const runLoop = useRef(false);
 
     function moveForward(){
         gridRef.current.moveForward();
@@ -75,7 +107,8 @@ const RunnableWorld = ({name, canvasSize, interactableName, worldDimensions, raw
         } finally {
             if(!ok){
                 console.log("done");
-                setRunDrawLoop(false);
+                // setRunDrawLoop(false);
+                runLoop.current = false;
                 stepAgain = false;
             }
         }
@@ -126,6 +159,20 @@ const RunnableWorld = ({name, canvasSize, interactableName, worldDimensions, raw
     isLine.oldStack_ = stack.slice();
 
     const [app, setApp] = useState();
+    const [karelSpeed, setKarelSpeed] = useState(500);
+
+    useEffect(() => {
+        console.log("useEffect");
+        // console.log("runDrawLoop: ", runDrawLoop);
+        // app = new PIXI.Application({
+        //     width: temporaryCanvasSize.width,
+        //     height: temporaryCanvasSize.height,
+        //     backgroundColor: 0x1099bb,
+        //     resolution: window.devicePixelRatio || 1,
+
+        // });
+
+    }, [karelSpeed]);
     // useTick((delta) => {
     //     console.log("TICKING")
     //     console.log("runDrawLoop: ", runDrawLoop);
@@ -135,39 +182,112 @@ const RunnableWorld = ({name, canvasSize, interactableName, worldDimensions, raw
     //         console.log("ENDED ONE DRAW LOOP <----------------->");
     //     }
     // });
+
+    // function runCode(){
+    //     const running = setInterval(() => {
+    //         console.log("TICKING")
+    //         // console.log("runDrawLoop: ", runDrawLoop);
+    //         console.log("running: ", runLoop.current);
+    //         if(runLoop.current){
+    //             stepCode();
+    //             console.log("ENDED ONE DRAW LOOP <----------------->");
+    //             app.renderer.render(app.stage)
+    //         }
+    //         else{
+    //             console.log("clearing interval")
+    //             clearInterval(running);
+    //         }
+            
+            
+    //     }, 1000);
+    // }
+
+    useInterval(() => {
+        console.log("TICKING")
+        // console.log("runDrawLoop: ", runDrawLoop);
+        console.log("running: ", runLoop.current);
+        if(runLoop.current){
+            stepCode();
+            console.log("ENDED ONE DRAW LOOP <----------------->");
+            // app.renderer.render(app.stage)
+        }
+        else{
+            console.log("clearing interval");
+            //HOW TO CLEAR THE INTERVAL ONCE THE CODE IS DONE RUNNING BUT NOT WHEN THE USER HAS NOT CLICKED RUN
+            
+
+            // setKarelSpeed(null);
+            // clearInterval(running);
+        }
+
+    }, karelSpeed);
+
+
     return (
         <section>
             {console.log("RENDERED")}
             {/* {console.log("karel: ", karel)} */}
             <p>{name}, {interactableName}, {worldDimensions.width}, {worldDimensions.height}</p>
-            <button
-                onClick={() => {
-                    interpreter.current = new Interpreter(rawCode, initApi);
-                    setRunDrawLoop(true)
-                }}
-                className='form_button'
-            >
-                Run
-            </button>
-            <button
-                className='form_button'
-                onClick={() => {setRunDrawLoop(false)}}
-            >   
-                Reset
-            </button>
-            <button
-                className='form_button'
-                onClick={() => {
-                    console.log("step");
-                    if(runDrawLoop){
-                        stepCode();
-                        console.log("ENDED ONE DRAW LOOP <----------------->");
-                    }
-                    app.renderer.render(app.stage)
-                }}
-            >   
-                Step
-            </button>
+            <section className='my-2'>
+                <button
+                    onClick={() => {
+                        gridRef.current.resetGrid();
+                        interpreter.current = new Interpreter(rawCode, initApi);
+                        // setRunDrawLoop(true);
+                        runLoop.current = true;
+                        setKarelSpeed( (karelSpeed) => {
+                            if(karelSpeed === null){
+                                return 500;
+                            } else {
+                                return karelSpeed;
+                            }
+                        } );
+                        
+                        // runCode();
+                    }}
+                    className='form_button'
+                >
+                    Run
+                </button>
+                <button
+                    className='form_button'
+                    onClick={() => {
+                        console.log("reset");
+                        gridRef.current.resetGrid();
+                        
+                        // setRunDrawLoop(false);
+                        runLoop.current = false;
+                        //pausing the interval
+                        setKarelSpeed(null);
+                    
+                    }}
+                >   
+                    Reset
+                </button>
+                {/* <button
+                    className='form_button'
+                    onClick={() => {
+                        console.log("step");
+                        if(runDrawLoop){
+                            stepCode();
+                            console.log("ENDED ONE DRAW LOOP <----------------->");
+                        }
+                        app.renderer.render(app.stage)
+                    }}
+                >   
+                    Step
+                </button> */}
+                <label htmlFor="karelSpeed" className='form_label'>
+                   Karel Speed: <span>{karelSpeed}</span>
+                </label>
+                <input type="range" id="karelSpeed" name="karelSpeed" 
+                    min={`100`} max={`1000`} 
+                    value={karelSpeed || 500}
+                    className='form_range' 
+                    onChange={(e) => {setKarelSpeed(e.target.value); console.log(e.target.value)}}
+                />
+            </section>
+            
             <Stage 
                 width={temporaryCanvasSize.width} 
                 height={temporaryCanvasSize.height}
@@ -184,6 +304,7 @@ const RunnableWorld = ({name, canvasSize, interactableName, worldDimensions, raw
                         cols={worldDimensions.height} 
                         maxWorldWH={50}
                         ref={gridRef}
+                        initialKarel={tempInitialKarel}
                     />
                 </Container>
             
