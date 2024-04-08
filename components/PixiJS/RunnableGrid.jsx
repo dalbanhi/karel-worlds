@@ -8,8 +8,19 @@ import Karel from './Karel';
 
 import '@pixi/events';
 
+// const possibleObjects = {
+//     "hWall": 1,
+//     "vWall": 2,
+//     "beeper": 3,
+//     "karel": 4,
+//     "empty": 0
+// }
+
+
 const RunnableGrid = forwardRef(function RunnableGrid(props, ref) {
     const {pxWidth, pxHeight, rows, cols, maxWorldWH, initialKarel} = props;
+
+    const propsRef = useRef(props);
 
     const [karel, setKarel] = useState({
         ...initialKarel
@@ -28,6 +39,7 @@ const RunnableGrid = forwardRef(function RunnableGrid(props, ref) {
 
     useEffect(() => {
         setMounted(true);
+        // propsRef.current = props;
     }, []);
 
     useEffect(() => {
@@ -45,19 +57,22 @@ const RunnableGrid = forwardRef(function RunnableGrid(props, ref) {
 
     useImperativeHandle(ref, () => ({
 
+        //not callable by user code
         resetGrid() {
-            console.log("Resetting the grid!!!!");
-            setKarel({
-                ...initialKarel
-            });
+            setKarel({...initialKarel});
+            //need to reset the grid by actual values, not just all to empty TODO
             setInternalGrid(
                 Array.from({length: rows}, () => Array.from({length: cols}, () => "empty"))
             );
         },
 
+        //callable by user code
+
         moveForward() {
             console.log("Moving forward in the grid!!!!");
             let newKarel = {...karel};
+
+            //TODO: check if karel CAN move forward, if not, return an error or something
             switch(karel.direction){
                 case "north":
                     newKarel.y = karel.y - 1;
@@ -93,7 +108,47 @@ const RunnableGrid = forwardRef(function RunnableGrid(props, ref) {
                     break;
             }
             setKarel(newKarel);
-        }
+        },
+
+        isFacingEast(){
+            return karel.direction === "east";
+        },
+        isNotFacingEast(){{ return !this.isFacingEast(); }},
+        isFacingNorth(){
+            return karel.direction === "north";
+        }, isNotFacingNorth(){{ return !this.isFacingNorth(); }},
+        isFacingSouth(){
+            return karel.direction === "south";
+        }, isNotFacingSouth(){{ return !this.isFacingSouth(); }},
+        isFacingWest(){
+            return karel.direction === "west";
+        }, isNotFacingWest(){{ return !this.isFacingWest(); }},
+
+        frontIsClear(){
+            switch(karel.direction){
+                case "north":
+                    let newYN = karel.y - 1;
+                    if(newYN < 0) return false;
+                    return internalGrid[karel.x][newYN] !== "hWall" && internalGrid[karel.x][newYN] !== "vWall";
+                    break;
+                case "south":
+                    let newYS = karel.y + 1;
+                    if(newYS >= cols) return false;
+                    return internalGrid[karel.x][newYS] !== "hWall" && internalGrid[karel.x][newYS] !== "vWall";
+                case "east":
+                    let newXE = karel.x + 1;
+                    if(newXE >= rows) return false;
+                    return internalGrid[newXE][karel.y] !== "hWall" && internalGrid[newXE][karel.y] !== "vWall";
+                case "west":
+                    let newXW = karel.x - 1;
+                    if(newXW < 0) return false;
+                    return internalGrid[newXW][karel.y] !== "hWall" && internalGrid[newXW][karel.y] !== "vWall";
+            }
+        }, frontIsBlocked(){{ return !this.frontIsClear(); }},
+
+
+
+
 
     }));
 
@@ -115,12 +170,11 @@ const RunnableGrid = forwardRef(function RunnableGrid(props, ref) {
             g.endFill();   
         },
         [pxWidth, pxHeight, rows, cols],
-    )
-
-
+    );
     return (
         <>
             <Circle x={0} y={0} radius={radius} ref={circle}/>
+            {console.log('karel direction', karel.direction)}
             {mounted && (
                 <>
                     <Graphics draw={draw} />
@@ -139,7 +193,6 @@ const RunnableGrid = forwardRef(function RunnableGrid(props, ref) {
                                                 height={yPXStep}
                                                 karel={karel}
                                             />
-
                                         )
                                     }
                                     else{

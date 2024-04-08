@@ -1,5 +1,5 @@
 'use client'
-import {useState } from 'react';
+import {useState, useRef, useEffect } from 'react';
 
 import { useSession } from 'next-auth/react';
 import {useRouter} from 'next/navigation';
@@ -30,16 +30,12 @@ themes.forEach(theme => require(`ace-builds/src-noconflict/theme-${theme}`));
 
 import RunnableWorld from '@components/RunnableWorld';
 
-
 const ExampleTest = () => {
 
     const {data: session} = useSession();
     const router = useRouter();
 
-    const [xml, setXml] = useState("");
     const [userJavaScriptCode, setUserJavaScriptCode] = useState('');
-
-    const initialXml = `<xml xmlns="http://www.w3.org/1999/xhtml"><block type="text" x="70" y="30"><field name="TEXT"></field></block></xml>`;
 
     const toolboxCategories = {
         kind: "categoryToolbox",
@@ -61,12 +57,46 @@ const ExampleTest = () => {
               {
                 kind: "block",
                 type: "logic_negate",
-              }
+              },
+              {
+                kind: "block",
+                type: "logic_boolean",
+              },
             ],
           },
           {
             kind: "category",
-            name: "Actions",
+            name: " Math & Numbers",
+            colour: "#5b67a5",
+            contents: [
+              {
+                kind: "block",
+                type: "math_number",
+              },
+            ],
+          },
+          {
+            kind: "category",
+            name: "Loops",
+            colour: "#5ba55b",
+            contents: [
+              {
+                kind: "block",
+                type: "controls_repeat_ext",
+              },
+              {
+                kind: "block",
+                type: "controls_whileUntil",
+              },
+              {
+                kind: "block",
+                type: "controls_for",
+              },
+            ],
+          },
+          {
+            kind: "category",
+            name: "Karel Actions",
             colour: "#000000",
             contents: [
               {
@@ -79,6 +109,45 @@ const ExampleTest = () => {
               },
             ],
           },
+          {
+            kind: "category",
+            name: "Karel Logic",
+            colour: "#000000",
+            contents: [
+              {
+                kind: "block",
+                type: "is_facing_north",
+              },
+              {
+                kind: "block",
+                type: "is_facing_south",
+              },
+              {
+                kind: "block",
+                type: "is_facing_east",
+              },
+              {
+                kind: "block",
+                type: "is_facing_west",
+              },
+              {
+                kind: "block",
+                type: "is_not_facing_north",
+              },
+              {
+                kind: "block",
+                type: "is_not_facing_south",
+              },
+              {
+                kind: "block",
+                type: "is_not_facing_east",
+              },
+              {
+                kind: "block",
+                type: "is_not_facing_west",
+              },
+            ],
+          }
         ],
       };
 
@@ -94,7 +163,6 @@ const ExampleTest = () => {
         // javascriptGenerator.addReservedWords('highlightBlock');
 
         const code = javascriptGenerator.workspaceToCode(workspace);
-        // console.log(code);
         setUserJavaScriptCode(code);
 
         const workSpaceState = Blockly.serialization.workspaces.save(workspace);

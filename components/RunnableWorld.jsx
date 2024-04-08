@@ -1,9 +1,6 @@
 'use client'
 import { useState } from 'react';
-// import { NextReactP5Wrapper } from '@p5-wrapper/next';
-import { useEffect, useRef } from 'react';
-import { useSession } from 'next-auth/react';
-import { useRouter } from 'next/navigation';
+import { useEffect, useRef, forwardRef } from 'react';
 
 import {Stage, Container, useTick} from '@pixi/react';
 import RunnableGrid from '@components/PixiJS/RunnableGrid';
@@ -11,7 +8,6 @@ import RunnableGrid from '@components/PixiJS/RunnableGrid';
 // import Karel from '@utils/p5-utils/Karel';
 // import Grid from '@utils/p5-utils/Grid';
 import Interpreter from 'js-interpreter';
-import { set } from 'mongoose';
 
 //from: https://overreacted.io/making-setinterval-declarative-with-react-hooks/ 
 function useInterval(callback, delay){
@@ -37,6 +33,9 @@ function useInterval(callback, delay){
 
 const RunnableWorld = ({name, canvasSize, interactableName, worldDimensions, rawCode}) => {
 
+    //use forwardRef and useImperativeHandle to expose the grid's methods to the parent component (ExampleTest)
+
+
     //temporary testing variables
     const temporaryCanvasSize = {width: 450, height: 450};
     const tempInitialKarel = {
@@ -49,35 +48,63 @@ const RunnableWorld = ({name, canvasSize, interactableName, worldDimensions, raw
         
     }
     
-
-    // const [runDrawLoop, setRunDrawLoop] = useState(false);
+    //references for grid, interpreter and runLoop
     const runLoop = useRef(false);
+    const interpreter = useRef(null);
+    const gridRef = useRef(null);
 
-    function moveForward(){
-        gridRef.current.moveForward();
-    }
+    //grid/Karel action ref functions
+    function moveForward(){gridRef.current.moveForward();}
 
-    function turnLeft(){
-        gridRef.current.turnLeft();
-    }
+    function turnLeft(){gridRef.current.turnLeft();}
+
+    function isFacingEast(){return gridRef.current.isFacingEast();}
+    function isFacingNorth(){return gridRef.current.isFacingNorth();}
+    function isFacingWest(){return gridRef.current.isFacingWest();}
+    function isFacingSouth(){return gridRef.current.isFacingSouth();}
+
+    function isNotFacingEast(){return gridRef.current.isNotFacingEast();}
+    function isNotFacingNorth(){return gridRef.current.isNotFacingNorth();}
+    function isNotFacingWest(){return gridRef.current.isNotFacingWest();}
+    function isNotFacingSouth(){return gridRef.current.isNotFacingSouth();}
+
+    function frontIsClear(){return gridRef.current.frontIsClear();}
+    function frontIsBlocked(){return gridRef.current.frontIsBlocked();}
+    function leftIsClear(){return gridRef.current.leftIsClear();}
+    function leftIsBlocked(){return gridRef.current.leftIsBlocked();}
+    function rightIsClear(){return gridRef.current.rightIsClear();}
+    function rightIsBlocked(){return gridRef.current.rightIsBlocked();}
 
 
     //js-interpreter api
     function initApi(interpreter, globalObject){
-        let moveForwardWrapper = function(){
-            return moveForward();
-        };
-        interpreter.setProperty(globalObject, 'moveForward', interpreter.createNativeFunction(moveForwardWrapper));
-        let turnLeftWrapper = function(){
-            return turnLeft();
-        }
-        interpreter.setProperty(globalObject, 'turnLeft', interpreter.createNativeFunction(turnLeftWrapper));
+
+        interpreter.setProperty(globalObject, 'moveForward', interpreter.createNativeFunction(() => {moveForward()}));
+
+        interpreter.setProperty(globalObject, 'turnLeft', interpreter.createNativeFunction(() => {turnLeft()}));
+
+        interpreter.setProperty(globalObject, 'isFacingEast', interpreter.createNativeFunction(() => {return isFacingEast()}));
+        interpreter.setProperty(globalObject, 'isFacingNorth', interpreter.createNativeFunction(() => {return isFacingNorth()}));
+        interpreter.setProperty(globalObject, 'isFacingWest', interpreter.createNativeFunction(() => {return isFacingWest()}));
+        interpreter.setProperty(globalObject, 'isFacingSouth', interpreter.createNativeFunction(() => {return isFacingSouth()}));
+
+        interpreter.setProperty(globalObject, 'isNotFacingEast', interpreter.createNativeFunction(() => {return isNotFacingEast()}));
+        interpreter.setProperty(globalObject, 'isNotFacingNorth', interpreter.createNativeFunction(() => {return isNotFacingNorth()}));
+        interpreter.setProperty(globalObject, 'isNotFacingWest', interpreter.createNativeFunction(() => {return isNotFacingWest()}));
+        interpreter.setProperty(globalObject, 'isNotFacingSouth', interpreter.createNativeFunction(() => {return isNotFacingSouth()}));
+
+        interpreter.setProperty(globalObject, 'frontIsClear', interpreter.createNativeFunction(() => {return frontIsClear()}));
+        interpreter.setProperty(globalObject, 'frontIsBlocked', interpreter.createNativeFunction(() => {return frontIsBlocked()}));
+        interpreter.setProperty(globalObject, 'leftIsClear', interpreter.createNativeFunction(() => {return leftIsClear()}));
+        interpreter.setProperty(globalObject, 'leftIsBlocked', interpreter.createNativeFunction(() => {return leftIsBlocked()}));
+        interpreter.setProperty(globalObject, 'rightIsClear', interpreter.createNativeFunction(() => {return rightIsClear()}));
+        interpreter.setProperty(globalObject, 'rightIsBlocked', interpreter.createNativeFunction(() => {return rightIsBlocked()}));
+
     }
 
 
     //js-interpreter to run code
-    const interpreter = useRef(null);
-    const gridRef = useRef(null);
+ 
 
     // let interpreter = new Interpreter(rawCode, initApi);
     let stack = [];
@@ -85,9 +112,8 @@ const RunnableWorld = ({name, canvasSize, interactableName, worldDimensions, raw
 
     //js-interpreter functions to step through code
     function stepCode(){
-        console.log("stepping code");
+        // console.log("stepping code");
         stack = interpreter.current.getStateStack();
-        console.log(stack);
         // let node;
         // let start;
         // let end;
@@ -106,8 +132,6 @@ const RunnableWorld = ({name, canvasSize, interactableName, worldDimensions, raw
             ok = interpreter.current.step();
         } finally {
             if(!ok){
-                console.log("done");
-                // setRunDrawLoop(false);
                 runLoop.current = false;
                 stepAgain = false;
             }
@@ -161,63 +185,10 @@ const RunnableWorld = ({name, canvasSize, interactableName, worldDimensions, raw
     const [app, setApp] = useState();
     const [karelSpeed, setKarelSpeed] = useState(500);
 
-    useEffect(() => {
-        console.log("useEffect");
-        // console.log("runDrawLoop: ", runDrawLoop);
-        // app = new PIXI.Application({
-        //     width: temporaryCanvasSize.width,
-        //     height: temporaryCanvasSize.height,
-        //     backgroundColor: 0x1099bb,
-        //     resolution: window.devicePixelRatio || 1,
-
-        // });
-
-    }, [karelSpeed]);
-    // useTick((delta) => {
-    //     console.log("TICKING")
-    //     console.log("runDrawLoop: ", runDrawLoop);
-    //     console.loog("delta: ", delta);
-    //     if(runDrawLoop){
-    //         stepCode();
-    //         console.log("ENDED ONE DRAW LOOP <----------------->");
-    //     }
-    // });
-
-    // function runCode(){
-    //     const running = setInterval(() => {
-    //         console.log("TICKING")
-    //         // console.log("runDrawLoop: ", runDrawLoop);
-    //         console.log("running: ", runLoop.current);
-    //         if(runLoop.current){
-    //             stepCode();
-    //             console.log("ENDED ONE DRAW LOOP <----------------->");
-    //             app.renderer.render(app.stage)
-    //         }
-    //         else{
-    //             console.log("clearing interval")
-    //             clearInterval(running);
-    //         }
-            
-            
-    //     }, 1000);
-    // }
-
     useInterval(() => {
-        console.log("TICKING")
-        // console.log("runDrawLoop: ", runDrawLoop);
-        console.log("running: ", runLoop.current);
         if(runLoop.current){
             stepCode();
-            console.log("ENDED ONE DRAW LOOP <----------------->");
-            // app.renderer.render(app.stage)
-        }
-        else{
-            console.log("clearing interval");
-            //HOW TO CLEAR THE INTERVAL ONCE THE CODE IS DONE RUNNING BUT NOT WHEN THE USER HAS NOT CLICKED RUN
-            
-
-            // setKarelSpeed(null);
-            // clearInterval(running);
+            app.renderer.render(app.stage)
         }
 
     }, karelSpeed);
@@ -225,25 +196,12 @@ const RunnableWorld = ({name, canvasSize, interactableName, worldDimensions, raw
 
     return (
         <section>
-            {console.log("RENDERED")}
-            {/* {console.log("karel: ", karel)} */}
-            <p>{name}, {interactableName}, {worldDimensions.width}, {worldDimensions.height}</p>
-            <section className='my-2'>
+            <section className='mb-2'>
                 <button
                     onClick={() => {
-                        gridRef.current.resetGrid();
-                        interpreter.current = new Interpreter(rawCode, initApi);
-                        // setRunDrawLoop(true);
-                        runLoop.current = true;
-                        setKarelSpeed( (karelSpeed) => {
-                            if(karelSpeed === null){
-                                return 500;
-                            } else {
-                                return karelSpeed;
-                            }
-                        } );
-                        
-                        // runCode();
+                        gridRef.current.resetGrid();//reset the grid
+                        interpreter.current = new Interpreter(rawCode, initApi); //reset the interpreter with the new code
+                        runLoop.current = true; //continue the loop
                     }}
                     className='form_button'
                 >
@@ -252,40 +210,35 @@ const RunnableWorld = ({name, canvasSize, interactableName, worldDimensions, raw
                 <button
                     className='form_button'
                     onClick={() => {
-                        console.log("reset");
-                        gridRef.current.resetGrid();
-                        
-                        // setRunDrawLoop(false);
-                        runLoop.current = false;
-                        //pausing the interval
-                        setKarelSpeed(null);
+                        // console.log("reset");
+                        gridRef.current.resetGrid(); //reset the grid
+                        runLoop.current = false; //stop the loop
+                        //something is slightly off with the reset
                     
                     }}
                 >   
                     Reset
                 </button>
-                {/* <button
-                    className='form_button'
-                    onClick={() => {
-                        console.log("step");
-                        if(runDrawLoop){
-                            stepCode();
-                            console.log("ENDED ONE DRAW LOOP <----------------->");
-                        }
-                        app.renderer.render(app.stage)
-                    }}
-                >   
-                    Step
-                </button> */}
-                <label htmlFor="karelSpeed" className='form_label'>
-                   Karel Speed: <span>{karelSpeed}</span>
-                </label>
-                <input type="range" id="karelSpeed" name="karelSpeed" 
-                    min={`100`} max={`1000`} 
-                    value={karelSpeed || 500}
-                    className='form_range' 
+                Slow <input type="range" id="karelSpeed" name="karelSpeed" 
+                    min={`50`} max={`500`} 
+                    value={karelSpeed || 250}
+                    step={`50`}
+                    className='speed_range reversed_range' 
+                    list="tickmarks"
                     onChange={(e) => {setKarelSpeed(e.target.value); console.log(e.target.value)}}
-                />
+                /> Fast
+                <datalist id="tickmarks">
+                    <option value="50" label="Slow" />
+                    <option value="100" />
+                    <option value="150" />
+                    <option value="200" />
+                    <option value="250" />
+                    <option value="300" />
+                    <option value="350" />
+                    <option value="400" />
+                    <option value="450" />
+                    <option value="500" label="Fast" />
+                </datalist>
             </section>
             
             <Stage 

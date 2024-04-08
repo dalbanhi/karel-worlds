@@ -115,6 +115,14 @@
   @apply w-full mt-1 accent-purple-800;
 }
 
+.speed_range{
+  @apply w-5/6 mt-1 accent-blue-800;
+}
+
+.reversed_range{
+  direction: rtl;
+}
+
 .form_label{
   @apply mt-1 text-sm font-inter font-semibold block;
 }
