@@ -9,9 +9,7 @@ const WorldsEditor = ({handleSubmit, worldDimensions, setWorldDimensions, setKar
     const minWorldWH = 1;
     const defaultWorldWH = 10;
 
-    const [customKarel, setCustomKarel] = useState(false);
 
-    const [customKarelUploadOption, setcustomKarelUploadOption] = useState("url");
 
     const onKarelImageFileChange = (e) => {
         const file = e.target.files[0];
@@ -19,7 +17,13 @@ const WorldsEditor = ({handleSubmit, worldDimensions, setWorldDimensions, setKar
         reader.onload = (e) => {
             setKarelImg(e.target.result);
         }
-        reader.readAsDataURL(file);
+        try{
+            reader.readAsDataURL(file);
+        }
+        catch(err){
+            console.log(err);
+            alert('Error uploading image. Please try again.');
+        }
     }
 
     // const [worldWidth, setWorldWidth] = useState(worldDimensions.width);
@@ -41,14 +45,12 @@ const WorldsEditor = ({handleSubmit, worldDimensions, setWorldDimensions, setKar
                     defaultWorldWH={defaultWorldWH}
                 />
                 <CustomizableSpriteInfo
-                    customKarel={customKarel}
-                    setCustomKarel={setCustomKarel}
                     setKarelImg={setKarelImg}
-                    customKarelUploadOption={customKarelUploadOption}
-                    setcustomKarelUploadOption={setcustomKarelUploadOption}
                     onKarelImageFileChange={onKarelImageFileChange}
                     originalKarelImg={originalKarelImg}
                 />
+
+                
                 <button className='form_button' type="submit">Save Puzzle</button>
 
             </form>

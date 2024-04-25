@@ -9,7 +9,7 @@ import {useRouter } from 'next/navigation';
 // import Form from '@components/Form';
 import WorldsEditor from '@components/WorldsEditor/WorldsEditor';
 import EditableWorld from '@components/EditableWorld/EditableWorld';
-// import {NextReactP5Wrapper} from '@p5-wrapper/next';
+
 
 function useWindowSize() {
     const [windowSize, setWindowSize] = useState({
@@ -102,7 +102,6 @@ const PuzzleCreator = () => {
                 <EditableWorld
                     name="Start World"
                     canvasSize={canvasSize}
-                    interactableName="Ball"
                     worldDimensions={worldDimensions}
                     karelImg={karelImg}
                     maxWorldWH={maxWorldWH}
@@ -110,14 +109,11 @@ const PuzzleCreator = () => {
                 <EditableWorld
                     name="End World"
                     canvasSize={canvasSize}
-                    interactableName="Ball"
                     worldDimensions={worldDimensions}
                     karelImg={karelImg}
                     maxWorldWH={maxWorldWH}
                 />    
-
             </section>
-
         </section>
     )
 }

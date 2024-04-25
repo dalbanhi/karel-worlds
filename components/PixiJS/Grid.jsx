@@ -1,4 +1,6 @@
 import React from 'react'
+import { Fragment } from 'react';
+
 import { useEffect, useState, useCallback, useRef } from 'react';
 
 import {Graphics} from '@pixi/react';
@@ -6,14 +8,9 @@ import {Graphics} from '@pixi/react';
 //sub components
 import Circle from './Circle';
 import Karel from './Karel';
+import Beeper from './Beeper';
 
 import '@pixi/events';
-
-//grid would need to have the same dimensions as world and paint a rectangle just like it did in p5. then karel would be a sprite that moves around the grid. grid would also draw circles in each cell to represent a space. 
-
-
-
-
 
 
 const Grid = ({pxWidth, pxHeight, rows, cols, internalGrid, setInternalGrid, karel, setKarel, maxWorldWH}) => {
@@ -21,6 +18,11 @@ const Grid = ({pxWidth, pxHeight, rows, cols, internalGrid, setInternalGrid, kar
     const [mounted, setMounted] = useState(false);
     const smCircleRadius = 1;
     const mdCircleRadius = 2;
+
+    const TestingBeeper = {
+        beeperCount: 3,
+        img: "/assets/images/karel/karel-beeper.png"
+    }
 
     useEffect(() => {
         setMounted(true);
@@ -36,6 +38,8 @@ const Grid = ({pxWidth, pxHeight, rows, cols, internalGrid, setInternalGrid, kar
 
     const radius = rows >= maxWorldWH/2 || cols >= maxWorldWH/2 ? smCircleRadius : mdCircleRadius;
 
+    const gridDotColor = 0xff0000;
+
     const draw = useCallback(
         (g) => {
             g.clear();
@@ -49,46 +53,60 @@ const Grid = ({pxWidth, pxHeight, rows, cols, internalGrid, setInternalGrid, kar
 
     return (
         <>
-            <Circle x={0} y={0} radius={radius} ref={circle}/>
+            <Circle x={0} y={0} radius={radius} color={gridDotColor} ref={circle}/>
             {mounted && (
                 <>
                     <Graphics draw={draw} />
                     {internalGrid.map((col, colIndex) => {
                         return (
-                            <>
+                            <Fragment key={colIndex}>
                                 {col.map((row, rowIndex) => {
-
-                                    if(row === "karel"){
-                                        return (
-                                            <Karel
-                                                key={`${colIndex}-${rowIndex}`}
-                                                x={colIndex * xPxStep + xPxStep / 2}
-                                                y={rowIndex * yPXStep + yPXStep / 2}
-                                                width={xPxStep}
-                                                height={yPXStep}
-                                                karel={karel}
-                                                setKarel={setKarel}
-                                                internalGrid={internalGrid}
-                                                setInternalGrid={setInternalGrid}
-                                            />
-
-                                        )
-                                    }
-                                    else{
-                                        return (
-                                            <Graphics
-                                                key={`${colIndex}-${rowIndex}`}
-                                                x={colIndex * xPxStep + xPxStep / 2}
-                                                y={rowIndex * yPXStep + yPXStep / 2}
-                                                radius={radius}
-                                                geometry={circle.current}
-                                                eventMode={"static"}
-                                                click={() => console.log('circle clicked')}
-                                            />
-                                        )
-                                    }
-                                })}
-                            </>
+                                    return (
+                                        <Fragment key={`${colIndex}-${rowIndex}`}>
+                                        {row.map((element, elementIndex) => {
+                                            if(element === "karel"){
+                                                return (
+                                                    <Karel
+                                                        key={`${colIndex}-${rowIndex}-${elementIndex}-karel`}
+                                                        x={colIndex * xPxStep + xPxStep / 2}
+                                                        y={rowIndex * yPXStep + yPXStep / 2}
+                                                        width={xPxStep}
+                                                        height={yPXStep}
+                                                        karel={karel}
+                                                    />
+                                                )
+                                            }
+                                            else if(element.includes("beeper")){
+                                                return (
+                                                    <Beeper
+                                                        key={`${colIndex}-${rowIndex}-${elementIndex}-beeper`}
+                                                        x={colIndex * xPxStep + xPxStep / 2}
+                                                        y={rowIndex * yPXStep + yPXStep / 2}
+                                                        width={xPxStep}
+                                                        height={yPXStep}
+                                                        beeper={TestingBeeper}
+                                                    />
+                                                )
+                                            }
+                                            else{
+                                                return (
+                                                    <Graphics
+                                                        key={`${colIndex}-${rowIndex}-${elementIndex}-grid-dot`}
+                                                        x={colIndex * xPxStep + xPxStep / 2}
+                                                        y={rowIndex * yPXStep + yPXStep / 2}
+                                                        draw={(g) => {
+                                                            g.beginFill(gridDotColor);
+                                                            g.drawCircle(0, 0, 2);
+                                                            g.endFill();
+                                                        }}
+                                                        zIndex={1}
+                                                    />
+                                                )
+                                            }
+                                        })}
+                                    </Fragment>
+                                )})}
+                            </Fragment>
                         )
                     })}
                 </>

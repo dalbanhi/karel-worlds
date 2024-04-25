@@ -1,6 +1,11 @@
-import React from 'react'
+import React from 'react';
+import {useState} from 'react';
 
-const CustomizableSpriteInfo = ({customKarel, setCustomKarel, setKarelImg, setcustomKarelUploadOption, customKarelUploadOption, onKarelImageFileChange, originalKarelImg}) => {
+const CustomizableSpriteInfo = ({setKarelImg, onKarelImageFileChange, originalKarelImg}) => {
+
+    const [customKarel, setCustomKarel] = useState(false);
+    const [customKarelUploadOption, setCustomKarelUploadOption] = useState("url");
+    
     return (
         <section className='w-3/12'>
             <label htmlFor="customKarel" className='form_label'>Custom Karel:</label>
@@ -28,7 +33,7 @@ const CustomizableSpriteInfo = ({customKarel, setCustomKarel, setKarelImg, setcu
                         name="customKarelUploadOption"
                         required
                         defaultValue={"url"}
-                        onChange={(e) => setcustomKarelUploadOption(e.target.value)}
+                        onChange={(e) => setCustomKarelUploadOption(e.target.value)}
                     >
                         <option value="url">URL</option>
                         <option value="file">File</option>

@@ -79,7 +79,14 @@ const RunnableWorld = ({name, canvasSize, interactableName, worldDimensions, raw
     //js-interpreter api
     function initApi(interpreter, globalObject){
 
-        interpreter.setProperty(globalObject, 'moveForward', interpreter.createNativeFunction(() => {moveForward()}));
+        interpreter.setProperty(globalObject, 'moveForward', interpreter.createNativeFunction(() => {
+            try{
+                moveForward();
+            }catch(e){
+                throw e;
+            }
+        
+        }));
 
         interpreter.setProperty(globalObject, 'turnLeft', interpreter.createNativeFunction(() => {turnLeft()}));
 
@@ -187,7 +194,14 @@ const RunnableWorld = ({name, canvasSize, interactableName, worldDimensions, raw
 
     useInterval(() => {
         if(runLoop.current){
-            stepCode();
+            try{
+                stepCode();
+            }
+            catch(e){
+                console.log(e);
+                alert(e);
+                runLoop.current = false;
+            }
             app.renderer.render(app.stage)
         }
 
@@ -210,10 +224,8 @@ const RunnableWorld = ({name, canvasSize, interactableName, worldDimensions, raw
                 <button
                     className='form_button'
                     onClick={() => {
-                        // console.log("reset");
                         gridRef.current.resetGrid(); //reset the grid
                         runLoop.current = false; //stop the loop
-                        //something is slightly off with the reset
                     
                     }}
                 >   

@@ -19,6 +19,7 @@ const Karel = ({x, y, width, height, karel}) => {
                 image={karel.img}
                 anchor={0.5}
                 angle={directions[karel.direction]}
+                zIndex={2}
             />
     )
 }
