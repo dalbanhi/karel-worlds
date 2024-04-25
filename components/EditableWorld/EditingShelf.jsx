@@ -1,6 +1,5 @@
 'use client'
 
-
 const EditingShelf = ({karel, setKarel, worldDimensions}) => {
 
     function capitalizeFirstLetter(string) {

@@ -15,7 +15,7 @@ const Circle = forwardRef(function Circle(props, ref) {
         [x, y, radius],
     );
 
-    return <Graphics zIndex={1} draw={draw} ref={ref} />  
+    return <Graphics eventMode="static" onclick={() => console.log("clicked")} zIndex={5} draw={draw} ref={ref} />  
 });
 
 export default Circle;

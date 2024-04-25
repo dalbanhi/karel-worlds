@@ -20,6 +20,8 @@ const Karel = ({x, y, width, height, karel}) => {
                 anchor={0.5}
                 angle={directions[karel.direction]}
                 zIndex={2}
+                eventMode="static"
+                onclick={() => console.log("Karel was clicked")}
             />
     )
 }

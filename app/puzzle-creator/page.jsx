@@ -1,5 +1,5 @@
 'use client'
-import {useState } from 'react';
+import {useState, createContext } from 'react';
 import { useEffect } from 'react';
 
 import { useSession } from 'next-auth/react';
@@ -59,6 +59,7 @@ function setCanvasSize(windowSize){
     return canvasSize;
 }
 
+export const SpriteImagesContext = createContext();
 
 const PuzzleCreator = () => {
 
@@ -69,8 +70,24 @@ const PuzzleCreator = () => {
     const size = useWindowSize();
     const maxWorldWH = 50;
     const canvasSize = setCanvasSize(size);
-    const originalKarelImg = "/assets/images/karel/karel.png";
-    const [karelImg, setKarelImg] = useState(originalKarelImg);
+
+
+    const defaultKarelImg = "/assets/images/karel/karel.png";
+    const defaultBeeperImg = "/assets/images/beeper/beeper.png";
+    const defaultWallPieceImg = "/assets/images/walls/wall-piece.png";
+    const defaultWallCornerImg = "/assets/images/walls/wall-corner.png";
+
+    const [spriteImages, setSpriteImages] = useState({
+        defaultKarel: defaultKarelImg,
+        karel: defaultKarelImg,
+        defaultBeeper: defaultBeeperImg,
+        beeper: defaultBeeperImg,
+        // defaultWallPiece: defaultWallPieceImg,
+        // wallPiece: defaultWallPieceImg,
+        // defaultWallCorner: defaultWallCornerImg,
+        // wallCorner: defaultWallCornerImg,
+    });
+
     
     const [worldDimensions, setWorldDimensions] = useState({
         width: 10,
@@ -84,38 +101,36 @@ const PuzzleCreator = () => {
     };
 
     return (
-        <section className="mt-12  w-full flex-center flex-col">
-            <h1 className="main_heading text-center">Puzzle Creator</h1>
-            {/* <p>{size.width}px / {size.height}px</p> */}
-            <section className="sm:hidden flex justify-center">
-                Puzzle Editing only available on Desktop    
+        <SpriteImagesContext.Provider value={{spriteImages, setSpriteImages}}>
+            <section className="mt-12  w-full flex-center flex-col">
+                <h1 className="main_heading text-center">Puzzle Creator</h1>
+                {/* <p>{size.width}px / {size.height}px</p> */}
+                <section className="sm:hidden flex justify-center">
+                    Puzzle Editing only available on Desktop    
+                </section>
+                <WorldsEditor 
+                        handleSubmit={handleSubmit}
+                        worldDimensions={worldDimensions}
+                        setWorldDimensions={setWorldDimensions}
+                        maxWorldWH={maxWorldWH}
+                    />
+                <section className="hidden sm:flex justify-evenly gap-4 my-4">
+                    
+                    <EditableWorld
+                        name="Start World"
+                        canvasSize={canvasSize}
+                        worldDimensions={worldDimensions}
+                        maxWorldWH={maxWorldWH}
+                    />
+                    <EditableWorld
+                        name="End World"
+                        canvasSize={canvasSize}
+                        worldDimensions={worldDimensions}
+                        maxWorldWH={maxWorldWH}
+                    />    
+                </section>
             </section>
-            <WorldsEditor 
-                    handleSubmit={handleSubmit}
-                    worldDimensions={worldDimensions}
-                    setWorldDimensions={setWorldDimensions}
-                    setKarelImg={setKarelImg}
-                    originalKarelImg={originalKarelImg}
-                    maxWorldWH={maxWorldWH}
-                />
-            <section className="hidden sm:flex justify-evenly gap-4 my-4">
-                
-                <EditableWorld
-                    name="Start World"
-                    canvasSize={canvasSize}
-                    worldDimensions={worldDimensions}
-                    karelImg={karelImg}
-                    maxWorldWH={maxWorldWH}
-                />
-                <EditableWorld
-                    name="End World"
-                    canvasSize={canvasSize}
-                    worldDimensions={worldDimensions}
-                    karelImg={karelImg}
-                    maxWorldWH={maxWorldWH}
-                />    
-            </section>
-        </section>
+        </SpriteImagesContext.Provider>
     )
 }
 

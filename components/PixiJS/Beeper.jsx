@@ -14,6 +14,8 @@ const Beeper = ({x, y, width, height, beeper}) => {
                 image={beeper.img}
                 anchor={0.5}
                 zIndex={3}
+                eventMode="static"
+                onclick={() => console.log("Beeper was clicked")}
             />
             <Text
                 x={x}
@@ -22,6 +24,8 @@ const Beeper = ({x, y, width, height, beeper}) => {
                 style={{fill: 'white', stroke: 'black', strokeThickness: 2}}
                 anchor={0.5}
                 zIndex={4}
+                eventMode="static"
+                onclick={() => console.log("Beeper count was clicked")}
             />
         </>
     )

@@ -13,16 +13,12 @@ import Beeper from './Beeper';
 import '@pixi/events';
 
 
-const Grid = ({pxWidth, pxHeight, rows, cols, internalGrid, setInternalGrid, karel, setKarel, maxWorldWH}) => {
+const Grid = ({pxWidth, pxHeight, rows, cols, internalGrid, karel, beeper, maxWorldWH}) => {
     const circle = useRef(null);
     const [mounted, setMounted] = useState(false);
     const smCircleRadius = 1;
     const mdCircleRadius = 2;
 
-    const TestingBeeper = {
-        beeperCount: 3,
-        img: "/assets/images/karel/karel-beeper.png"
-    }
 
     useEffect(() => {
         setMounted(true);
@@ -38,7 +34,7 @@ const Grid = ({pxWidth, pxHeight, rows, cols, internalGrid, setInternalGrid, kar
 
     const radius = rows >= maxWorldWH/2 || cols >= maxWorldWH/2 ? smCircleRadius : mdCircleRadius;
 
-    const gridDotColor = 0xff0000;
+    const gridDotColor = 0x0000FF;
 
     const draw = useCallback(
         (g) => {
@@ -53,7 +49,10 @@ const Grid = ({pxWidth, pxHeight, rows, cols, internalGrid, setInternalGrid, kar
 
     return (
         <>
-            <Circle x={0} y={0} radius={radius} color={gridDotColor} ref={circle}/>
+            <Circle x={0} y={0} radius={radius*3} 
+            eventMode="static"
+            onclick={() => console.log("Clicked")}
+            color={gridDotColor} ref={circle}/>
             {mounted && (
                 <>
                     <Graphics draw={draw} />
@@ -64,7 +63,7 @@ const Grid = ({pxWidth, pxHeight, rows, cols, internalGrid, setInternalGrid, kar
                                     return (
                                         <Fragment key={`${colIndex}-${rowIndex}`}>
                                         {row.map((element, elementIndex) => {
-                                            if(element === "karel"){
+                                            if(element.isKarel()){
                                                 return (
                                                     <Karel
                                                         key={`${colIndex}-${rowIndex}-${elementIndex}-karel`}
@@ -76,7 +75,7 @@ const Grid = ({pxWidth, pxHeight, rows, cols, internalGrid, setInternalGrid, kar
                                                     />
                                                 )
                                             }
-                                            else if(element.includes("beeper")){
+                                            else if(element.isBeeper()){
                                                 return (
                                                     <Beeper
                                                         key={`${colIndex}-${rowIndex}-${elementIndex}-beeper`}
@@ -84,7 +83,10 @@ const Grid = ({pxWidth, pxHeight, rows, cols, internalGrid, setInternalGrid, kar
                                                         y={rowIndex * yPXStep + yPXStep / 2}
                                                         width={xPxStep}
                                                         height={yPXStep}
-                                                        beeper={TestingBeeper}
+                                                        beeper={{
+                                                            img: beeper.img, 
+                                                            beeperCount: element.count
+                                                        }}
                                                     />
                                                 )
                                             }
@@ -94,11 +96,16 @@ const Grid = ({pxWidth, pxHeight, rows, cols, internalGrid, setInternalGrid, kar
                                                         key={`${colIndex}-${rowIndex}-${elementIndex}-grid-dot`}
                                                         x={colIndex * xPxStep + xPxStep / 2}
                                                         y={rowIndex * yPXStep + yPXStep / 2}
-                                                        draw={(g) => {
-                                                            g.beginFill(gridDotColor);
-                                                            g.drawCircle(0, 0, 2);
-                                                            g.endFill();
-                                                        }}
+                                                        radius={5}
+                                                        color={gridDotColor}
+                                                        eventMode="static"
+                                                        onClick={(e) => console.log(e)}
+                                                        geometry={circle.current}
+                                                        // draw={(g) => {
+                                                        //     g.beginFill(gridDotColor);
+                                                        //     g.drawCircle(0, 0, 2);
+                                                        //     g.endFill();
+                                                        // }}
                                                         zIndex={1}
                                                     />
                                                 )

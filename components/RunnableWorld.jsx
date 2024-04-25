@@ -45,8 +45,11 @@ const RunnableWorld = ({name, canvasSize, interactableName, worldDimensions, raw
         beeperBag: 0,
         placedBeepers: [],
         img: "/assets/images/karel/karel.png"
-        
     }
+
+    const tempInitialBeeper = {
+        img: "/assets/images/beeper/beeper.png"
+    };
     
     //references for grid, interpreter and runLoop
     const runLoop = useRef(false);
@@ -85,7 +88,6 @@ const RunnableWorld = ({name, canvasSize, interactableName, worldDimensions, raw
             }catch(e){
                 throw e;
             }
-        
         }));
 
         interpreter.setProperty(globalObject, 'turnLeft', interpreter.createNativeFunction(() => {turnLeft()}));
@@ -226,7 +228,6 @@ const RunnableWorld = ({name, canvasSize, interactableName, worldDimensions, raw
                     onClick={() => {
                         gridRef.current.resetGrid(); //reset the grid
                         runLoop.current = false; //stop the loop
-                    
                     }}
                 >   
                     Reset
@@ -237,7 +238,10 @@ const RunnableWorld = ({name, canvasSize, interactableName, worldDimensions, raw
                     step={`50`}
                     className='speed_range reversed_range' 
                     list="tickmarks"
-                    onChange={(e) => {setKarelSpeed(e.target.value); console.log(e.target.value)}}
+                    onChange={(e) => {
+                        setKarelSpeed(e.target.value); 
+                        // console.log(e.target.value);
+                    }}
                 /> Fast
                 <datalist id="tickmarks">
                     <option value="50" label="Slow" />
@@ -270,6 +274,7 @@ const RunnableWorld = ({name, canvasSize, interactableName, worldDimensions, raw
                         maxWorldWH={50}
                         ref={gridRef}
                         initialKarel={tempInitialKarel}
+                        initialBeeper={tempInitialBeeper}
                     />
                 </Container>
             
