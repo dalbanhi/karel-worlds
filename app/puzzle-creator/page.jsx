@@ -80,6 +80,7 @@ const PuzzleCreator = () => {
     const handleSubmit = (e) => { 
         e.preventDefault();
         console.log('submit');
+        //here I will save information about the images and the world dimensions (and hints) to the database
     };
 
     return (
