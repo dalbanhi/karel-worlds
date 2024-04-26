@@ -1,0 +1,174 @@
+{
+    "kind": "categoryToolbox",
+    "contents": [
+      {
+        "kind": "category",
+        "name": "Logic",
+        "colour": "#5b80a5",
+        "contents": [
+          {
+            "kind": "block",
+            "type": "controls_if"
+          },
+          {
+            "kind": "block",
+            "type": "logic_operation"
+
+          },
+          {
+            "kind": "block",
+            "type": "logic_negate"
+          },
+          {
+            "kind": "block",
+            "type": "logic_boolean"
+          }
+        ]
+      },
+      {
+        "kind": "category",
+        "name": " Math & Numbers",
+        "colour": "#5b67a5",
+        "contents": [
+          {
+            "kind": "block",
+            "type": "math_number"
+          }
+        ]
+      },
+      {
+        "kind": "category",
+        "name": "Loops",
+        "colour": "#5ba55b",
+        "contents": [
+          {
+            "kind": "block",
+            "type": "controls_repeat_ext"
+          },
+          {
+            "kind": "block",
+            "type": "controls_whileUntil"
+          },
+          {
+            "kind": "block",
+            "type": "controls_for"
+          }
+        ]
+      },
+      {
+        "kind": "category",
+        "name": "Movement Actions",
+        "colour": "#000000",
+        "contents": [
+          {
+            "kind": "block",
+            "type": "move_forward"
+          },
+          {
+            "kind": "block",
+            "type": "turn_left"
+          }
+        ]
+      },
+      {
+        "kind": "category",
+        "name": "Beeper Actions",
+        "colour": "#000000",
+        "contents": [
+          {
+            "kind": "block",
+            "type": "put_beeper"
+          },
+          {
+            "kind": "block",
+            "type": "take_beeper"
+          }
+        ]
+      },
+      {
+        "kind": "category",
+        "name": "Direction Logic",
+        "colour": "#000000",
+        "contents": [
+          {
+            "kind": "block",
+            "type": "is_facing_north"
+          },
+          {
+            "kind": "block",
+            "type": "is_facing_south"
+          },
+          {
+            "kind": "block",
+            "type": "is_facing_east"
+          },
+          {
+            "kind": "block",
+            "type": "is_facing_west"
+          },
+          {
+            "kind": "block",
+            "type": "is_not_facing_north"
+          },
+          {
+            "kind": "block",
+            "type": "is_not_facing_south"
+          },
+          {
+            "kind": "block",
+            "type": "is_not_facing_east"
+          },
+          {
+            "kind": "block",
+            "type": "is_not_facing_west"
+          }
+        ]
+      },
+      {
+        "kind": "category",
+        "name": "Clear/Blocked Logic",
+        "colour": "#000000",
+        "contents": [
+          {
+            "kind": "block",
+            "type": "front_is_clear"
+          },
+          {
+            "kind": "block",
+            "type": "front_is_blocked"
+          },
+          {
+            "kind": "block",
+            "type": "left_is_clear"
+          },
+          {
+            "kind": "block",
+            "type": "left_is_blocked"
+          },
+          {
+            "kind": "block",
+            "type": "right_is_clear"
+          },
+          {
+            "kind": "block",
+            "type": "right_is_blocked"
+          }
+        ]
+      },
+      {
+        "kind": "category",
+        "name": "Beeper Logic",
+        "colour": "#000000",
+        "contents": [
+          {
+            "kind": "block",
+            "type": "beepers_present"
+          },
+          {
+            "kind": "block",
+            "type": "no_beepers_present"
+          }
+        ]
+      }
+    ]
+  }

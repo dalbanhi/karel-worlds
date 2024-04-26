@@ -83,7 +83,6 @@ svg[display="none"] {
   @apply  text-white hover:text-gray-300 ;
 }
 
-
 .opposite_dropdown_link {
   @apply  mt-5 w-full px-1 py-1 rounded-full border border-blue-800 bg-white text-blue-800 hover:text-gray-500;
 }
@@ -96,7 +95,7 @@ svg[display="none"] {
 }
 
 .form_instructions{
-  @apply my-1 text-xs text-gray-500 sm:text-xs max-w-2xl;
+  @apply my-1 text-xs text-gray-500 sm:text-sm max-w-2xl;
 }
 
 .form_input{
@@ -115,8 +114,16 @@ svg[display="none"] {
   @apply w-1/2 bg-blue-800 text-white rounded-full mt-2 py-2 text-sm font-inter font-semibold;
 }
 
+.form_button:hover{
+  @apply bg-white text-blue-800 border-2 border-blue-800;
+}
+
 .edit_world_button{
   @apply w-1/4 bg-blue-800 text-white rounded-full text-sm font-inter font-semibold;
+}
+
+.edit_world_button:hover{
+  @apply bg-white text-blue-800 border-2 border-blue-800;
 }
 
 .form_range{
@@ -138,3 +145,13 @@ svg[display="none"] {
 .world_title{
   @apply mt-2 text-xl font-extrabold leading-[1.15] sm:text-2xl;
 }
+
+
+/* Puzzle Solving Page */
+.puzzle_instructions{
+  @apply my-2 text-xs text-gray-800 sm:text-sm max-w-md;
+}
+
+/* .form_header{
+  @apply mt-2 text-xl font-extrabold leading-[1.15] sm:text-2xl;
+} */

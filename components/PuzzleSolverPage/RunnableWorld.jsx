@@ -5,8 +5,6 @@ import { useEffect, useRef, forwardRef } from 'react';
 import {Stage, Container, useTick} from '@pixi/react';
 import RunnableGrid from '@components/PixiJS/RunnableGrid';
 
-// import Karel from '@utils/p5-utils/Karel';
-// import Grid from '@utils/p5-utils/Grid';
 import Interpreter from 'js-interpreter';
 import KarelElement from '@utils/karel-elements/KarelElement';
 //from: https://overreacted.io/making-setinterval-declarative-with-react-hooks/ 
@@ -31,29 +29,7 @@ function useInterval(callback, delay){
 
 
 
-const RunnableWorld = ({name, canvasSize, interactableName, worldDimensions, rawCode}) => {
-
-    //use forwardRef and useImperativeHandle to expose the grid's methods to the parent component (ExampleTest)
-
-
-    //temporary testing variables
-    const temporaryCanvasSize = {width: 450, height: 450};
-    const tempInitialKarel = {
-        x: 0,
-        y: 0,
-        direction: "east",
-        beeperBag: 1000,
-        img: "/assets/images/karel/karel.png"
-    }
-
-    const tempInitialBeeper = {
-        img: "/assets/images/beeper/beeper.png"
-    };
-
-    const tempInitialBeepersList = [
-        new KarelElement("beeper", 1, 1),
-        new KarelElement("beeper", 2, 2, 4),
-    ]
+const RunnableWorld = ({name, canvasSize, worldDimensions, rawCode, initialKarel, initialBeeper, initialBeepersList, maxWorldWH}) => {
     
     //references for grid, interpreter and runLoop
     const runLoop = useRef(false);
@@ -235,6 +211,7 @@ const RunnableWorld = ({name, canvasSize, interactableName, worldDimensions, raw
 
     return (
         <section>
+            {name && <h1 className='text-xl font-extrabold'>{name}</h1>}
             <section className='mb-2'>
                 <button
                     onClick={() => {
@@ -280,8 +257,8 @@ const RunnableWorld = ({name, canvasSize, interactableName, worldDimensions, raw
             </section>
             
             <Stage 
-                width={temporaryCanvasSize.width} 
-                height={temporaryCanvasSize.height}
+                width={canvasSize.width} 
+                height={canvasSize.height}
                 raf={false}
                 renderOnComponentChange={true} 
                 onMount={(app) => setApp(app)}
@@ -289,15 +266,15 @@ const RunnableWorld = ({name, canvasSize, interactableName, worldDimensions, raw
                 <Container 
                     x={0} y={0} >
                     <RunnableGrid 
-                        pxWidth={temporaryCanvasSize.width} 
-                        pxHeight={temporaryCanvasSize.height} 
+                        pxWidth={canvasSize.width} 
+                        pxHeight={canvasSize.height} 
                         rows={worldDimensions.width} 
                         cols={worldDimensions.height} 
-                        maxWorldWH={50}
+                        maxWorldWH={maxWorldWH}
                         ref={gridRef}
-                        initialKarel={tempInitialKarel}
-                        initialBeeper={tempInitialBeeper}
-                        initialBeepersList={tempInitialBeepersList}
+                        initialKarel={initialKarel}
+                        initialBeeper={initialBeeper}
+                        initialBeepersList={initialBeepersList}
                     />
                 </Container>
             

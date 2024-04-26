@@ -15,7 +15,7 @@ const WorldsEditor = ({handleSubmit, worldDimensions, setWorldDimensions, maxWor
 
     return (
         <section className='w-full max-w-full flex-start flex-col'>
-            <h3 className='form_header green_purple_gradient'>Edit Your Puzzle Here...</h3>
+            <h3 className='form_header blue_purple_gradient'>Edit Your Puzzle Here...</h3>
             <p className='form_instructions'>Edit attributes that correspond to both worlds below.</p>
             <p className='form_instructions'>Edit the start/end worlds individually with the buttons and widgets on top of each world.</p>
             <form

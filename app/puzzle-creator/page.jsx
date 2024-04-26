@@ -1,15 +1,15 @@
 'use client'
 import {useState, createContext } from 'react';
 import { useEffect } from 'react';
-
 import { useSession } from 'next-auth/react';
-
-import {useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 
 // import Form from '@components/Form';
-import WorldsEditor from '@components/WorldsEditor/WorldsEditor';
-import EditableWorld from '@components/EditableWorld/EditableWorld';
+import WorldsEditor from '@components/PuzzleCreatorPage/WorldsEditor/WorldsEditor';
+import EditableWorld from '@components/PuzzleCreatorPage/EditableWorld/EditableWorld';
 
+//TODO: Make this into a hook
+// import { useWindowSize } from '../../hooks/useWindowSize'
 
 function useWindowSize() {
     const [windowSize, setWindowSize] = useState({
@@ -123,7 +123,7 @@ const PuzzleCreator = () => {
                         maxWorldWH={maxWorldWH}
                     />
                     <EditableWorld
-                        name="Ending World"
+                        name="Goal World"
                         canvasSize={canvasSize}
                         worldDimensions={worldDimensions}
                         maxWorldWH={maxWorldWH}
