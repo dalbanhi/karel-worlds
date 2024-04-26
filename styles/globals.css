@@ -111,6 +111,10 @@
   @apply w-1/2 bg-blue-800 text-white rounded-full mt-2 py-2 text-sm font-inter font-semibold;
 }
 
+.edit_world_button{
+  @apply w-1/4 bg-blue-800 text-white rounded-full text-sm font-inter font-semibold;
+}
+
 .form_range{
   @apply w-full mt-1 accent-purple-800;
 }

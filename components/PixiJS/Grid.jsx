@@ -16,8 +16,8 @@ import '@pixi/events';
 const Grid = ({pxWidth, pxHeight, rows, cols, internalGrid, karel, beeper, maxWorldWH}) => {
     const circle = useRef(null);
     const [mounted, setMounted] = useState(false);
-    const smCircleRadius = 1;
-    const mdCircleRadius = 2;
+    const smCircleRadius = 3;
+    const mdCircleRadius = 4;
 
 
     useEffect(() => {
@@ -49,9 +49,7 @@ const Grid = ({pxWidth, pxHeight, rows, cols, internalGrid, karel, beeper, maxWo
 
     return (
         <>
-            <Circle x={0} y={0} radius={radius*3} 
-            eventMode="static"
-            onclick={() => console.log("Clicked")}
+            <Circle x={0} y={0} radius={radius} 
             color={gridDotColor} ref={circle}/>
             {mounted && (
                 <>
@@ -96,16 +94,11 @@ const Grid = ({pxWidth, pxHeight, rows, cols, internalGrid, karel, beeper, maxWo
                                                         key={`${colIndex}-${rowIndex}-${elementIndex}-grid-dot`}
                                                         x={colIndex * xPxStep + xPxStep / 2}
                                                         y={rowIndex * yPXStep + yPXStep / 2}
-                                                        radius={5}
+                                                        radius={radius}
                                                         color={gridDotColor}
                                                         eventMode="static"
-                                                        onClick={(e) => console.log(e)}
+                                                        click={() => console.log("circle clicked")}
                                                         geometry={circle.current}
-                                                        // draw={(g) => {
-                                                        //     g.beginFill(gridDotColor);
-                                                        //     g.drawCircle(0, 0, 2);
-                                                        //     g.endFill();
-                                                        // }}
                                                         zIndex={1}
                                                     />
                                                 )

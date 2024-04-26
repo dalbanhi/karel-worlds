@@ -32,8 +32,9 @@ const RunnableGrid = forwardRef(function RunnableGrid(props, ref) {
     });
 
     const [internalGrid, setInternalGrid] = useState(
-        Array.from({length: rows}, () => Array.from({length: cols}, 
-            () => [new KarelElement("empty")]
+        Array.from({length: rows}, 
+            () => Array.from({length: cols}, 
+                () => [new KarelElement("empty")]
             ))
     );
 

@@ -1,10 +1,20 @@
 'use client'
+import { useState } from 'react'
 
 const EditingShelf = ({karel, setKarel, worldDimensions}) => {
 
     function capitalizeFirstLetter(string) {
         return string.charAt(0).toUpperCase() + string.slice(1);
     }
+
+    function toRegularSpace(string){
+        string = capitalizeFirstLetter(string);
+        return string.replace(/([A-Z])/g, ' $1').trim();
+    }
+
+    const [editingMode, setEditingMode] = useState('');
+
+    const [elementEditing, setElementEditing] = useState('beeper');
 
     return (
         <>
@@ -27,19 +37,86 @@ const EditingShelf = ({karel, setKarel, worldDimensions}) => {
                 onChange={(e) => {setKarel({...karel, y: e.target.value})}}
                 
              />
-            <label htmlFor="Karel Direction" className='form_label'>
-                Karel is facing: <span>{capitalizeFirstLetter(karel.direction)}</span>
-            </label>
-            <select 
-                name="direction" id="direction" className='form_input_short' 
-                defaultValue={karel.direction}
-                onChange={(e) => {setKarel({...karel, direction: e.target.value})}}
-            >
-                <option value="north">North</option>
-                <option value="east">East</option>
-                <option value="south">South</option>
-                <option value="west">West</option>
-            </select>        
+             <div className="flex flex-col">
+                <label htmlFor="direction" className='form_label'>
+                    Karel is facing: <span>{capitalizeFirstLetter(karel.direction)}</span>
+                </label>
+                <select 
+                    name="direction" id="direction" className='form_input_short' 
+                    defaultValue={karel.direction}
+                    onChange={(e) => {setKarel({...karel, direction: e.target.value})}}
+                >
+                    <option value="north">North</option>
+                    <option value="east">East</option>
+                    <option value="south">South</option>
+                    <option value="west">West</option>
+                </select> 
+
+            </div>
+            
+            <div className="flex justify-start gap-2 mb-2">
+                <div className="flex flex-col">
+                    <label htmlFor="editingMode" className='form_label'>
+                        Editing Mode:
+                    </label>  
+                    <select
+                        name="editingMode"
+                        id="editingMode"
+                        className='form_input'
+                        value={editingMode}
+                        onChange={(e) => setEditingMode(e.target.value)}
+                    >
+                        <option value="">--</option>
+                        <option value="add">Add</option>
+                        <option value="remove">Remove</option>
+                    </select>   
+                </div>
+                {editingMode !== '' &&(
+                    <>
+                        <div className="flex flex-col">
+                            <label htmlFor={`${editingMode}Elements`} className='form_label'>
+                                {capitalizeFirstLetter(editingMode)}:
+                            </label>
+                            <select
+                                name={`${editingMode}Elements`}
+                                id={`${editingMode}Elements`}
+                                className='form_input'
+                                value={elementEditing}
+                                onChange={(e) => setElementEditing(e.target.value)}
+                            >
+                                {/* <option value="">--</option> */}
+                                <option value="beeper">Beepers</option>
+                                <option value="wallPiece">Wall Piece</option>
+                                <option value="wallCorner">Wall Corner</option>
+                            </select>   
+                        </div>
+                        {[{name: 'row', max: worldDimensions.height-1}, {name: 'column', max: worldDimensions.width-1}]
+                            .map(({name, max}) => {
+                                return (
+                                    <div className='flex flex-col' key={name}>
+                                        <label htmlFor={name} className='form_label'>
+                                            {capitalizeFirstLetter(name)}:
+                                        </label>
+                                        <input 
+                                            type="number"
+                                            id={name}
+                                            name={name}
+                                            className='form_input'
+                                            placeholder="0"
+                                            min="0"
+                                            max={String(max)}
+                                        />
+                                    </div>
+                                )
+                            })
+                        }
+                        <button className="edit_world_button" onClick={() => console.log('Add/Remove Element')}>{capitalizeFirstLetter(editingMode)} {toRegularSpace(elementEditing)}</button>
+                    </>
+                    
+                )}
+
+            </div>
+               
         </>
     )
 }
