@@ -8,7 +8,7 @@ import RunnableGrid from '@components/PixiJS/RunnableGrid';
 // import Karel from '@utils/p5-utils/Karel';
 // import Grid from '@utils/p5-utils/Grid';
 import Interpreter from 'js-interpreter';
-
+import KarelElement from '@utils/karel-elements/KarelElement';
 //from: https://overreacted.io/making-setinterval-declarative-with-react-hooks/ 
 function useInterval(callback, delay){
     const savedCallback = useRef();
@@ -42,25 +42,33 @@ const RunnableWorld = ({name, canvasSize, interactableName, worldDimensions, raw
         x: 0,
         y: 0,
         direction: "east",
-        beeperBag: 0,
-        placedBeepers: [],
+        beeperBag: 1000,
         img: "/assets/images/karel/karel.png"
     }
 
     const tempInitialBeeper = {
         img: "/assets/images/beeper/beeper.png"
     };
+
+    const tempInitialBeepersList = [
+        new KarelElement("beeper", 1, 1),
+        new KarelElement("beeper", 2, 2, 4),
+    ]
     
     //references for grid, interpreter and runLoop
     const runLoop = useRef(false);
     const interpreter = useRef(null);
     const gridRef = useRef(null);
 
-    //grid/Karel action ref functions
+    //movement functions
     function moveForward(){gridRef.current.moveForward();}
-
     function turnLeft(){gridRef.current.turnLeft();}
 
+    //beeper functions
+    function takeBeeper(){gridRef.current.takeBeeper();}
+    function putBeeper(){gridRef.current.putBeeper();}
+
+    //direction logic functions
     function isFacingEast(){return gridRef.current.isFacingEast();}
     function isFacingNorth(){return gridRef.current.isFacingNorth();}
     function isFacingWest(){return gridRef.current.isFacingWest();}
@@ -71,6 +79,7 @@ const RunnableWorld = ({name, canvasSize, interactableName, worldDimensions, raw
     function isNotFacingWest(){return gridRef.current.isNotFacingWest();}
     function isNotFacingSouth(){return gridRef.current.isNotFacingSouth();}
 
+    //block/clear logic
     function frontIsClear(){return gridRef.current.frontIsClear();}
     function frontIsBlocked(){return gridRef.current.frontIsBlocked();}
     function leftIsClear(){return gridRef.current.leftIsClear();}
@@ -78,10 +87,15 @@ const RunnableWorld = ({name, canvasSize, interactableName, worldDimensions, raw
     function rightIsClear(){return gridRef.current.rightIsClear();}
     function rightIsBlocked(){return gridRef.current.rightIsBlocked();}
 
+    //beeper logic
+    function beepersPresent(){return gridRef.current.beepersPresent();}
+    function noBeepersPresent(){return gridRef.current.noBeepersPresent();}
+
 
     //js-interpreter api
     function initApi(interpreter, globalObject){
 
+        //movement actions
         interpreter.setProperty(globalObject, 'moveForward', interpreter.createNativeFunction(() => {
             try{
                 moveForward();
@@ -92,16 +106,35 @@ const RunnableWorld = ({name, canvasSize, interactableName, worldDimensions, raw
 
         interpreter.setProperty(globalObject, 'turnLeft', interpreter.createNativeFunction(() => {turnLeft()}));
 
+        //beeper actions
+        interpreter.setProperty(globalObject, 'putBeeper', interpreter.createNativeFunction(() => {
+            try{
+                putBeeper();
+            }
+            catch(e){
+                throw e;
+            }
+        }));
+        interpreter.setProperty(globalObject, 'takeBeeper', interpreter.createNativeFunction(() => {
+            try{
+                takeBeeper();
+            }
+            catch(e){
+                throw e;
+            }
+        }));
+
+        //direction logic
         interpreter.setProperty(globalObject, 'isFacingEast', interpreter.createNativeFunction(() => {return isFacingEast()}));
         interpreter.setProperty(globalObject, 'isFacingNorth', interpreter.createNativeFunction(() => {return isFacingNorth()}));
         interpreter.setProperty(globalObject, 'isFacingWest', interpreter.createNativeFunction(() => {return isFacingWest()}));
         interpreter.setProperty(globalObject, 'isFacingSouth', interpreter.createNativeFunction(() => {return isFacingSouth()}));
-
         interpreter.setProperty(globalObject, 'isNotFacingEast', interpreter.createNativeFunction(() => {return isNotFacingEast()}));
         interpreter.setProperty(globalObject, 'isNotFacingNorth', interpreter.createNativeFunction(() => {return isNotFacingNorth()}));
         interpreter.setProperty(globalObject, 'isNotFacingWest', interpreter.createNativeFunction(() => {return isNotFacingWest()}));
         interpreter.setProperty(globalObject, 'isNotFacingSouth', interpreter.createNativeFunction(() => {return isNotFacingSouth()}));
 
+        //block/clear logic
         interpreter.setProperty(globalObject, 'frontIsClear', interpreter.createNativeFunction(() => {return frontIsClear()}));
         interpreter.setProperty(globalObject, 'frontIsBlocked', interpreter.createNativeFunction(() => {return frontIsBlocked()}));
         interpreter.setProperty(globalObject, 'leftIsClear', interpreter.createNativeFunction(() => {return leftIsClear()}));
@@ -109,6 +142,9 @@ const RunnableWorld = ({name, canvasSize, interactableName, worldDimensions, raw
         interpreter.setProperty(globalObject, 'rightIsClear', interpreter.createNativeFunction(() => {return rightIsClear()}));
         interpreter.setProperty(globalObject, 'rightIsBlocked', interpreter.createNativeFunction(() => {return rightIsBlocked()}));
 
+        //beeper logic
+        interpreter.setProperty(globalObject, 'beepersPresent', interpreter.createNativeFunction(() => {return beepersPresent()}));
+        interpreter.setProperty(globalObject, 'noBeepersPresent', interpreter.createNativeFunction(() => {return noBeepersPresent()}));
     }
 
 
@@ -121,21 +157,8 @@ const RunnableWorld = ({name, canvasSize, interactableName, worldDimensions, raw
 
     //js-interpreter functions to step through code
     function stepCode(){
-        // console.log("stepping code");
         stack = interpreter.current.getStateStack();
-        // let node;
-        // let start;
-        // let end;
-        // if(stack.length){
-        //     node = stack[stack.length - 1].node;
-        //     start = node.start;
-        //     end = node.end;
-        // } else {
-        //     node = null;
-        //     start = 0;
-        //     end = 0;
-        // }
-        // createSelection(start, end);
+        //TODO: Add code highlighting
         let stepAgain = !isLine(stack);
         try {
             ok = interpreter.current.step();
@@ -194,13 +217,13 @@ const RunnableWorld = ({name, canvasSize, interactableName, worldDimensions, raw
     const [app, setApp] = useState();
     const [karelSpeed, setKarelSpeed] = useState(500);
 
+    //interval to run code
     useInterval(() => {
         if(runLoop.current){
             try{
                 stepCode();
             }
             catch(e){
-                console.log(e);
                 alert(e);
                 runLoop.current = false;
             }
@@ -240,7 +263,6 @@ const RunnableWorld = ({name, canvasSize, interactableName, worldDimensions, raw
                     list="tickmarks"
                     onChange={(e) => {
                         setKarelSpeed(e.target.value); 
-                        // console.log(e.target.value);
                     }}
                 /> Fast
                 <datalist id="tickmarks">
@@ -275,6 +297,7 @@ const RunnableWorld = ({name, canvasSize, interactableName, worldDimensions, raw
                         ref={gridRef}
                         initialKarel={tempInitialKarel}
                         initialBeeper={tempInitialBeeper}
+                        initialBeepersList={tempInitialBeepersList}
                     />
                 </Container>
             

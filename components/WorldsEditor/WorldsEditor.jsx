@@ -35,15 +35,12 @@ const WorldsEditor = ({handleSubmit, worldDimensions, setWorldDimensions, maxWor
                 <CustomizableSpriteInfo
                     spriteName='Beeper'
                 />
-                <CustomizableSpriteInfo
+                {/* <CustomizableSpriteInfo
                     spriteName='Wall Piece'
                 />
                 <CustomizableSpriteInfo
                     spriteName='Wall Corner'
-                />
-
-
-                
+                /> */}
                 <button className='form_button' type="submit">Save Puzzle</button>
 
             </form>

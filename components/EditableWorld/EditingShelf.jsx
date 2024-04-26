@@ -1,7 +1,7 @@
 'use client'
 import { useState } from 'react'
 
-const EditingShelf = ({karel, setKarel, worldDimensions}) => {
+const EditingShelf = ({karel, setKarel, worldDimensions, handleEditElement}) => {
 
     function capitalizeFirstLetter(string) {
         return string.charAt(0).toUpperCase() + string.slice(1);
@@ -15,6 +15,9 @@ const EditingShelf = ({karel, setKarel, worldDimensions}) => {
     const [editingMode, setEditingMode] = useState('');
 
     const [elementEditing, setElementEditing] = useState('beeper');
+
+    const [elementEditingCoords, setElementEditingCoords] = 
+    useState({row: 0, column: 0});
 
     return (
         <>
@@ -86,8 +89,8 @@ const EditingShelf = ({karel, setKarel, worldDimensions}) => {
                             >
                                 {/* <option value="">--</option> */}
                                 <option value="beeper">Beepers</option>
-                                <option value="wallPiece">Wall Piece</option>
-                                <option value="wallCorner">Wall Corner</option>
+                                {/* <option value="wallPiece">Wall Piece</option>
+                                <option value="wallCorner">Wall Corner</option> */}
                             </select>   
                         </div>
                         {[{name: 'row', max: worldDimensions.height-1}, {name: 'column', max: worldDimensions.width-1}]
@@ -105,12 +108,30 @@ const EditingShelf = ({karel, setKarel, worldDimensions}) => {
                                             placeholder="0"
                                             min="0"
                                             max={String(max)}
+                                            value={elementEditingCoords[name]}
+                                            onChange={(e) => setElementEditingCoords(
+                                                {...elementEditingCoords, 
+                                                [name]: e.target.value
+                                            })}
                                         />
                                     </div>
                                 )
                             })
                         }
-                        <button className="edit_world_button" onClick={() => console.log('Add/Remove Element')}>{capitalizeFirstLetter(editingMode)} {toRegularSpace(elementEditing)}</button>
+                        <button 
+                            className="edit_world_button" 
+                            onClick={() => {
+
+                                if(elementEditingCoords.row >= worldDimensions.height || elementEditingCoords.column >= worldDimensions.width){
+                                    alert('Invalid coordinates');
+                                    return;
+                                }
+                            
+                                handleEditElement(editingMode, elementEditing, '', elementEditingCoords);
+                            }}
+                        >
+                            {capitalizeFirstLetter(editingMode)} {toRegularSpace(elementEditing)}
+                        </button>
                     </>
                     
                 )}

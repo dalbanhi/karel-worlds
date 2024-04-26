@@ -68,7 +68,7 @@ const PuzzleCreator = () => {
     const router = useRouter();
 
     const size = useWindowSize();
-    const maxWorldWH = 50;
+    const maxWorldWH = 25;
     const canvasSize = setCanvasSize(size);
 
 
@@ -117,13 +117,13 @@ const PuzzleCreator = () => {
                 <section className="hidden sm:flex justify-evenly gap-4 my-4">
                     
                     <EditableWorld
-                        name="Start World"
+                        name="Starting World"
                         canvasSize={canvasSize}
                         worldDimensions={worldDimensions}
                         maxWorldWH={maxWorldWH}
                     />
                     <EditableWorld
-                        name="End World"
+                        name="Ending World"
                         canvasSize={canvasSize}
                         worldDimensions={worldDimensions}
                         maxWorldWH={maxWorldWH}

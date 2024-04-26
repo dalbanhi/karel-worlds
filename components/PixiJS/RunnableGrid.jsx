@@ -8,6 +8,7 @@ import '@pixi/events';
 
 
 import KarelElement from '@utils/karel-elements/KarelElement';
+import { set } from 'mongoose';
 
 // const possibleObjects = {
 //     "hWall": 1,
@@ -16,13 +17,21 @@ import KarelElement from '@utils/karel-elements/KarelElement';
 //     "karel": 4,
 //     "empty": 0
 // }
-
+function makeNewGrid(rows, cols){
+    let newGrid = [];
+    for(let i = 0; i < rows; i++){
+        newGrid.push([]);
+        for(let j = 0; j < cols; j++){
+            newGrid[i].push([new KarelElement("empty", i, j)]);
+        }
+    }
+    return newGrid;
+}
 
 const RunnableGrid = forwardRef(function RunnableGrid(props, ref) {
-    const {pxWidth, pxHeight, rows, cols, maxWorldWH, initialKarel, initialBeeper} = props;
+    const {pxWidth, pxHeight, rows, cols, maxWorldWH, initialKarel, initialBeeper, initialBeepersList} = props;
 
     const propsRef = useRef(props);
-
     const [karel, setKarel] = useState({
         ...initialKarel
     });
@@ -31,59 +40,77 @@ const RunnableGrid = forwardRef(function RunnableGrid(props, ref) {
         ...initialBeeper
     });
 
-    const [internalGrid, setInternalGrid] = useState(
-        Array.from({length: rows}, 
-            () => Array.from({length: cols}, 
-                () => [new KarelElement("empty")]
-            ))
+    const [testBeeperList, setTestBeeperList] = useState(
+        [...initialBeepersList]
     );
 
+    const initialNewGrid = makeNewGrid(rows, cols);
+
+    const [internalGrid, setInternalGrid] = useState(initialNewGrid);
+
     useEffect(() => {
-        console.log("Running useEffect");
+
         
         //update grid
-        let newGrid = Array.from({length: rows}, () => Array.from({length: cols}, 
-            () => [new KarelElement("empty")]
-        ));
+        let newGrid = makeNewGrid(rows, cols);
 
         //add beepers to the grid
+        testBeeperList.forEach(beeper => {
+            let placeToPutBeeper = newGrid[beeper.x][beeper.y];
+            if(placeToPutBeeper[0].type === "empty"){
+                newGrid[beeper.x][beeper.y] = [beeper];
+            }
+        });
 
         //add walls to the grid
 
 
         //update Karel's location
-        console.log("Karel's location: ", karel.x, karel.y, karel.direction, karel.beeperBag, karel.placedBeepers);
         //only unshift if there are beepers. if it's empty, replace the first element
-
-        newGrid[karel.x >= rows? rows-1: karel.x][karel.y >= cols? cols-1: karel.y].unshift(new KarelElement("karel"));
+        let karelX = karel.x >= rows? rows-1: karel.x;
+        let karelY = karel.y >= cols? cols-1: karel.y;
+        if(newGrid[karelX][karelY][0].type === "empty"){
+            newGrid[karelX][karelY][0] = new KarelElement("karel", karelX, karelY);
+        }
+        else{
+            newGrid[karelX][karelY].unshift(new KarelElement("karel", karelX, karelY));
+        }
         setInternalGrid(newGrid);
+
+        setKarel({...karel});
     
-    }, [karel.x, karel.y, karel.direction, karel.beeperBag, karel.placedBeepers, rows, cols])
+    }, [karel.x, karel.y, karel.direction, karel.beeperBag, rows, cols, testBeeperList, initialBeepersList])
 
     useImperativeHandle(ref, () => ({
 
         //not callable by user code
         resetGrid() {
-            let newGrid = Array.from({length: rows}, () => Array.from({length: cols}, () => [new KarelElement("empty")]));
+            let newGrid = makeNewGrid(rows, cols);
 
-            //add any beepers
+            //add any initial beepers
+            initialBeepersList.forEach(beeper => {
+                let placeToPutBeeper = newGrid[beeper.x][beeper.y];
+                if(placeToPutBeeper[0].type === "empty"){
+                    newGrid[beeper.x][beeper.y] = [beeper];
+                }
+            });
 
             //add any walls
 
             //prepend karel to the grid only if there are beepers, otherwise, replace the first element
-            newGrid[initialKarel.x][initialKarel.y].unshift(new KarelElement("karel"));
+            newGrid[initialKarel.x][initialKarel.y].unshift(new KarelElement("karel", initialKarel.x, initialKarel.y));
 
-            setKarel({...initialKarel});
+            setTestBeeperList([...initialBeepersList]);
             setInternalGrid(newGrid);
+            setKarel({...initialKarel});
+            
         },
 
         //callable by user code
-
+        //movement actions
         moveForward() {
-            console.log("Moving forward in the grid!!!!");
             let newKarel = {...karel};
 
-            //TODO: check if karel CAN move forward, if not, return an error or something
             const onEdgeError = new Error("Karel cannot move forward. Karel is at the edge of the grid");
             const wouldHitWallError = new Error("Karel cannot move forward. Karel would hit a wall");
             switch(karel.direction){
@@ -91,7 +118,6 @@ const RunnableGrid = forwardRef(function RunnableGrid(props, ref) {
                     if(karel.y - 1 < 0) throw onEdgeError;
                     let newKarelCellN = internalGrid[karel.x][karel.y-1];
                     if(newKarelCellN.some(element => element.isWall())){
-                        console.log("Karel would hit a wall");
                         throw wouldHitWallError;
                     }
                     newKarel.y = karel.y - 1;
@@ -100,7 +126,6 @@ const RunnableGrid = forwardRef(function RunnableGrid(props, ref) {
                     if(karel.y + 1 >= cols) throw onEdgeError;
                     let newKarelCellS = internalGrid[karel.x][karel.y+1];
                     if(newKarelCellS.some(element => element.isWall())){
-                        console.log("Karel would hit a wall");
                         throw wouldHitWallError;
                     }
                     newKarel.y = karel.y + 1;
@@ -109,7 +134,6 @@ const RunnableGrid = forwardRef(function RunnableGrid(props, ref) {
                     if(karel.x + 1 >= rows) throw onEdgeError;
                     let newKarelCellE = internalGrid[karel.x+1][karel.y];
                     if(newKarelCellE.some(element => element.isWall())){
-                        console.log("Karel would hit a wall");
                         throw wouldHitWallError;
                     }
                     newKarel.x = karel.x + 1;
@@ -118,7 +142,6 @@ const RunnableGrid = forwardRef(function RunnableGrid(props, ref) {
                     if(karel.x - 1 < 0) throw onEdgeError;
                     let newKarelCellW = internalGrid[karel.x-1][karel.y];
                     if(newKarelCellW.some(element => element.isWall())){
-                        console.log("Karel would hit a wall");
                         throw wouldHitWallError;
                     }
                     newKarel.x = karel.x - 1;
@@ -128,7 +151,6 @@ const RunnableGrid = forwardRef(function RunnableGrid(props, ref) {
         },
 
         turnLeft() {
-            console.log("Turning left in the grid!!!!");
             let newKarel = {...karel};
             switch(karel.direction){
                 case "north":
@@ -147,6 +169,65 @@ const RunnableGrid = forwardRef(function RunnableGrid(props, ref) {
             setKarel(newKarel);
         },
 
+        //beeper actions
+        putBeeper() {
+            let newKarel = {...karel};
+            //check if karel still has beepers left
+            if(newKarel.beeperBag <= 0){
+                throw new Error("Karel does not have any beepers left");
+            }
+
+            // //check if there is already a beeper in the beeperlist
+            let beeperExists = testBeeperList.find(beeper => beeper.x === newKarel.x && beeper.y === newKarel.y);
+
+            if(!beeperExists){
+                let newBeeper = new KarelElement("beeper", newKarel.x, newKarel.y);
+                setTestBeeperList([...testBeeperList, newBeeper]);
+            }
+            else{
+                //find the index of the beeper in the list
+                let index = testBeeperList.findIndex(beeper => beeper.x === newKarel.x && beeper.y === newKarel.y);
+
+                setTestBeeperList((prevBeepers) =>{
+                    let newBeepers = [...prevBeepers];
+                    let updatedBeeper = new KarelElement("beeper", newKarel.x, newKarel.y, prevBeepers[index].count);
+                    updatedBeeper.addOne();
+                    newBeepers[index] = updatedBeeper;
+                    return newBeepers;
+                })
+            }
+            setKarel(newKarel);
+        },
+
+        takeBeeper(){
+            let newKarel = {...karel};
+            //check if there is a beeper in the beeperlist
+            let beeperExists = testBeeperList.find(beeper => beeper.x === newKarel.x && beeper.y === newKarel.y);
+
+            if(!beeperExists){
+                throw new Error("Karel cannot take a beeper. There is no beeper at this location");
+            }
+            else{
+                //find the index of the beeper in the list
+                let index = testBeeperList.findIndex(beeper => beeper.x === newKarel.x && beeper.y === newKarel.y);
+
+                setTestBeeperList((prevBeepers) =>{
+                    let newBeepers = [...prevBeepers];
+                    let updatedBeeper = new KarelElement("beeper", newKarel.x, newKarel.y, prevBeepers[index].count);
+                    updatedBeeper.subtractOne();
+                    if(updatedBeeper.count === 0){
+                        newBeepers.splice(index, 1);
+                    }
+                    else{
+                        newBeepers[index] = updatedBeeper;
+                    }
+                    return newBeepers;
+                })
+            }
+            setKarel(newKarel);
+        },
+
+        //direction logic
         isFacingEast(){
             return karel.direction === "east";
         },
@@ -161,6 +242,8 @@ const RunnableGrid = forwardRef(function RunnableGrid(props, ref) {
             return karel.direction === "west";
         }, isNotFacingWest(){{ return !this.isFacingWest(); }},
 
+
+        //block/clear logic
         frontIsClear(){
             switch(karel.direction){
                 case "north":
@@ -185,6 +268,64 @@ const RunnableGrid = forwardRef(function RunnableGrid(props, ref) {
                     return !newCellW.some(element => element.isWall());
             }
         }, frontIsBlocked(){{ return !this.frontIsClear(); }},
+
+        leftIsClear(){
+            switch(karel.direction){
+                case "north":
+                    let newXW = karel.x - 1;
+                    if(newXW < 0) return false;
+                    let newCellW = internalGrid[newXW][karel.y];
+                    return !newCellW.some(element => element.isWall());
+                case "south":
+                    let newXE = karel.x + 1;
+                    if(newXE >= rows) return false;
+                    let newCellE = internalGrid[newXE][karel.y];
+                    return !newCellE.some(element => element.isWall());
+                case "east":
+                    let newYN = karel.y - 1;
+                    if(newYN < 0) return false;
+                    let newCellN = internalGrid[karel.x][newYN];
+                    return !newCellN.some(element => element.isWall());
+                case "west":
+                    let newYS = karel.y + 1;
+                    if(newYS >= cols) return false;
+                    let newCellS = internalGrid[karel.x][newYS];
+                    return !newCellS.some(element => element.isWall());
+            }
+        }, leftIsBlocked(){{ return !this.leftIsClear(); }},
+
+        rightIsClear(){
+            switch(karel.direction){
+                case "north":
+                    let newXE = karel.x + 1;
+                    if(newXE >= rows) return false;
+                    let newCellE = internalGrid[newXE][karel.y];
+                    return !newCellE.some(element => element.isWall());
+                case "south":
+                    let newXW = karel.x - 1;
+                    if(newXW < 0) return false;
+                    let newCellW = internalGrid[newXW][karel.y];
+                    return !newCellW.some(element => element.isWall());
+                case "east":
+                    let newYS = karel.y + 1;
+                    if(newYS >= cols) return false;
+                    let newCellS = internalGrid[karel.x][newYS];
+                    return !newCellS.some(element => element.isWall());
+                case "west":
+                    let newYN = karel.y - 1;
+                    if(newYN < 0) return false;
+                    let newCellN = internalGrid[karel.x][newYN];
+                    return !newCellN.some(element => element.isWall());
+            }
+        }, rightIsBlocked(){{ return !this.rightIsClear(); }},
+
+        //beeper logic
+        beepersPresent(){
+            let newCell = internalGrid[karel.x][karel.y];
+            return newCell.some(element => element.isBeeper());
+        }, noBeepersPresent(){{ return !this.beepersPresent(); }},
+
+
     }));
 
     return (

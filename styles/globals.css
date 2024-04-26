@@ -15,6 +15,10 @@
   pointer-events: none;
 }
 
+/* Fixing blockly workspace issue*/
+svg[display="none"] {
+  display: none;
+}
 
 @media screen and (max-width: 640px) {
   .main {
@@ -129,4 +133,8 @@
 
 .form_label{
   @apply mt-1 text-sm font-inter font-semibold block;
+}
+
+.world_title{
+  @apply mt-2 text-xl font-extrabold leading-[1.15] sm:text-2xl;
 }

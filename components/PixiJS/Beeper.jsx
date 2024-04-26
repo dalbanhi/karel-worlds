@@ -21,7 +21,7 @@ const Beeper = ({x, y, width, height, beeper}) => {
                 x={x}
                 y={y}
                 text={beeper.beeperCount}
-                style={{fill: 'white', stroke: 'black', strokeThickness: 2}}
+                style={{fill: 'white', stroke: 'black', strokeThickness: 3, fontSize: height / 2, align: 'center'}}
                 anchor={0.5}
                 zIndex={4}
                 eventMode="static"

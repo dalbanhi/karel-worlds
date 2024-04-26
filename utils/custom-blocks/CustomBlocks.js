@@ -1,13 +1,17 @@
 import Blockly from 'blockly';
 import { javascriptGenerator } from 'blockly/javascript';
 
+const booleanColor = 30;
+const actionColor = 330;
+
 Blockly.defineBlocksWithJsonArray([
+    //Movement Actions
     {
         "type": "move_forward",
         "message0": "moveForward",
         "previousStatement": null,
         "nextStatement": null,
-        "colour": 330,
+        "colour": actionColor,
         "tooltip": "Move one step forward (direction you are facing)",
         "helpUrl": ""
     },
@@ -16,15 +20,35 @@ Blockly.defineBlocksWithJsonArray([
         "message0": "turnLeft",
         "previousStatement": null,
         "nextStatement": null,
-        "colour": 330,
+        "colour": actionColor,
         "tooltip": "Turn 90° to the left from where you are facing",
         "helpUrl": ""
     },
+    //Beeper Actions
+    {
+        "type": "take_beeper",
+        "message0": "takeBeeper",
+        "previousStatement": null,
+        "nextStatement": null,
+        "colour": actionColor,
+        "tooltip": "Take a beeper from the current location (if there is one)",
+        "helpUrl": ""
+    },
+    {
+        "type": "put_beeper",
+        "message0": "putBeeper",
+        "previousStatement": null,
+        "nextStatement": null,
+        "colour": actionColor,
+        "tooltip": "Put a beeper at the current location",
+        "helpUrl": ""
+    },
+    //Direction Logic
     {
         "type": "is_facing_north",
         "message0": "isFacingNorth",
         "output": "Boolean",
-        "colour": 30,
+        "colour": booleanColor,
         "tooltip": "Check if Karel is facing 'North'",
         "helpUrl": ""
     },
@@ -32,7 +56,7 @@ Blockly.defineBlocksWithJsonArray([
         "type": "is_facing_south",
         "message0": "isFacingSouth",
         "output": "Boolean",
-        "colour": 30,
+        "colour": booleanColor,
         "tooltip": "Check if Karel is facing 'South'",
         "helpUrl": ""
     },
@@ -40,7 +64,7 @@ Blockly.defineBlocksWithJsonArray([
         "type": "is_facing_west",
         "message0": "isFacingWest",
         "output": "Boolean",
-        "colour": 30,
+        "colour": booleanColor,
         "tooltip": "Check if Karel is facing 'West'",
         "helpUrl": ""
     },
@@ -48,17 +72,15 @@ Blockly.defineBlocksWithJsonArray([
         "type": "is_facing_east",
         "message0": "isFacingEast",
         "output": "Boolean",
-        "colour": 30,
+        "colour": booleanColor,
         "tooltip": "Check if Karel is facing 'East'",
         "helpUrl": ""
     },
-
-
     {
         "type": "is_not_facing_west",
         "message0": "isNotFacingWest",
         "output": "Boolean",
-        "colour": 30,
+        "colour": booleanColor,
         "tooltip": "Check if Karel is not facing 'West'",
         "helpUrl": ""
     },
@@ -66,7 +88,7 @@ Blockly.defineBlocksWithJsonArray([
         "type": "is_not_facing_east",
         "message0": "isNotFacingEast",
         "output": "Boolean",
-        "colour": 30,
+        "colour": booleanColor,
         "tooltip": "Check if Karel is not facing 'East'",
         "helpUrl": ""
     },
@@ -74,7 +96,7 @@ Blockly.defineBlocksWithJsonArray([
         "type": "is_not_facing_north",
         "message0": "isNotFacingNorth",
         "output": "Boolean",
-        "colour": 30,
+        "colour": booleanColor,
         "tooltip": "Check if Karel is not facing 'North'",
         "helpUrl": ""
     },
@@ -82,16 +104,79 @@ Blockly.defineBlocksWithJsonArray([
         "type": "is_not_facing_south",
         "message0": "isNotFacingSouth",
         "output": "Boolean",
-        "colour": 30,
+        "colour": booleanColor,
         "tooltip": "Check if Karel is not facing 'South'",
         "helpUrl": ""
     },
-
-
-    
-
+    //block/clear logic
+    {
+        "type": "front_is_clear",
+        "message0": "frontIsClear",
+        "output": "Boolean",
+        "colour": booleanColor,
+        "tooltip": "Check if Karel can move forward",
+        "helpUrl": ""
+    },
+    {
+        "type": "front_is_blocked",
+        "message0": "frontIsBlocked",
+        "output": "Boolean",
+        "colour": booleanColor,
+        "tooltip": "Check if Karel cannot move forward",
+        "helpUrl": ""
+    },
+    {
+        "type": "left_is_clear",
+        "message0": "leftIsClear",
+        "output": "Boolean",
+        "colour": booleanColor,
+        "tooltip": "Check if Karel can move left",
+        "helpUrl": ""
+    },
+    {
+        "type": "left_is_blocked",
+        "message0": "leftIsBlocked",
+        "output": "Boolean",
+        "colour": booleanColor,
+        "tooltip": "Check if Karel cannot move left",
+        "helpUrl": ""
+    },
+    {
+        "type": "right_is_clear",
+        "message0": "rightIsClear",
+        "output": "Boolean",
+        "colour": booleanColor,
+        "tooltip": "Check if Karel can move right",
+        "helpUrl": ""
+    },
+    {
+        "type": "right_is_blocked",
+        "message0": "rightIsBlocked",
+        "output": "Boolean",
+        "colour": booleanColor,
+        "tooltip": "Check if Karel cannot move right",
+        "helpUrl": ""
+    },
+    //beeper logic
+    {
+        "type": "beepers_present",
+        "message0": "beepersPresent",
+        "output": "Boolean",
+        "colour": booleanColor,
+        "tooltip": "Check if there is one or more beepers present in the current location",
+        "helpUrl": ""
+    },
+    {
+        "type": "no_beepers_present",
+        "message0": "noBeepersPresent",
+        "output": "Boolean",
+        "colour": booleanColor,
+        "tooltip": "Check if there are no beepers present in the current location",
+        "helpUrl": ""
+    },
 ]);
 
+//movement actions
 javascriptGenerator.forBlock['move_forward'] = function(block, generator) {
     let code = 'moveForward();\n';
     return code;
@@ -102,7 +187,18 @@ javascriptGenerator.forBlock['turn_left'] = function(block, generator) {
     return code;
 };
 
+//beeper actions
+javascriptGenerator.forBlock['put_beeper'] = function(block, generator) {
+    let code = 'putBeeper();\n';
+    return code;
+};
 
+javascriptGenerator.forBlock['take_beeper'] = function(block, generator) {
+    let code = 'takeBeeper();\n';
+    return code;
+};
+
+//direction logic
 javascriptGenerator.forBlock['is_facing_west'] = function(block, generator) {
     let code = `isFacingWest()`;
     return [code, generator.ORDER_ATOMIC];
@@ -141,5 +237,47 @@ javascriptGenerator.forBlock['is_not_facing_north'] = function(block, generator)
 
 javascriptGenerator.forBlock['is_not_facing_south'] = function(block, generator) {
     let code = 'isNotFacingSouth()';
+    return [code, generator.ORDER_ATOMIC];
+}
+
+//block/clear logic
+javascriptGenerator.forBlock['front_is_clear'] = function(block, generator) {
+    let code = 'frontIsClear()';
+    return [code, generator.ORDER_ATOMIC];
+}
+
+javascriptGenerator.forBlock['front_is_blocked'] = function(block, generator) {
+    let code = 'frontIsBlocked()';
+    return [code, generator.ORDER_ATOMIC];
+}
+
+javascriptGenerator.forBlock['left_is_clear'] = function(block, generator) {
+    let code = 'leftIsClear()';
+    return [code, generator.ORDER_ATOMIC];
+}
+
+javascriptGenerator.forBlock['left_is_blocked'] = function(block, generator) {
+    let code = 'leftIsBlocked()';
+    return [code, generator.ORDER_ATOMIC];
+}
+
+javascriptGenerator.forBlock['right_is_clear'] = function(block, generator) {
+    let code = 'rightIsClear()';
+    return [code, generator.ORDER_ATOMIC];
+}
+
+javascriptGenerator.forBlock['right_is_blocked'] = function(block, generator) {
+    let code = 'rightIsBlocked()';
+    return [code, generator.ORDER_ATOMIC];
+}
+
+//beeper logic
+javascriptGenerator.forBlock['beepers_present'] = function(block, generator) {
+    let code = 'beepersPresent()';
+    return [code, generator.ORDER_ATOMIC];
+}
+
+javascriptGenerator.forBlock['no_beepers_present'] = function(block, generator) {
+    let code = 'noBeepersPresent()';
     return [code, generator.ORDER_ATOMIC];
 }

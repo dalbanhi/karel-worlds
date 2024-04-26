@@ -1,6 +1,8 @@
 
 class KarelElement{
-    constructor(type, count=1, subtype=''){
+    constructor(type, x, y, count=1, subtype=''){
+        this.x = x;
+        this.y = y;
         this.type = type;
         this.count = count;
         this.subtype = subtype;
@@ -28,6 +30,18 @@ class KarelElement{
 
     addOne(){
         this.count = this.count + 1;
+    }
+
+    subtractOne(){
+        this.count = this.count - 1;
+    }
+
+    getSubtype(){
+        return this.subtype;
+    }
+
+    getCoords(){
+        return [this.x, this.y];
     }
 }
 

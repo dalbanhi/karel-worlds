@@ -11,23 +11,21 @@ function toCamelCase(str) {
         }
         return word[0].toUpperCase() + word.slice(1).toLowerCase();
     });
+    return camelCaseWords.join('');
 }
 
 const CustomizableSpriteInfo = ({spriteName}) => {
 
     const [customSprite, setCustomSprite] = useState(false);
     const [customSpriteUploadOption, setCustomSpriteUploadOption] = useState("url");
-
+    console.log
     const camelCaseSpriteName = toCamelCase(spriteName);
-
     const {spriteImages, setSpriteImages} = useContext(SpriteImagesContext);
 
     const onSpriteImageFileChange = (e) => {
         const file = e.target.files[0];
         const reader = new FileReader();
         reader.onload = (e) => {
-            // setKarelImg(e.target.result);
-            //add a check for which image to set based on spriteName
             setSpriteImages({
                 ...spriteImages,
                 [camelCaseSpriteName]: e.target.result
@@ -37,8 +35,7 @@ const CustomizableSpriteInfo = ({spriteName}) => {
             reader.readAsDataURL(file);
         }
         catch(err){
-            console.log(err);
-            alert('Error uploading image. Please try again.');
+            alert('Error uploading image. Please try a different one.');
         }
     }
     
@@ -53,8 +50,6 @@ const CustomizableSpriteInfo = ({spriteName}) => {
                 onChange={(e) => {
                     setCustomSprite(e.target.value === 'custom' ? true : false)
                     if (e.target.value === 'default') {
-                        // setKarelImg(originalKarelImg);
-                        //add a check for which image to set based on spriteName
                         setSpriteImages((oldSprites) => ({
                             ...oldSprites,
                             [camelCaseSpriteName]: oldSprites.defaultKarel
@@ -90,9 +85,6 @@ const CustomizableSpriteInfo = ({spriteName}) => {
                             placeholder={`New ${spriteName} Image URL`} 
                             required
                             onChange={(e) => {
-                                console.log(e.target.value);
-                                // setKarelImg(e.target.value);
-                                //add a check for which image to set based on spriteName
                                 setSpriteImages({
                                     ...spriteImages,
                                     [camelCaseSpriteName]: e.target.value
