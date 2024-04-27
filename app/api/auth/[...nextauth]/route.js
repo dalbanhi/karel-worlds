@@ -5,6 +5,11 @@ import { connectToDatabase } from "@utils/database";
 
 import User from "@models/User";
 
+
+function removeAccents(str) {
+    return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+}
+
 const handler = NextAuth({
     providers: [
         GoogleProvider({
@@ -31,12 +36,27 @@ const handler = NextAuth({
                 const userExistsAlready = await User.findOne({
                     email: profile.email
                 });
-    
+
+                let uniqueUsername = profile.name.replaceAll(" ", ".").toLowerCase();
+
+                uniqueUsername = removeAccents(uniqueUsername);
+
+                while(await User.findOne({username: uniqueUsername})){
+                    uniqueUsername += Math.floor(Math.random() * 10);
+                }
+
+                //make sure username is at least 8 characters long
+                while(uniqueUsername.length < 8){
+                    uniqueUsername += Math.floor(Math.random() * 10);
+                }
+
+                // //make sure username is at most 30 characters long
+                uniqueUsername = uniqueUsername.slice(0, 30);
                 //if the user does not exist, make one
                 if(!userExistsAlready){
                     await User.create({
                         email: profile.email,
-                        username: profile.name.replaceAll(" ", ".").toLowerCase(), //replace spaces with periods and make everything lowercase -- possibly add a random number to the end to avoid duplicates?
+                        username: uniqueUsername, 
                         image: profile.picture,
     
                     });

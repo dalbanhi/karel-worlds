@@ -10,6 +10,7 @@ import PuzzleCardList from '@components/Puzzles/PuzzleCardList';
 
 const Puzzles = () => {
     const { data: session, status } = useSession();
+    const user = session?.user;
     const router = useRouter();
     const [puzzles, setPuzzles] = useState([]);
 
@@ -26,8 +27,21 @@ const Puzzles = () => {
         }
     }, [status]);
 
-    const handlePuzzleClick = (id) => {
-        console.log(id);
+    const handlePuzzleClick = (puzzle) => {
+        console.log("I am handling the puzzle click")
+        console.log(puzzle);
+
+        //check if the user is the creator of the puzzle
+        console.log(user.id);
+        console.log(puzzle.creator._id);
+        if (user.id === puzzle.creator._id) {
+            alert("Editing puzzles will be available soon!")
+            // router.push(`/puzzle-creator/${puzzle.id}`);
+        }
+        else {
+            const id = puzzle._id;
+            router.push(`/puzzle/${id}`);
+        }
     }
 
     return (

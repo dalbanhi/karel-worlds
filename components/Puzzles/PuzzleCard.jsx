@@ -1,6 +1,15 @@
-import React from 'react'
+'use client'
+import React from 'react';
+import Image from 'next/image';
 
-const PuzzleCard = ({puzzle, handleClick}) => {
+import { useSession } from 'next-auth/react'; 
+
+const PuzzleCard = ({puzzle, handlePuzzleClick}) => {
+    const { data: session, status } = useSession();
+
+    const isAuthenticated = status === 'authenticated';
+    const isUser = isAuthenticated && session.user.id === puzzle.creator._id;
+
     return (
         <>
             <div 
@@ -11,25 +20,38 @@ const PuzzleCard = ({puzzle, handleClick}) => {
                         <h2><span className='puzzle_card_title blue_purple_gradient'>Title: </span> {puzzle.puzzleInfo.name}</h2>
                         <p><span className='puzzle_card_title blue_purple_gradient'>Description: </span><span className='puzzle_card_description'>{puzzle.puzzleInfo.description}</span></p>
                         <p><span className='puzzle_card_title blue_purple_gradient'>World Dimensions: </span><span className='puzzle_card_description'>{puzzle.puzzleInfo.worldDimensions.width}x{puzzle.puzzleInfo.worldDimensions.height}</span></p>
+                        <p><span className='puzzle_card_title blue_purple_gradient'>Creator: </span><span className='puzzle_card_description'>{isUser ? `You`: puzzle.creator.username}</span></p>
                     </div>
                     <div className='w-1/2 flex'>
-                        <figure className=' flex flex-col justify-start items-center'>
+                        <figure className='px-3 flex flex-col justify-start items-center'>
                             <figcaption className='font-bold'>Karel</figcaption>
-                            <img src={puzzle.spriteImages.karel} alt="Karel in this puzzle" className='puzzle_card_image'/>
+                            <Image
+                                src={puzzle.spriteImages.karel}
+                                alt="Karel in this puzzle"
+                                width={150}
+                                height={200}
+                            />
                     
                         </figure>
-                        <figure className=' flex flex-col justify-start items-center'>
+                        <figure className='px-3 flex flex-col justify-start items-center'>
                             <figcaption className='font-bold'>Beepers</figcaption>
-                            <img src={puzzle.spriteImages.beeper} alt="Beepers in this puzzle" className='puzzle_card_image'/>
+                            <Image
+                                src={puzzle.spriteImages.beeper}
+                                alt="Beepers in this puzzle"
+                                width={150}
+                                height={200}
+                            />   
                         </figure>
                     </div>
                 </div>
                 <div className='pt-2 flex justify-center items-center'>
                     <button 
                         className='puzzle_card_button'
-                        onClick={() => handleClick(puzzle)}
+                        onClick={() => handlePuzzleClick(puzzle)}
                     >
-                        Solve Puzzle
+                        {isAuthenticated ? (
+                            isUser ? `Edit Puzzle` : `Solve Puzzle`
+                        ): `Sign in to Solve`}
                     </button>
                 </div>
                 

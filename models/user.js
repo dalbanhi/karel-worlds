@@ -9,7 +9,7 @@ const UserSchema = new Schema({
     username: {
         type: String,
         required: [true, 'Username is required'],
-        match: [/^(?=.{8,20}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])$/, 'Username must be between 8 and 20 characters long and can only contain letters, numbers, and periods'],
+        match: [/^(?=.{8,30}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])$/, 'Username must be between 8 and 30 characters long and can only contain letters, numbers, and periods'],
     },
     image: {
         type: String,
