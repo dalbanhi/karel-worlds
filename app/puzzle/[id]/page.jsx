@@ -1,5 +1,5 @@
 'use client';
-import {useState, useRef, useEffect } from 'react';
+import {useState, useRef, useEffect, createContext } from 'react';
 
 import { useSession } from 'next-auth/react';
 import {useRouter, useParams} from 'next/navigation';
@@ -80,12 +80,13 @@ function setCanvasSize(windowSize){
   return canvasSize;
 }
 
-
+export const RunningWorldStateContext = createContext();
 
 const Puzzle = () => {
     const { data: session, status } = useSession();
     const {id} = useParams();
     const [puzzle, setPuzzle] = useState({});
+    const router = useRouter();
 
     const [userJavaScriptCode, setUserJavaScriptCode] = useState('');
     const [toolboxData, setToolboxData] = useState(null);
@@ -98,6 +99,7 @@ const Puzzle = () => {
 
     const [karelStart, setKarelStart] = useState(null);
     const [karelGoal, setKarelGoal] = useState(null);
+    const [karelRunning, setKarelRunning] = useState(null);
 
     const [beeper, setBeeper] = useState({
         img: '',
@@ -105,6 +107,10 @@ const Puzzle = () => {
 
     const [startWorldBeeperList, setStartWorldBeeperList] = useState([]);
     const [goalWorldBeeperList, setGoalWorldBeeperList] = useState([]);
+
+    const [runningWorldBeeperList, setRunningWorldBeeperList] = useState([]);
+
+    const [shouldCheckSolution, setShouldCheckSolution] = useState(false);
 
     //getting the puzzle info from the backend
     useEffect(() => {
@@ -145,7 +151,6 @@ const Puzzle = () => {
     useEffect(() => {
 
         if(puzzle){
-            console.log(puzzle);
             //set the world dimensions
             setWorldDimensions(puzzle.puzzleInfo?.worldDimensions);
 
@@ -164,7 +169,6 @@ const Puzzle = () => {
             //set the start world beeper list
             //turn into array of KarelElements
             let startBeepers = puzzle.startWorldInfo?.beepers;
-            console.log(startBeepers);
             if(startBeepers !== undefined){
                 startBeepers = startBeepers.map(beeper => {
                     return new KarelElement("beeper", beeper.x, beeper.y, beeper.count);
@@ -182,10 +186,6 @@ const Puzzle = () => {
                 setGoalWorldBeeperList(goalBeepers);
             
             }
-
-            //set the beeper image
-            // console.log("BEEPER IMAGE: ")
-            // console.log(puzzle.spriteImages?.beeper);
             let beeperImg = puzzle.spriteImages?.beeper;
             if(beeperImg !== undefined){
                 setBeeper({
@@ -197,6 +197,12 @@ const Puzzle = () => {
 
 
     }, [puzzle, puzzle.puzzleInfo, puzzle.startWorldInfo, puzzle.goalWorldInfo, puzzle.spriteImages, puzzle.spriteImages?.karel, puzzle.spriteImages?.beeper, puzzle.startWorldInfo?.beepers, puzzle.goalWorldInfo?.beepers]);
+
+    useEffect(() => {
+        if(shouldCheckSolution){
+            checkPuzzleSolution();
+        }
+    }, [shouldCheckSolution]);
 
     function workspaceDidChange(workspace) {
         //TODO: Add block highlighting
@@ -216,6 +222,61 @@ const Puzzle = () => {
     function onAceChange(value){
         // console.log(value);
     }
+
+    function karelEquality(karel1, karel2){
+        let xs = Number(karel1.x) === Number(karel2.x);
+        let ys = Number(karel1.y) === Number(karel2.y);
+        let dirs = karel1.direction === karel2.direction;
+        let beeperBag = Number(karel1.beeperBag) === Number(karel2.beeperBag);
+        return xs && ys && dirs && beeperBag;
+    }
+
+    function beepersListEquality(beepers1, beepers2){
+        if(beepers1.length !== beepers2.length){
+            return false;
+        }
+        for(let i = 0; i < beepers1.length; i++){
+            if(Number(beepers1[i].x) !== Number(beepers2[i].x) || Number(beepers1[i].y) !== Number(beepers2[i].y) || Number(beepers1[i].count) !== Number(beepers2[i].count)){
+                return false;
+            }
+        }
+        return true;
+    }
+
+    function checkPuzzleSolution(){
+        console.log('Checking Solution');
+        try{
+            console.log(karelGoal)
+            console.log(goalWorldBeeperList);
+            console.log("THE RUNNING WORLD")
+            console.log(runningWorldBeeperList);
+            console.log(karelRunning);
+            let karelsEqual = karelEquality(karelGoal, karelRunning);
+            let beepersEqual = beepersListEquality(goalWorldBeeperList, runningWorldBeeperList);
+
+            if(karelsEqual && beepersEqual){
+                alert('Puzzle Solved!');
+            }
+            else{
+                if(!karelsEqual){
+                    alert('Karels are not equal');
+                }
+                else{
+                    alert('Beepers are not equal');
+                }
+            }
+
+
+        }
+        catch(error){
+            console.error(error);
+        }
+        finally{
+            setShouldCheckSolution(false);
+        }
+
+    }
+
     if(!puzzle || !toolboxData || !worldDimensions || !karelStart || !karelGoal || beeper.img === '' || !startWorldBeeperList || !goalWorldBeeperList || !karelStart.img || !karelGoal.img){
         return <div className='mt-12'>Loading...</div>
     }
@@ -284,16 +345,21 @@ const Puzzle = () => {
           <div className='flex flex-col'>
             <h3 className='form_header blue_purple_gradient'>Solve the Puzzle...</h3>
             <h5 className='puzzle_instructions'>Drag & Drop the blocks on the left to write code and test it out below to attempt to solve the puzzle. Notice how you're actually writing real code!</h5>
-            <RunnableWorld
-              name="Example Puzzle"
-              canvasSize={canvasSize}
-              worldDimensions={worldDimensions}
-              rawCode={userJavaScriptCode}
-              initialKarel={karelStart}
-              initialBeepersList={startWorldBeeperList}
-              initialBeeper={beeper}
-              maxWorldWH={maxWorldWH}
-            />
+            {/* <RunningWorldStateContext.Provider value={{setKarelRunning, setRunningWorldBeeperList }}> */}
+                <RunnableWorld
+                    name="Example Puzzle"
+                    canvasSize={canvasSize}
+                    worldDimensions={worldDimensions}
+                    rawCode={userJavaScriptCode}
+                    initialKarel={karelStart}
+                    initialBeepersList={startWorldBeeperList}
+                    initialBeeper={beeper}
+                    maxWorldWH={maxWorldWH}
+                    setKarelRunning={setKarelRunning}
+                    setRunningWorldBeeperList={setRunningWorldBeeperList}
+                    setShouldCheckSolution={setShouldCheckSolution}
+                />
+            {/* </RunningWorldStateContext.Provider> */}
             <p className='puzzle_instructions'>The puzzle should look like the world below:</p>
             <ViewableWorld 
               name="Example Puzzle"

@@ -121,11 +121,6 @@ const PuzzleCreator = () => {
         e.preventDefault();
         setSubmitting(true);
         //here I will save information about the images and the world dimensions (and hints) to the database
-        console.log('Submitting Puzzle');
-        console.log(basePuzzleInfo);
-        console.log(spriteImages);
-        console.log(startWorldInfo);
-        console.log(goalWorldInfo);
 
 
         try{
@@ -163,11 +158,9 @@ const PuzzleCreator = () => {
 
             });
             if(response.ok){
-                console.log('Puzzle Created');
                 router.push('/puzzles');
             }
             const data = await response.json();
-            console.log(data);
         }
         catch(error){
             console.error('Error creating PUZZLE:', error);

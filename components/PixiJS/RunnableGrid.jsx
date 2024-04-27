@@ -1,5 +1,5 @@
 import React from 'react'
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef, useContext } from 'react';
 import {forwardRef, useImperativeHandle} from 'react';
 //sub components
 import Grid from './Grid';
@@ -8,7 +8,9 @@ import '@pixi/events';
 
 
 import KarelElement from '@utils/karel-elements/KarelElement';
-import { set } from 'mongoose';
+
+//why is this context not working?
+import { RunningWorldStateContext } from '@app/puzzle/[id]/page';
 
 // const possibleObjects = {
 //     "hWall": 1,
@@ -29,7 +31,8 @@ function makeNewGrid(rows, cols){
 }
 
 const RunnableGrid = forwardRef(function RunnableGrid(props, ref) {
-    const {pxWidth, pxHeight, rows, cols, maxWorldWH, initialKarel, initialBeeper, initialBeepersList} = props;
+
+    const {pxWidth, pxHeight, rows, cols, maxWorldWH, initialKarel, initialBeeper, initialBeepersList, setKarelRunning, setRunningWorldBeeperList} = props;
 
     const propsRef = useRef(props);
     const [karel, setKarel] = useState({
@@ -40,7 +43,7 @@ const RunnableGrid = forwardRef(function RunnableGrid(props, ref) {
         ...initialBeeper
     });
 
-    const [testBeeperList, setTestBeeperList] = useState(
+    const [currentBeeperList, setCurrentBeeperList] = useState(
         [...initialBeepersList]
     );
 
@@ -55,7 +58,7 @@ const RunnableGrid = forwardRef(function RunnableGrid(props, ref) {
         let newGrid = makeNewGrid(rows, cols);
 
         //add beepers to the grid
-        testBeeperList.forEach(beeper => {
+        currentBeeperList.forEach(beeper => {
             let placeToPutBeeper = newGrid[beeper.x][beeper.y];
             if(placeToPutBeeper[0].type === "empty"){
                 newGrid[beeper.x][beeper.y] = [beeper];
@@ -79,8 +82,9 @@ const RunnableGrid = forwardRef(function RunnableGrid(props, ref) {
         setInternalGrid(newGrid);
 
         setKarel({...karel});
+        setKarelRunning({...karel});
     
-    }, [karel.x, karel.y, karel.direction, karel.beeperBag, rows, cols, testBeeperList, initialBeepersList])
+    }, [karel.x, karel.y, karel.direction, karel.beeperBag, rows, cols, currentBeeperList, initialBeepersList])
 
     useImperativeHandle(ref, () => ({
 
@@ -101,9 +105,12 @@ const RunnableGrid = forwardRef(function RunnableGrid(props, ref) {
             //prepend karel to the grid only if there are beepers, otherwise, replace the first element
             newGrid[initialKarel.x][initialKarel.y].unshift(new KarelElement("karel", initialKarel.x, initialKarel.y));
 
-            setTestBeeperList([...initialBeepersList]);
+            setCurrentBeeperList([...initialBeepersList]);
+            setRunningWorldBeeperList([...initialBeepersList]);
             setInternalGrid(newGrid);
             setKarel({...initialKarel});
+            //update grandpa state
+            setKarelRunning({...initialKarel});
             
         },
 
@@ -149,6 +156,7 @@ const RunnableGrid = forwardRef(function RunnableGrid(props, ref) {
                     break;
             }
             setKarel(newKarel);
+            setKarelRunning(newKarel);
         },
 
         turnLeft() {
@@ -168,6 +176,7 @@ const RunnableGrid = forwardRef(function RunnableGrid(props, ref) {
                     break;
             }
             setKarel(newKarel);
+            setKarelRunning(newKarel);
         },
 
         //beeper actions
@@ -179,40 +188,51 @@ const RunnableGrid = forwardRef(function RunnableGrid(props, ref) {
             }
 
             // //check if there is already a beeper in the beeperlist
-            let beeperExists = testBeeperList.find(beeper => beeper.x === newKarel.x && beeper.y === newKarel.y);
+            let beeperExists = currentBeeperList.find(beeper => beeper.x === newKarel.x && beeper.y === newKarel.y);
 
             if(!beeperExists){
                 let newBeeper = new KarelElement("beeper", newKarel.x, newKarel.y);
-                setTestBeeperList([...testBeeperList, newBeeper]);
+                setCurrentBeeperList([...currentBeeperList, newBeeper]);
+                setRunningWorldBeeperList([...currentBeeperList, newBeeper]);
             }
             else{
                 //find the index of the beeper in the list
-                let index = testBeeperList.findIndex(beeper => beeper.x === newKarel.x && beeper.y === newKarel.y);
+                let index = currentBeeperList.findIndex(beeper => beeper.x === newKarel.x && beeper.y === newKarel.y);
 
-                setTestBeeperList((prevBeepers) =>{
+                setCurrentBeeperList((prevBeepers) =>{
                     let newBeepers = [...prevBeepers];
                     let updatedBeeper = new KarelElement("beeper", newKarel.x, newKarel.y, prevBeepers[index].count);
                     updatedBeeper.addOne();
                     newBeepers[index] = updatedBeeper;
                     return newBeepers;
-                })
+                });
+                //setting grandfather state
+                setRunningWorldBeeperList((prevBeepers) =>{
+                    let newBeepers = [...prevBeepers];
+                    let updatedBeeper = new KarelElement("beeper", newKarel.x, newKarel.y, prevBeepers[index].count);
+                    updatedBeeper.addOne();
+                    newBeepers[index] = updatedBeeper;
+                    return newBeepers;
+                });
             }
             setKarel(newKarel);
+            setKarelRunning(newKarel);
         },
 
         takeBeeper(){
+            console.log("taking beeper");
             let newKarel = {...karel};
             //check if there is a beeper in the beeperlist
-            let beeperExists = testBeeperList.find(beeper => beeper.x === newKarel.x && beeper.y === newKarel.y);
+            let beeperExists = currentBeeperList.find(beeper => beeper.x === newKarel.x && beeper.y === newKarel.y);
 
             if(!beeperExists){
                 throw new Error("Karel cannot take a beeper. There is no beeper at this location");
             }
             else{
                 //find the index of the beeper in the list
-                let index = testBeeperList.findIndex(beeper => beeper.x === newKarel.x && beeper.y === newKarel.y);
+                let index = currentBeeperList.findIndex(beeper => beeper.x === newKarel.x && beeper.y === newKarel.y);
 
-                setTestBeeperList((prevBeepers) =>{
+                setCurrentBeeperList((prevBeepers) =>{
                     let newBeepers = [...prevBeepers];
                     let updatedBeeper = new KarelElement("beeper", newKarel.x, newKarel.y, prevBeepers[index].count);
                     updatedBeeper.subtractOne();
@@ -223,9 +243,24 @@ const RunnableGrid = forwardRef(function RunnableGrid(props, ref) {
                         newBeepers[index] = updatedBeeper;
                     }
                     return newBeepers;
-                })
+                });
+                //setting grandfather state
+                setRunningWorldBeeperList((prevBeepers) =>{
+                    let newBeepers = [...prevBeepers];
+                    let updatedBeeper = new KarelElement("beeper", newKarel.x, newKarel.y, prevBeepers[index].count);
+                    updatedBeeper.subtractOne();
+                    if(updatedBeeper.count === 0){
+                        newBeepers.splice(index, 1);
+                    }
+                    else{
+                        newBeepers[index] = updatedBeeper;
+                    }
+                    return newBeepers;
+                });
             }
             setKarel(newKarel);
+            setKarelRunning(newKarel);
+            console.log("beeper taken");
         },
 
         //direction logic

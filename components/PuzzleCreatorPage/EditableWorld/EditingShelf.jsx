@@ -33,12 +33,12 @@ const EditingShelf = ({karel, setKarel, handleEditElement, worldInfo, onWorldInf
                 value={karel.x} 
                 className='form_range'
                 onChange={(e) => {
-                    setKarel({...karel, x: e.target.value});
+                    setKarel({...karel, x: Number(e.target.value)});
                     onWorldInfoChange({
                         ...worldInfo,
                         karel: {
                             ...karel,
-                            x: e.target.value
+                            x: Number(e.target.value)
                         }
                     });
                 }}
@@ -51,12 +51,12 @@ const EditingShelf = ({karel, setKarel, handleEditElement, worldInfo, onWorldInf
                 value={karel.y} 
                 className='form_range'
                 onChange={(e) => {
-                    setKarel({...karel, y: e.target.value});
+                    setKarel({...karel, y: Number(e.target.value)});
                     onWorldInfoChange({
                         ...worldInfo,
                         karel: {
                             ...karel,
-                            y: e.target.value
+                            y: Number(e.target.value)
                         }
                     });
                 }}

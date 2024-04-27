@@ -29,15 +29,16 @@ function useInterval(callback, delay){
 
 
 
-const RunnableWorld = ({name, canvasSize, worldDimensions, rawCode, initialKarel, initialBeeper, initialBeepersList, maxWorldWH}) => {
+const RunnableWorld = ({name, canvasSize, worldDimensions, rawCode, initialKarel, initialBeeper, initialBeepersList, maxWorldWH, checkPuzzleSolution, setKarelRunning, setRunningWorldBeeperList, setShouldCheckSolution}) => {
     
     //references for grid, interpreter and runLoop
     const runLoop = useRef(false);
     const interpreter = useRef(null);
     const gridRef = useRef(null);
+    const shouldCheckPuzzle = useRef(false);
 
     //movement functions
-    function moveForward(){gridRef.current.moveForward();}
+    // function moveForward(){gridRef.current.moveForward();}
     function turnLeft(){gridRef.current.turnLeft();}
 
     //beeper functions
@@ -67,14 +68,22 @@ const RunnableWorld = ({name, canvasSize, worldDimensions, rawCode, initialKarel
     function beepersPresent(){return gridRef.current.beepersPresent();}
     function noBeepersPresent(){return gridRef.current.noBeepersPresent();}
 
-
+    // function checkPuzzle(){
+    //     console.log("Checking puzzle solution");
+    //     console.log(checkPuzzleSolution)
+    //     try{
+    //         () => checkPuzzleSolution;
+    //     }catch(e){
+    //         throw e;
+    //     }
+    // }
     //js-interpreter api
     function initApi(interpreter, globalObject){
 
         //movement actions
         interpreter.setProperty(globalObject, 'moveForward', interpreter.createNativeFunction(() => {
             try{
-                moveForward();
+                gridRef.current.moveForward();
             }catch(e){
                 throw e;
             }
@@ -142,6 +151,8 @@ const RunnableWorld = ({name, canvasSize, worldDimensions, rawCode, initialKarel
             if(!ok){
                 runLoop.current = false;
                 stepAgain = false;
+                console.log("ACTUALLY DONE")
+                shouldCheckPuzzle.current = true;
             }
         }
         if(stepAgain){
@@ -203,7 +214,16 @@ const RunnableWorld = ({name, canvasSize, worldDimensions, rawCode, initialKarel
                 alert(e);
                 runLoop.current = false;
             }
-            app.renderer.render(app.stage)
+            app.renderer.render(app.stage);
+            console.log(shouldCheckPuzzle.current);
+            if(shouldCheckPuzzle.current){
+                console.log("checking puzzle solution");
+                app.renderer.render(app.stage);
+                app.renderer.render(app.stage);
+                console.log("rendered");
+                setShouldCheckSolution(true);
+                shouldCheckPuzzle.current = false;
+            }
         }
 
     }, karelSpeed);
@@ -211,7 +231,6 @@ const RunnableWorld = ({name, canvasSize, worldDimensions, rawCode, initialKarel
 
     return (
         <section>
-            {console.log(initialBeeper)}
             {name && <h1 className='text-xl font-extrabold'>{name}</h1>}
             <section className='mb-2'>
                 <button
@@ -276,6 +295,8 @@ const RunnableWorld = ({name, canvasSize, worldDimensions, rawCode, initialKarel
                         initialKarel={initialKarel}
                         initialBeeper={initialBeeper}
                         initialBeepersList={initialBeepersList}
+                        setKarelRunning={setKarelRunning}
+                        setRunningWorldBeeperList={setRunningWorldBeeperList}
                     />
                 </Container>
             
