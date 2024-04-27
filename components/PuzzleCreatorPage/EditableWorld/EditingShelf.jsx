@@ -136,13 +136,13 @@ const EditingShelf = ({karel, setKarel, handleEditElement, worldInfo, onWorldInf
                                             id={name}
                                             name={name}
                                             className='form_input'
-                                            placeholder="0"
+                                            placeholder={0}
                                             min="0"
                                             max={String(max)}
                                             value={elementEditingCoords[name]}
                                             onChange={(e) => setElementEditingCoords(
                                                 {...elementEditingCoords, 
-                                                [name]: e.target.value
+                                                [name]: Number(e.target.value)
                                             })}
                                         />
                                     </div>

@@ -101,12 +101,12 @@ const PuzzleCreator = () => {
 
     const [startWorldInfo, setStartWorldInfo] = useState({
         karel: {},
-        grid: []
+        beepers: []
     });
 
     const [goalWorldInfo, setGoalWorldInfo] = useState({
         karel: {},
-        grid: []
+        beepers: []
     });
 
     const [submitting, setSubmitting] = useState(false);
@@ -121,8 +121,11 @@ const PuzzleCreator = () => {
         e.preventDefault();
         setSubmitting(true);
         //here I will save information about the images and the world dimensions (and hints) to the database
-
-        //and also here, I will save the infomation about the starting and goal worlds to the database
+        console.log('Submitting Puzzle');
+        console.log(basePuzzleInfo);
+        console.log(spriteImages);
+        console.log(startWorldInfo);
+        console.log(goalWorldInfo);
 
 
         try{
@@ -159,9 +162,6 @@ const PuzzleCreator = () => {
                 }),
 
             });
-            console.log(response);
-            console.log(response.ok);
-
             if(response.ok){
                 console.log('Puzzle Created');
                 router.push('/puzzles');

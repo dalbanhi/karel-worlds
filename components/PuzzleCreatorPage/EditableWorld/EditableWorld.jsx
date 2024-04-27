@@ -55,7 +55,6 @@ const EditableWorld = ({name, canvasSize, worldInfo, onWorldInfoChange, maxWorld
 
     function handleEditBeeper(editingMode, row, column){
         let beeperExists = beepers.find(beeper => beeper.x === row && beeper.y === column);
-
             if(editingMode === "add"){
 
                 if(!beeperExists){
@@ -75,7 +74,7 @@ const EditableWorld = ({name, canvasSize, worldInfo, onWorldInfoChange, maxWorld
                     } );
 
                 }
-            }else if(editingMode === "remove"){
+            } else if(editingMode === "remove"){
 
                 //if the beeper exists, subtract one, if it's zero, completely remove it
                 if(beeperExists){
@@ -141,6 +140,38 @@ const EditableWorld = ({name, canvasSize, worldInfo, onWorldInfoChange, maxWorld
         return true;
     }
 
+
+    //use Effect for karel image and beeper image
+    useEffect(() => {
+
+        setKarel({
+            ...karel,
+            img: spriteImages.karel
+        });
+        //also update the world info
+        onWorldInfoChange({
+            ...worldInfo,
+            karel: {
+                ...karel,
+                img: spriteImages.karel
+            }
+        });
+
+        setBeeper({
+            ...beeper,
+            img: spriteImages.beeper
+        });
+        //also update the world info
+        // onWorldInfoChange({
+        //     ...worldInfo,
+        //     beeper: {
+        //         ...beeper,
+        //         img: spriteImages.beeper
+        //     }
+        // });
+
+    }, [karel.img, beeper.img, spriteImages.karel, spriteImages.defaultKarel, spriteImages.defaultBeeper, spriteImages.beeper]);
+
     
     useEffect(() => {   
         if(karel.x >= worldDimensions.width){
@@ -194,28 +225,19 @@ const EditableWorld = ({name, canvasSize, worldInfo, onWorldInfoChange, maxWorld
         setInternalGrid(newGrid);
         onWorldInfoChange({
             karel: karel,
-            grid: newGrid
+            beepers: newBeepers
         });
 
         //update beepers only if it changed
         if(!arraysAreEqual(beepers, newBeepers)){
             setBeepers(newBeepers);
+            onWorldInfoChange({
+                ...worldInfo,
+                beepers: newBeepers
+            });
         }
 
-        //update Karel img
-        setKarel({...karel, img: spriteImages.karel});
-        onWorldInfoChange({
-            karel: {
-                ...karel,
-                img: spriteImages.karel
-            },
-            grid: newGrid
-        });
-        //update beeper img
-        setBeeper({...beeper, img: spriteImages.beeper});
-
-
-    }, [worldDimensions, worldDimensions.height, karel.x, karel.y, karel.direction, karel.beeperBag, spriteImages, beepers])
+    }, [worldDimensions, karel.x, karel.y, karel.direction, karel.beeperBag, spriteImages, beepers])
     
     return (
         <section>

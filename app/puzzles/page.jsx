@@ -15,7 +15,6 @@ const Puzzles = () => {
     const [puzzles, setPuzzles] = useState([]);
 
     useEffect(() => {
-        console.log(status);
         if (status === 'authenticated') {
 
             const fetchPuzzles = async () => {
@@ -25,15 +24,13 @@ const Puzzles = () => {
             }
             fetchPuzzles();
         }
+        else{
+            router.push('/');
+        }
     }, [status]);
 
     const handlePuzzleClick = (puzzle) => {
-        console.log("I am handling the puzzle click")
-        console.log(puzzle);
-
         //check if the user is the creator of the puzzle
-        console.log(user.id);
-        console.log(puzzle.creator._id);
         if (user.id === puzzle.creator._id) {
             alert("Editing puzzles will be available soon!")
             // router.push(`/puzzle-creator/${puzzle.id}`);

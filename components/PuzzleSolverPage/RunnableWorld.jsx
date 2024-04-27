@@ -211,6 +211,7 @@ const RunnableWorld = ({name, canvasSize, worldDimensions, rawCode, initialKarel
 
     return (
         <section>
+            {console.log(initialBeeper)}
             {name && <h1 className='text-xl font-extrabold'>{name}</h1>}
             <section className='mb-2'>
                 <button
@@ -268,8 +269,8 @@ const RunnableWorld = ({name, canvasSize, worldDimensions, rawCode, initialKarel
                     <RunnableGrid 
                         pxWidth={canvasSize.width} 
                         pxHeight={canvasSize.height} 
-                        rows={worldDimensions.width} 
-                        cols={worldDimensions.height} 
+                        rows={worldDimensions?.width} 
+                        cols={worldDimensions?.height} 
                         maxWorldWH={maxWorldWH}
                         ref={gridRef}
                         initialKarel={initialKarel}

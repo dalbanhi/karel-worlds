@@ -74,7 +74,8 @@ const RunnableGrid = forwardRef(function RunnableGrid(props, ref) {
         }
         else{
             newGrid[karelX][karelY].unshift(new KarelElement("karel", karelX, karelY));
-        }
+        };
+
         setInternalGrid(newGrid);
 
         setKarel({...karel});
@@ -329,16 +330,19 @@ const RunnableGrid = forwardRef(function RunnableGrid(props, ref) {
     }));
 
     return (
-        <Grid
-            pxWidth={pxWidth}
-            pxHeight={pxHeight}
-            rows={rows}
-            cols={cols}
-            internalGrid={internalGrid}
-            karel={karel}
-            beeper={beeper}
-            maxWorldWH={maxWorldWH}
-        />
+        <>
+            <Grid
+                pxWidth={pxWidth}
+                pxHeight={pxHeight}
+                rows={rows}
+                cols={cols}
+                internalGrid={internalGrid}
+                karel={karel}
+                beeper={beeper}
+                maxWorldWH={maxWorldWH}
+            />
+        </>
+        
     );
 });
 

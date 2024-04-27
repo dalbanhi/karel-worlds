@@ -51,7 +51,7 @@ const CustomizableSpriteInfo = ({spriteName}) => {
                     if (e.target.value === 'default') {
                         setSpriteImages((oldSprites) => ({
                             ...oldSprites,
-                            [camelCaseSpriteName]: oldSprites.defaultKarel
+                            [camelCaseSpriteName]: oldSprites[`default${spriteName}`]
                         }));
                     }
                 }}
