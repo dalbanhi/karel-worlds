@@ -2,16 +2,14 @@
 
 import {useState } from 'react';
 import BasePuzzleInfo from './BasePuzzleInfo';
+import HintsSection from './HintsSection';
 import CustomizableSpriteInfo from './CustomizableSpriteInfo';
 // import { SpriteImagesContext } from '@app/puzzle-creator/page';
 
-const WorldsEditor = ({handleSubmit, worldDimensions, setWorldDimensions, maxWorldWH}) => {
+const WorldsEditor = ({handleSubmit, maxWorldWH, submitting}) => {
 
     const minWorldWH = 1;
     const defaultWorldWH = 10;
-
-
-
 
     return (
         <section className='w-full max-w-full flex-start flex-col'>
@@ -23,25 +21,31 @@ const WorldsEditor = ({handleSubmit, worldDimensions, setWorldDimensions, maxWor
                 className='flex flex-start flex-wrap my-1 justify-evenly gap-1 w-full max-w-full p-3 border-2 border-blue-400 rounded-md bg-blue-100'
             >
                 <BasePuzzleInfo
-                    worldDimensions={worldDimensions}
-                    setWorldDimensions={setWorldDimensions}
                     maxWorldWH={maxWorldWH}
                     minWorldWH={minWorldWH}
                     defaultWorldWH={defaultWorldWH}
                 />
+                <HintsSection/>
                 <CustomizableSpriteInfo
                     spriteName='Karel'
                 />
                 <CustomizableSpriteInfo
                     spriteName='Beeper'
                 />
+                {/** TODO: Add walls */}
                 {/* <CustomizableSpriteInfo
                     spriteName='Wall Piece'
                 />
                 <CustomizableSpriteInfo
                     spriteName='Wall Corner'
                 /> */}
-                <button className='form_button' type="submit">Save Puzzle</button>
+                <button 
+                    className='form_button' 
+                    type="submit"
+                    disabled={submitting}
+                >
+                        Save Puzzle
+                </button>
 
             </form>
         </section>

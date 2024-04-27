@@ -1,7 +1,11 @@
 'use client'
-import { useState } from 'react'
+import { useState, useContext } from 'react';
 
-const EditingShelf = ({karel, setKarel, worldDimensions, handleEditElement}) => {
+import { BasePuzzleInfoContext } from '@app/puzzle-creator/page';
+
+const EditingShelf = ({karel, setKarel, handleEditElement, worldInfo, onWorldInfoChange}) => {
+    const [basePuzzleInfo, setBasePuzzleInfo] = useContext(BasePuzzleInfoContext);
+    const worldDimensions = basePuzzleInfo.worldDimensions;
 
     function capitalizeFirstLetter(string) {
         return string.charAt(0).toUpperCase() + string.slice(1);
@@ -28,7 +32,16 @@ const EditingShelf = ({karel, setKarel, worldDimensions, handleEditElement}) => 
                 min="0" max={String(worldDimensions.width-1)} 
                 value={karel.x} 
                 className='form_range'
-                onChange={(e) => {setKarel({...karel, x: e.target.value})}}
+                onChange={(e) => {
+                    setKarel({...karel, x: e.target.value});
+                    onWorldInfoChange({
+                        ...worldInfo,
+                        karel: {
+                            ...karel,
+                            x: e.target.value
+                        }
+                    });
+                }}
              />
             <label htmlFor="karelY" className='form_label'>
                 Karel Y Position: <span>{karel.y}</span>
@@ -37,7 +50,16 @@ const EditingShelf = ({karel, setKarel, worldDimensions, handleEditElement}) => 
                 min="0" max={String(worldDimensions.height-1)} 
                 value={karel.y} 
                 className='form_range'
-                onChange={(e) => {setKarel({...karel, y: e.target.value})}}
+                onChange={(e) => {
+                    setKarel({...karel, y: e.target.value});
+                    onWorldInfoChange({
+                        ...worldInfo,
+                        karel: {
+                            ...karel,
+                            y: e.target.value
+                        }
+                    });
+                }}
                 
              />
              <div className="flex flex-col">
@@ -47,7 +69,16 @@ const EditingShelf = ({karel, setKarel, worldDimensions, handleEditElement}) => 
                 <select 
                     name="direction" id="direction" className='form_input_short' 
                     defaultValue={karel.direction}
-                    onChange={(e) => {setKarel({...karel, direction: e.target.value})}}
+                    onChange={(e) => {
+                        setKarel({...karel, direction: e.target.value});
+                        onWorldInfoChange({
+                            ...worldInfo,
+                            karel: {
+                                ...karel,
+                                direction: e.target.value
+                            }
+                        });
+                    }}
                 >
                     <option value="north">North</option>
                     <option value="east">East</option>

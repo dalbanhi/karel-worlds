@@ -7,6 +7,15 @@ class KarelElement{
         this.count = count;
         this.subtype = subtype;
     }
+    toJSON(){
+        return {
+            x: this.x,
+            y: this.y,
+            type: this.type,
+            count: this.count,
+            subtype: this.subtype
+        };
+    }
 
     isBeeper(){
         return this.type === "beeper";

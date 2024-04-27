@@ -18,9 +18,8 @@ const CustomizableSpriteInfo = ({spriteName}) => {
 
     const [customSprite, setCustomSprite] = useState(false);
     const [customSpriteUploadOption, setCustomSpriteUploadOption] = useState("url");
-    console.log
     const camelCaseSpriteName = toCamelCase(spriteName);
-    const {spriteImages, setSpriteImages} = useContext(SpriteImagesContext);
+    const [spriteImages, setSpriteImages] = useContext(SpriteImagesContext);
 
     const onSpriteImageFileChange = (e) => {
         const file = e.target.files[0];

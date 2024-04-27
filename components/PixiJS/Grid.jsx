@@ -79,8 +79,8 @@ const Grid = ({pxWidth, pxHeight, rows, cols, internalGrid, karel, beeper, maxWo
                                                         key={`${colIndex}-${rowIndex}-${elementIndex}-beeper`}
                                                         x={colIndex * xPxStep + xPxStep / 2}
                                                         y={rowIndex * yPXStep + yPXStep / 2}
-                                                        width={xPxStep}
-                                                        height={yPXStep}
+                                                        width={xPxStep*0.75}
+                                                        height={yPXStep*0.75}
                                                         beeper={{
                                                             img: beeper.img, 
                                                             beeperCount: element.count

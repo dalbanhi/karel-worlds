@@ -60,10 +60,11 @@ function setCanvasSize(windowSize){
 }
 
 export const SpriteImagesContext = createContext();
+export const BasePuzzleInfoContext = createContext();
 
 const PuzzleCreator = () => {
 
-    const {data: session} = useSession();
+    const {data: session, status} = useSession();
 
     const router = useRouter();
 
@@ -74,8 +75,18 @@ const PuzzleCreator = () => {
 
     const defaultKarelImg = "/assets/images/karel/karel.png";
     const defaultBeeperImg = "/assets/images/beeper/beeper.png";
-    const defaultWallPieceImg = "/assets/images/walls/wall-piece.png";
-    const defaultWallCornerImg = "/assets/images/walls/wall-corner.png";
+    // const defaultWallPieceImg = "/assets/images/walls/wall-piece.png";
+    // const defaultWallCornerImg = "/assets/images/walls/wall-corner.png";
+
+    const [basePuzzleInfo, setBasePuzzleInfo] = useState({
+        name: '',
+        description: '',
+        worldDimensions: {
+            width: 10,
+            height: 10
+        },
+        hints:['', '', '']
+    })
 
     const [spriteImages, setSpriteImages] = useState({
         defaultKarel: defaultKarelImg,
@@ -88,48 +99,118 @@ const PuzzleCreator = () => {
         // wallCorner: defaultWallCornerImg,
     });
 
-    
-    const [worldDimensions, setWorldDimensions] = useState({
-        width: 10,
-        height: 10
-    })
+    const [startWorldInfo, setStartWorldInfo] = useState({
+        karel: {},
+        grid: []
+    });
 
-    const handleSubmit = (e) => { 
+    const [goalWorldInfo, setGoalWorldInfo] = useState({
+        karel: {},
+        grid: []
+    });
+
+    const [submitting, setSubmitting] = useState(false);
+
+    const handleSubmit = async (e) => {
+        //check if user is authenticatedq
+        if(status !== 'authenticated'){
+            alert('You must be logged in to create a puzzle');
+            return;
+        }
+        
         e.preventDefault();
-        console.log('submit');
+        setSubmitting(true);
         //here I will save information about the images and the world dimensions (and hints) to the database
+
+        //and also here, I will save the infomation about the starting and goal worlds to the database
+
+
+        try{
+            //don't save the default images
+            const customImages = {
+                karel: spriteImages.karel,
+                beeper: spriteImages.beeper,
+            }
+            const startWorldInfoNoImages = {
+                ...startWorldInfo,
+                karel:{
+                    ...startWorldInfo.karel,
+                    img: ''
+                }
+            };
+
+
+            //don' save the karel images in the world to avoid redundancy
+            const goalWorldInfoNoImages = {
+                ...goalWorldInfo,
+                karel:{
+                    ...goalWorldInfo.karel,
+                    img: ''
+                }
+            };
+            const response = await fetch('/api/puzzle/new',{
+                method: 'POST',
+                body: JSON.stringify({
+                    userId: session.user.id,
+                    puzzleInfo: basePuzzleInfo,
+                    spriteImages: customImages,
+                    startWorldInfo: startWorldInfoNoImages,
+                    goalWorldInfo: goalWorldInfoNoImages,
+                }),
+
+            });
+            console.log(response);
+            console.log(response.ok);
+
+            if(response.ok){
+                console.log('Puzzle Created');
+                router.push('/puzzles');
+            }
+            const data = await response.json();
+            console.log(data);
+        }
+        catch(error){
+            console.error('Error creating PUZZLE:', error);
+        }
+        finally{
+            setSubmitting(false);
+        }
+
     };
 
     return (
-        <SpriteImagesContext.Provider value={{spriteImages, setSpriteImages}}>
-            <section className="mt-12  w-full flex-center flex-col">
-                <h1 className="main_heading text-center">Puzzle Creator</h1>
-                {/* <p>{size.width}px / {size.height}px</p> */}
-                <section className="sm:hidden flex justify-center">
-                    Puzzle Editing only available on Desktop    
-                </section>
-                <WorldsEditor 
-                        handleSubmit={handleSubmit}
-                        worldDimensions={worldDimensions}
-                        setWorldDimensions={setWorldDimensions}
-                        maxWorldWH={maxWorldWH}
+        <SpriteImagesContext.Provider value={[spriteImages, setSpriteImages]}>
+            <BasePuzzleInfoContext.Provider value={[basePuzzleInfo, setBasePuzzleInfo]}>
+                <section className="mt-12  w-full flex-center flex-col">
+                    <h1 className="main_heading text-center">Puzzle Creator</h1>
+                    {/* <p>{size.width}px / {size.height}px</p> */}
+                    <section className="sm:hidden flex justify-center">
+                        Puzzle Editing only available on Desktop    
+                    </section>
+                    <WorldsEditor 
+                            handleSubmit={handleSubmit}
+                            maxWorldWH={maxWorldWH}
+                            submitting={submitting}
                     />
-                <section className="hidden sm:flex justify-evenly gap-4 my-4">
-                    
-                    <EditableWorld
-                        name="Starting World"
-                        canvasSize={canvasSize}
-                        worldDimensions={worldDimensions}
-                        maxWorldWH={maxWorldWH}
-                    />
-                    <EditableWorld
-                        name="Goal World"
-                        canvasSize={canvasSize}
-                        worldDimensions={worldDimensions}
-                        maxWorldWH={maxWorldWH}
-                    />    
+                    <section className="hidden sm:flex justify-evenly gap-4 my-4">
+                        
+                        <EditableWorld
+                            name="Starting World"
+                            canvasSize={canvasSize}
+                            maxWorldWH={maxWorldWH}
+                            worldInfo={startWorldInfo}
+                            onWorldInfoChange={setStartWorldInfo}
+                        />
+                        <EditableWorld
+                            name="Goal World"
+                            canvasSize={canvasSize}
+                            maxWorldWH={maxWorldWH}
+                            worldInfo={goalWorldInfo}
+                            onWorldInfoChange={setGoalWorldInfo}
+                        />    
+                    </section>
                 </section>
-            </section>
+            </BasePuzzleInfoContext.Provider>
         </SpriteImagesContext.Provider>
     )
 }

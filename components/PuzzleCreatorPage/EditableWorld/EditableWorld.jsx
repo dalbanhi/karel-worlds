@@ -13,6 +13,7 @@ import { SpriteImagesContext } from '@app/puzzle-creator/page';
 
 //utils
 import KarelElement from '@utils/karel-elements/KarelElement';
+import { BasePuzzleInfoContext } from '@app/puzzle-creator/page';
 
 /**
  * A helper function that creates a new empty grid for the world
@@ -31,9 +32,13 @@ function makeNewGrid(rows, cols){
     return newGrid;
 }
 
-const EditableWorld = ({name, canvasSize, worldDimensions, maxWorldWH}) => {
+const EditableWorld = ({name, canvasSize, worldInfo, onWorldInfoChange, maxWorldWH}) => {
 
-    const {spriteImages} = useContext(SpriteImagesContext);
+    const [basePuzzleInfo, setBasePuzzleInfo] = useContext(BasePuzzleInfoContext);
+
+    const worldDimensions = basePuzzleInfo.worldDimensions;
+    const [spriteImages, setSpriteImages] = useContext(SpriteImagesContext);
+
     const [karel, setKarel] = useState({
         x: 0,
         y: 0,
@@ -140,9 +145,23 @@ const EditableWorld = ({name, canvasSize, worldDimensions, maxWorldWH}) => {
     useEffect(() => {   
         if(karel.x >= worldDimensions.width){
             setKarel({...karel, x: worldDimensions.width - 1});
+            onWorldInfoChange({
+                ...worldInfo,
+                karel: {
+                    ...karel,
+                    x: worldDimensions.width - 1
+                }
+            });
         }
         if(karel.y >= worldDimensions.height){
             setKarel({...karel, y: worldDimensions.height- 1});
+            onWorldInfoChange({
+                ...worldInfo,
+                karel: {
+                    ...karel,
+                    y: worldDimensions.height - 1
+                }
+            });
         }
         //make a new empty grid
         let newGrid = makeNewGrid(worldDimensions.width, worldDimensions.height);
@@ -173,6 +192,10 @@ const EditableWorld = ({name, canvasSize, worldDimensions, maxWorldWH}) => {
         
         //set the new grid
         setInternalGrid(newGrid);
+        onWorldInfoChange({
+            karel: karel,
+            grid: newGrid
+        });
 
         //update beepers only if it changed
         if(!arraysAreEqual(beepers, newBeepers)){
@@ -181,11 +204,18 @@ const EditableWorld = ({name, canvasSize, worldDimensions, maxWorldWH}) => {
 
         //update Karel img
         setKarel({...karel, img: spriteImages.karel});
+        onWorldInfoChange({
+            karel: {
+                ...karel,
+                img: spriteImages.karel
+            },
+            grid: newGrid
+        });
         //update beeper img
         setBeeper({...beeper, img: spriteImages.beeper});
 
 
-    }, [worldDimensions.width, worldDimensions.height, karel.x, karel.y, karel.direction, karel.beeperBag, spriteImages, beepers])
+    }, [worldDimensions, worldDimensions.height, karel.x, karel.y, karel.direction, karel.beeperBag, spriteImages, beepers])
     
     return (
         <section>
@@ -193,8 +223,9 @@ const EditableWorld = ({name, canvasSize, worldDimensions, maxWorldWH}) => {
             <EditingShelf
                 karel={karel}
                 setKarel={setKarel}
-                worldDimensions={worldDimensions}
                 handleEditElement={handleEditElement}
+                worldInfo={worldInfo}
+                onWorldInfoChange={onWorldInfoChange}
             />
             <Stage 
                 width={canvasSize.width} height={canvasSize.height} options={{background: 0xFFFFFF}}
