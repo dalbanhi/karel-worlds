@@ -174,7 +174,7 @@ const PuzzleCreator = () => {
     return (
         <SpriteImagesContext.Provider value={[spriteImages, setSpriteImages]}>
             <BasePuzzleInfoContext.Provider value={[basePuzzleInfo, setBasePuzzleInfo]}>
-                <section className="mt-12  w-full flex-center flex-col">
+                <section className="mt-12 w-5/6 flex-center flex-col">
                     <h1 className="main_heading text-center">Puzzle Creator</h1>
                     {/* <p>{size.width}px / {size.height}px</p> */}
                     <section className="sm:hidden flex justify-center">
@@ -185,7 +185,7 @@ const PuzzleCreator = () => {
                             maxWorldWH={maxWorldWH}
                             submitting={submitting}
                     />
-                    <section className="hidden sm:flex justify-evenly gap-4 my-4">
+                    <section className="w-full hidden sm:flex justify-evenly gap-4 my-4 py-4 ">
                         
                         <EditableWorld
                             name="Starting World"

@@ -278,102 +278,97 @@ const Puzzle = () => {
         return <div className='mt-12'>Loading...</div>
     }
     return (
-        <section className="mt-12  w-full flex-center flex-col">
-          <h1 className="main_heading text-center mb-4">{puzzle.puzzleInfo?.name}</h1>
-          <p className="text-center my-2 py-2 text-gray-800">
+        <section className="mt-12 pb-4 w-full flex-center flex-col">
+            <h1 className="main_heading text-center mb-4">{puzzle.puzzleInfo?.name}</h1>
+            <p className="text-center my-2 py-2 text-gray-800">
             <span className="text-xl font-bold">Description:</span> {puzzle.puzzleInfo?.description}
-          </p>
-          <section className="sm:hidden flex justify-center">
-            Puzzle Editing only available on Desktop    
-          </section>
-          <section className="flex justify-between gap-6">
-          <div className='flex w-3/4 h-fot border-4 border-blue-500'>
-            {toolboxData &&
-            <BlocklyWorkspace 
-              toolboxConfiguration={toolboxData}
-              onWorkspaceChange={workspaceDidChange}
-              className="w-1/2 h-full border-2 border-gray-300"
-              workspaceConfiguration={{
-                collapse: true,
-                comments: false,
-                disable: false,
-                maxBlocks: Infinity,
-                trashcan: true,
-                horizontalLayout: false,
-                toolboxPosition: 'start',
-                css: true,
-                media: 'https://blockly-demo.appspot.com/static/media/',
-                rtl: false,
-                scrollbars: true,
-                sounds: true,
-                oneBasedIndex: false,
-                grid: {
-                    spacing: 20,
-                    length: 3,
-                    colour: '#888',
-                    snap: true,
-                },
-              }}
-            />}
-            <div className='w-1/2 h-full border-2 border-gray-300'>
-              <AceEditor 
-                  mode="javascript"
-                  theme="github"
-                  name="userJavaScriptCodeOnAce"
-                  width='100%'
-                  height='100%'
-                  onChange={(value) => onAceChange(value)}
-                  fontSize={14}
-                  showPrintMargin={true}
-                  showGutter={true}
-                  highlightActiveLine={true}
-                  readOnly={true}
-                  value={userJavaScriptCode}
-                  enableLiveAutocompletion={true}
-                  enableBasicAutocompletion={true}
-                  enableSnippets={true}
-                  setOptions={{
-                      showLineNumbers: true,
-                      tabSize: 5,
-                  }}
-              />
-            </div>
-          </div>
-          <div className='flex flex-col'>
-            <h3 className='form_header blue_purple_gradient'>Solve the Puzzle...</h3>
-            <h5 className='puzzle_instructions'>Drag & Drop the blocks on the left to write code and test it out below to attempt to solve the puzzle. Notice how you're actually writing real code!</h5>
-            {/* <RunningWorldStateContext.Provider value={{setKarelRunning, setRunningWorldBeeperList }}> */}
-                <RunnableWorld
-                    name={puzzle.puzzleInfo?.name}
-                    canvasSize={canvasSize}
-                    worldDimensions={worldDimensions}
-                    rawCode={userJavaScriptCode}
-                    initialKarel={karelStart}
-                    initialBeepersList={startWorldBeeperList}
-                    initialBeeper={beeper}
-                    maxWorldWH={maxWorldWH}
-                    setKarelRunning={setKarelRunning}
-                    setRunningWorldBeeperList={setRunningWorldBeeperList}
-                    setShouldCheckSolution={setShouldCheckSolution}
-                />
-            {/* </RunningWorldStateContext.Provider> */}
-            <p className='puzzle_instructions'>The puzzle should look like the world below:</p>
-            <ViewableWorld 
-              name={puzzle.puzzleInfo?.name}
-              canvasSize={canvasSize}
-              worldDimensions={worldDimensions}
-              hints={puzzle.puzzleInfo?.hints}
-              initialKarel={karelGoal}
-              initialBeepersList={goalWorldBeeperList}
-              initialBeeper={beeper}
-              maxWorldWH={maxWorldWH}
-            />
-
-          </div>
-
+            </p>
+            <section className="sm:hidden flex justify-center">
+                Puzzle Editing only available on Desktop    
             </section>
- 
-
+            <section className="flex justify-between gap-6">
+                <div className='flex w-3/4 h-fot border-4 border-blue-500'>
+                    {toolboxData &&
+                    <BlocklyWorkspace 
+                        toolboxConfiguration={toolboxData}
+                        onWorkspaceChange={workspaceDidChange}
+                        className="w-1/2 h-full border-2 border-gray-300"
+                        workspaceConfiguration={{
+                            collapse: true,
+                            comments: false,
+                            disable: false,
+                            maxBlocks: Infinity,
+                            trashcan: true,
+                            horizontalLayout: false,
+                            toolboxPosition: 'start',
+                            css: true,
+                            media: 'https://blockly-demo.appspot.com/static/media/',
+                            rtl: false,
+                            scrollbars: true,
+                            sounds: true,
+                            oneBasedIndex: false,
+                            grid: {
+                                spacing: 20,
+                                length: 3,
+                                colour: '#888',
+                                snap: true,
+                            },
+                        }}
+                    />
+                    }
+                    <div className='w-1/2 h-full border-2 border-gray-300'>
+                        <AceEditor 
+                            mode="javascript"
+                            theme="github"
+                            name="userJavaScriptCodeOnAce"
+                            width='100%'
+                            height='100%'
+                            onChange={(value) => onAceChange(value)}
+                            fontSize={14}
+                            showPrintMargin={true}
+                            showGutter={true}
+                            highlightActiveLine={true}
+                            readOnly={true}
+                            value={userJavaScriptCode}
+                            enableLiveAutocompletion={true}
+                            enableBasicAutocompletion={true}
+                            enableSnippets={true}
+                            setOptions={{
+                                showLineNumbers: true,
+                                tabSize: 5,
+                            }}
+                        />
+                    </div>
+                </div>
+                <div className='flex flex-col'>
+                    <h3 className='form_header blue_purple_gradient'>Solve the Puzzle...</h3>
+                    <h5 className='puzzle_instructions'>Drag & Drop the blocks on the left to write code and test it out below to attempt to solve the puzzle. Notice how you're actually writing real code!</h5>
+                        <RunnableWorld
+                            name={puzzle.puzzleInfo?.name}
+                            canvasSize={canvasSize}
+                            worldDimensions={worldDimensions}
+                            rawCode={userJavaScriptCode}
+                            initialKarel={karelStart}
+                            initialBeepersList={startWorldBeeperList}
+                            initialBeeper={beeper}
+                            maxWorldWH={maxWorldWH}
+                            setKarelRunning={setKarelRunning}
+                            setRunningWorldBeeperList={setRunningWorldBeeperList}
+                            setShouldCheckSolution={setShouldCheckSolution}
+                        />
+                    <p className='puzzle_instructions'>The puzzle should look like the world below:</p>
+                    <ViewableWorld 
+                        name={puzzle.puzzleInfo?.name}
+                        canvasSize={canvasSize}
+                        worldDimensions={worldDimensions}
+                        hints={puzzle.puzzleInfo?.hints}
+                        initialKarel={karelGoal}
+                        initialBeepersList={goalWorldBeeperList}
+                        initialBeeper={beeper}
+                        maxWorldWH={maxWorldWH}
+                    />
+                </div>
+            </section>
         </section>
     )
 }

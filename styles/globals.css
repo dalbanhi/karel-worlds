@@ -111,7 +111,7 @@ svg[display="none"] {
 }
 
 .form_button{
-  @apply w-1/2 bg-blue-800 text-white rounded-full mt-2 py-2 text-sm font-inter font-semibold;
+  @apply w-1/2 bg-blue-800 text-white border-2 border-blue-800 rounded-full mt-2 py-2 text-sm font-inter font-semibold;
 }
 
 .form_button:hover{
