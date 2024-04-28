@@ -3,7 +3,7 @@ import PuzzleCard from '@components/Puzzles/PuzzleCard';
 
 const PuzzleCardList = ({puzzles, handlePuzzleClick}) => {
     return (
-        <div className='w-5/6 mt-16 puzzles_layout flex flex-row flex-wrap'>
+        <div className='w-5/6 mt-8 puzzles_layout flex flex-row justify-center items-center'>
             {puzzles.map((puzzle, index) => {
                 return (
                     <PuzzleCard 

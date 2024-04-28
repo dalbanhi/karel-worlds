@@ -48,7 +48,6 @@ const Puzzles = () => {
                 KarelWorlds currently only supports puzzle editing on Desktop   
             </section>
             <section className="hidden sm:flex justify-evenly gap-4 my-4">
-                {console.log(puzzles)}
                   <PuzzleCardList 
                     puzzles={puzzles} 
                     handlePuzzleClick={handlePuzzleClick}/>

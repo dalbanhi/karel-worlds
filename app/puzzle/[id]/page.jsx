@@ -19,6 +19,8 @@ import "ace-builds/src-noconflict/ace";
 import "ace-builds/webpack-resolver";
 import "ace-builds/src-noconflict/mode-javascript";
 import "ace-builds/src-noconflict/theme-github";
+import "ace-builds/src-noconflict/ext-language_tools";
+import "ace-builds/src-noconflict/snippets/javascript";
 
 import RunnableWorld from '@components/PuzzleSolverPage/RunnableWorld';
 import ViewableWorld from '@components/PuzzleSolverPage/ViewableWorld';
@@ -220,7 +222,7 @@ const Puzzle = () => {
     }
 
     function onAceChange(value){
-        // console.log(value);
+        // TODO: Handle changes to the Ace editor when editing is enabled.
     }
 
     function karelEquality(karel1, karel2){
@@ -244,13 +246,8 @@ const Puzzle = () => {
     }
 
     function checkPuzzleSolution(){
-        console.log('Checking Solution');
+        //TODO: Give feedback to user on what is wrong with the solution
         try{
-            console.log(karelGoal)
-            console.log(goalWorldBeeperList);
-            console.log("THE RUNNING WORLD")
-            console.log(runningWorldBeeperList);
-            console.log(karelRunning);
             let karelsEqual = karelEquality(karelGoal, karelRunning);
             let beepersEqual = beepersListEquality(goalWorldBeeperList, runningWorldBeeperList);
 
@@ -283,8 +280,8 @@ const Puzzle = () => {
     return (
         <section className="mt-12  w-full flex-center flex-col">
           <h1 className="main_heading text-center mb-4">{puzzle.puzzleInfo?.name}</h1>
-          <p text-center>
-            {puzzle.puzzleInfo?.description}
+          <p className="text-center my-2 py-2 text-gray-800">
+            <span className="text-xl font-bold">Description:</span> {puzzle.puzzleInfo?.description}
           </p>
           <section className="sm:hidden flex justify-center">
             Puzzle Editing only available on Desktop    
@@ -332,10 +329,10 @@ const Puzzle = () => {
                   highlightActiveLine={true}
                   readOnly={true}
                   value={userJavaScriptCode}
+                  enableLiveAutocompletion={true}
+                  enableBasicAutocompletion={true}
+                  enableSnippets={true}
                   setOptions={{
-                      enableBasicAutocompletion: true,
-                      enableLiveAutocompletion: true,
-                      enableSnippets: true,
                       showLineNumbers: true,
                       tabSize: 5,
                   }}
@@ -347,7 +344,7 @@ const Puzzle = () => {
             <h5 className='puzzle_instructions'>Drag & Drop the blocks on the left to write code and test it out below to attempt to solve the puzzle. Notice how you're actually writing real code!</h5>
             {/* <RunningWorldStateContext.Provider value={{setKarelRunning, setRunningWorldBeeperList }}> */}
                 <RunnableWorld
-                    name="Example Puzzle"
+                    name={puzzle.puzzleInfo?.name}
                     canvasSize={canvasSize}
                     worldDimensions={worldDimensions}
                     rawCode={userJavaScriptCode}
@@ -362,10 +359,10 @@ const Puzzle = () => {
             {/* </RunningWorldStateContext.Provider> */}
             <p className='puzzle_instructions'>The puzzle should look like the world below:</p>
             <ViewableWorld 
-              name="Example Puzzle"
+              name={puzzle.puzzleInfo?.name}
               canvasSize={canvasSize}
               worldDimensions={worldDimensions}
-              hints={"This is a hint"}
+              hints={puzzle.puzzleInfo?.hints}
               initialKarel={karelGoal}
               initialBeepersList={goalWorldBeeperList}
               initialBeeper={beeper}

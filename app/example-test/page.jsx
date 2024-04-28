@@ -168,7 +168,7 @@ const ExampleTest = () => {
     }
 
     function onAceChange(value){
-        // console.log(value);
+        //TODO: Handle Ace Editor changes when user writes code. Check syntax and conversion to blocks
     }
 
     return (

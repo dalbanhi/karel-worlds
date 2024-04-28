@@ -26,6 +26,10 @@ const ViewableWorld = ({initialKarel, initialBeeper, initialBeepersList, canvasS
     const [beeper, setBeeper] = useState({...initialBeeper});
     const [beepers, setBeepers] = useState([...initialBeepersList]);
 
+    const showHints = hints.forEach(hint => {
+         return false;  
+    });
+
     const firstEmptyGrid = makeNewGrid(worldDimensions.width, worldDimensions.height);
 
     const [internalGrid, setInternalGrid] = useState(firstEmptyGrid);
@@ -60,7 +64,29 @@ const ViewableWorld = ({initialKarel, initialBeeper, initialBeepersList, canvasS
     <>
         <div>
             {name && <h1 className='text-xl font-extrabold'>{name}'s Goal</h1>}
-            {hints && <h2 className='text-lg font-bold'>Hints: {hints}</h2>}
+            {hints && (
+                <>
+                    <h2 className='text-lg font-bold'>Hints</h2>
+                    <>
+                        <div className='text-sm flex gap-1'>
+                        {hints.map((hint, index) => {
+                            if(hint !== ''){
+                                return (
+                                    <button 
+                                        key={index} 
+                                        className='text-sm hint_button'
+                                        onClick={() => alert(hint)}
+                                    >
+                                        {`Hint ${index+1}`}
+                                    </button>
+                                )
+                            }
+                        })}
+                        </div>
+                    </>
+                    
+                </> 
+            )}
             <Stage 
                 width={canvasSize.width} height={canvasSize.height} options={{background: 0xFFFFFF}}
                 >

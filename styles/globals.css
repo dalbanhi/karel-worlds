@@ -42,7 +42,7 @@ svg[display="none"] {
 }
 
 .description{
-  @apply mt-5 text-lg text-gray-500 sm:text-xl max-w-2xl;
+  @apply mt-5 text-lg text-gray-500 sm:text-xl;
 }
 
 .blue_purple_gradient {
@@ -155,10 +155,6 @@ svg[display="none"] {
   @apply my-2 text-xs text-gray-800 sm:text-sm max-w-md;
 }
 
-/* .form_header{
-  @apply mt-2 text-xl font-extrabold leading-[1.15] sm:text-2xl;
-} */
-
 /** Puzzles View Page */
 
 .puzzle_card{
@@ -166,7 +162,7 @@ svg[display="none"] {
 }
 
 .glassy{
-  @apply rounded-xl border border-blue-500 bg-blue-500/20 shadow-[inset_10px-50px_94px_0_rgb(250,250,250,0.8)] backdrop-blur-md backdrop-filter p-5;
+  @apply rounded-xl border border-blue-500 bg-blue-500/20 shadow-[inset_10px-50px_94px_0_rgb(250,250,250,0.8)] backdrop-blur-md backdrop-filter;
 }
 
 .puzzle_card_title{
@@ -184,15 +180,24 @@ svg[display="none"] {
   @apply w-1/2 bg-blue-800 text-white rounded-full py-1 text-sm font-inter font-semibold border;
 }
 
-
-/* .puzzle_card_button:hover{
-  @apply bg-white bg-gradient-to-r from-purple-950 from-10% via-blue-800 via-50% to-cyan-600 text-white;
-} */
-
 .puzzle_card_button:hover{
   @apply bg-white text-blue-800 border-blue-800;
 }
 
 .puzzles_layout{
-  @apply space-y-6 py-8 sm:columns-2 sm:gap-6 xl:columns-3;
+  @apply py-8 sm:columns-2 sm:gap-6 xl:columns-3;
 }
+
+/* Viewable Puzzle */
+
+.hint_button{
+  @apply border border-blue-800 bg-blue-800 p-1 rounded-sm text-white font-inter flex items-center justify-center transition-all text-center text-sm;
+}
+
+.hint_button:hover{
+  @apply bg-white text-blue-800;
+}
+
+/* .nav_link{
+  @apply border border-blue-800 bg-blue-800 px-2 py-1 mx-1 my-1 rounded-md font-inter flex items-center justify-center transition-all text-center text-sm;
+} */

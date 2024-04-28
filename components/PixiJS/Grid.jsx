@@ -97,7 +97,8 @@ const Grid = ({pxWidth, pxHeight, rows, cols, internalGrid, karel, beeper, maxWo
                                                         radius={radius}
                                                         color={gridDotColor}
                                                         eventMode="static"
-                                                        click={() => console.log("circle clicked")}
+                                                        //TODO: Add onclick to edit the grid
+                                                        click={() => {}}
                                                         geometry={circle.current}
                                                         zIndex={1}
                                                     />

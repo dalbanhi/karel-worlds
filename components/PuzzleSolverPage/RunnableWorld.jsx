@@ -29,7 +29,7 @@ function useInterval(callback, delay){
 
 
 
-const RunnableWorld = ({name, canvasSize, worldDimensions, rawCode, initialKarel, initialBeeper, initialBeepersList, maxWorldWH, checkPuzzleSolution, setKarelRunning, setRunningWorldBeeperList, setShouldCheckSolution}) => {
+const RunnableWorld = ({name, canvasSize, worldDimensions, rawCode, initialKarel, initialBeeper, initialBeepersList, maxWorldWH, setKarelRunning, setRunningWorldBeeperList, setShouldCheckSolution}) => {
     
     //references for grid, interpreter and runLoop
     const runLoop = useRef(false);
@@ -37,64 +37,24 @@ const RunnableWorld = ({name, canvasSize, worldDimensions, rawCode, initialKarel
     const gridRef = useRef(null);
     const shouldCheckPuzzle = useRef(false);
 
-    //movement functions
-    // function moveForward(){gridRef.current.moveForward();}
-    function turnLeft(){gridRef.current.turnLeft();}
-
-    //beeper functions
-    function takeBeeper(){gridRef.current.takeBeeper();}
-    function putBeeper(){gridRef.current.putBeeper();}
-
-    //direction logic functions
-    function isFacingEast(){return gridRef.current.isFacingEast();}
-    function isFacingNorth(){return gridRef.current.isFacingNorth();}
-    function isFacingWest(){return gridRef.current.isFacingWest();}
-    function isFacingSouth(){return gridRef.current.isFacingSouth();}
-
-    function isNotFacingEast(){return gridRef.current.isNotFacingEast();}
-    function isNotFacingNorth(){return gridRef.current.isNotFacingNorth();}
-    function isNotFacingWest(){return gridRef.current.isNotFacingWest();}
-    function isNotFacingSouth(){return gridRef.current.isNotFacingSouth();}
-
-    //block/clear logic
-    function frontIsClear(){return gridRef.current.frontIsClear();}
-    function frontIsBlocked(){return gridRef.current.frontIsBlocked();}
-    function leftIsClear(){return gridRef.current.leftIsClear();}
-    function leftIsBlocked(){return gridRef.current.leftIsBlocked();}
-    function rightIsClear(){return gridRef.current.rightIsClear();}
-    function rightIsBlocked(){return gridRef.current.rightIsBlocked();}
-
-    //beeper logic
-    function beepersPresent(){return gridRef.current.beepersPresent();}
-    function noBeepersPresent(){return gridRef.current.noBeepersPresent();}
-
-    // function checkPuzzle(){
-    //     console.log("Checking puzzle solution");
-    //     console.log(checkPuzzleSolution)
-    //     try{
-    //         () => checkPuzzleSolution;
-    //     }catch(e){
-    //         throw e;
-    //     }
-    // }
     //js-interpreter api
     function initApi(interpreter, globalObject){
 
         //movement actions
         interpreter.setProperty(globalObject, 'moveForward', interpreter.createNativeFunction(() => {
             try{
-                gridRef.current.moveForward();
+                gridRef.current.moveForward();   //movement functions
             }catch(e){
                 throw e;
             }
         }));
 
-        interpreter.setProperty(globalObject, 'turnLeft', interpreter.createNativeFunction(() => {turnLeft()}));
+        interpreter.setProperty(globalObject, 'turnLeft', interpreter.createNativeFunction(() => { gridRef.current.turnLeft()}));
 
         //beeper actions
         interpreter.setProperty(globalObject, 'putBeeper', interpreter.createNativeFunction(() => {
             try{
-                putBeeper();
+                gridRef.current.putBeeper();
             }
             catch(e){
                 throw e;
@@ -102,7 +62,7 @@ const RunnableWorld = ({name, canvasSize, worldDimensions, rawCode, initialKarel
         }));
         interpreter.setProperty(globalObject, 'takeBeeper', interpreter.createNativeFunction(() => {
             try{
-                takeBeeper();
+                gridRef.current.takeBeeper();
             }
             catch(e){
                 throw e;
@@ -110,26 +70,26 @@ const RunnableWorld = ({name, canvasSize, worldDimensions, rawCode, initialKarel
         }));
 
         //direction logic
-        interpreter.setProperty(globalObject, 'isFacingEast', interpreter.createNativeFunction(() => {return isFacingEast()}));
-        interpreter.setProperty(globalObject, 'isFacingNorth', interpreter.createNativeFunction(() => {return isFacingNorth()}));
-        interpreter.setProperty(globalObject, 'isFacingWest', interpreter.createNativeFunction(() => {return isFacingWest()}));
-        interpreter.setProperty(globalObject, 'isFacingSouth', interpreter.createNativeFunction(() => {return isFacingSouth()}));
-        interpreter.setProperty(globalObject, 'isNotFacingEast', interpreter.createNativeFunction(() => {return isNotFacingEast()}));
-        interpreter.setProperty(globalObject, 'isNotFacingNorth', interpreter.createNativeFunction(() => {return isNotFacingNorth()}));
-        interpreter.setProperty(globalObject, 'isNotFacingWest', interpreter.createNativeFunction(() => {return isNotFacingWest()}));
-        interpreter.setProperty(globalObject, 'isNotFacingSouth', interpreter.createNativeFunction(() => {return isNotFacingSouth()}));
+        interpreter.setProperty(globalObject, 'isFacingEast', interpreter.createNativeFunction(() => {return gridRef.current.isFacingEast()}));
+        interpreter.setProperty(globalObject, 'isFacingNorth', interpreter.createNativeFunction(() => {return gridRef.current.isFacingNorth()}));
+        interpreter.setProperty(globalObject, 'isFacingWest', interpreter.createNativeFunction(() => {return gridRef.current.isFacingWest()}));
+        interpreter.setProperty(globalObject, 'isFacingSouth', interpreter.createNativeFunction(() => {return gridRef.current.isFacingSouth()}));
+        interpreter.setProperty(globalObject, 'isNotFacingEast', interpreter.createNativeFunction(() => {return gridRef.current.isNotFacingEast()}));
+        interpreter.setProperty(globalObject, 'isNotFacingNorth', interpreter.createNativeFunction(() => {return gridRef.current.isNotFacingNorth()}));
+        interpreter.setProperty(globalObject, 'isNotFacingWest', interpreter.createNativeFunction(() => {return gridRef.current.isNotFacingWest()}));
+        interpreter.setProperty(globalObject, 'isNotFacingSouth', interpreter.createNativeFunction(() => {return gridRef.current.isNotFacingSouth()}));
 
         //block/clear logic
-        interpreter.setProperty(globalObject, 'frontIsClear', interpreter.createNativeFunction(() => {return frontIsClear()}));
-        interpreter.setProperty(globalObject, 'frontIsBlocked', interpreter.createNativeFunction(() => {return frontIsBlocked()}));
-        interpreter.setProperty(globalObject, 'leftIsClear', interpreter.createNativeFunction(() => {return leftIsClear()}));
-        interpreter.setProperty(globalObject, 'leftIsBlocked', interpreter.createNativeFunction(() => {return leftIsBlocked()}));
+        interpreter.setProperty(globalObject, 'frontIsClear', interpreter.createNativeFunction(() => {return gridRef.current.frontIsClear()}));
+        interpreter.setProperty(globalObject, 'frontIsBlocked', interpreter.createNativeFunction(() => {return gridRef.current.frontIsBlocked()}));
+        interpreter.setProperty(globalObject, 'leftIsClear', interpreter.createNativeFunction(() => {return gridRef.current.leftIsClear()}));
+        interpreter.setProperty(globalObject, 'leftIsBlocked', interpreter.createNativeFunction(() => {return gridRef.current.leftIsBlocked()}));
         interpreter.setProperty(globalObject, 'rightIsClear', interpreter.createNativeFunction(() => {return rightIsClear()}));
-        interpreter.setProperty(globalObject, 'rightIsBlocked', interpreter.createNativeFunction(() => {return rightIsBlocked()}));
+        interpreter.setProperty(globalObject, 'rightIsBlocked', interpreter.createNativeFunction(() => {return gridRef.current.rightIsBlocked()}));
 
         //beeper logic
-        interpreter.setProperty(globalObject, 'beepersPresent', interpreter.createNativeFunction(() => {return beepersPresent()}));
-        interpreter.setProperty(globalObject, 'noBeepersPresent', interpreter.createNativeFunction(() => {return noBeepersPresent()}));
+        interpreter.setProperty(globalObject, 'beepersPresent', interpreter.createNativeFunction(() => {return gridRef.current.beepersPresent()}));
+        interpreter.setProperty(globalObject, 'noBeepersPresent', interpreter.createNativeFunction(() => {return gridRef.current.noBeepersPresent()}));
     }
 
 
@@ -151,7 +111,6 @@ const RunnableWorld = ({name, canvasSize, worldDimensions, rawCode, initialKarel
             if(!ok){
                 runLoop.current = false;
                 stepAgain = false;
-                console.log("ACTUALLY DONE")
                 shouldCheckPuzzle.current = true;
             }
         }
@@ -215,12 +174,8 @@ const RunnableWorld = ({name, canvasSize, worldDimensions, rawCode, initialKarel
                 runLoop.current = false;
             }
             app.renderer.render(app.stage);
-            console.log(shouldCheckPuzzle.current);
+
             if(shouldCheckPuzzle.current){
-                console.log("checking puzzle solution");
-                app.renderer.render(app.stage);
-                app.renderer.render(app.stage);
-                console.log("rendered");
                 setShouldCheckSolution(true);
                 shouldCheckPuzzle.current = false;
             }

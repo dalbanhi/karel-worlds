@@ -21,7 +21,8 @@ const Karel = ({x, y, width, height, karel}) => {
                 angle={directions[karel.direction]}
                 zIndex={2}
                 eventMode="static"
-                onclick={() => console.log("Karel was clicked")}
+                //TODO: Add onclick to edit the karel direction
+                onclick={() => {}}
             />
     )
 }

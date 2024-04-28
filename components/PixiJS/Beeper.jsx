@@ -15,7 +15,7 @@ const Beeper = ({x, y, width, height, beeper}) => {
                 anchor={0.5}
                 zIndex={3}
                 eventMode="static"
-                onclick={() => console.log("Beeper was clicked")}
+                onclick={() => {}}
             />
             <Text
                 x={x}
@@ -25,7 +25,8 @@ const Beeper = ({x, y, width, height, beeper}) => {
                 anchor={0.5}
                 zIndex={4}
                 eventMode="static"
-                onclick={() => console.log("Beeper count was clicked")}
+                //TODO: Add onclick to edit the beeper count
+                onclick={() => {}}
             />
         </>
     )

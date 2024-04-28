@@ -35,7 +35,6 @@ function makeNewGrid(rows, cols){
 const EditableWorld = ({name, canvasSize, worldInfo, onWorldInfoChange, maxWorldWH}) => {
 
     const [basePuzzleInfo, setBasePuzzleInfo] = useContext(BasePuzzleInfoContext);
-    console.log(BasePuzzleInfoContext);
 
     const worldDimensions = basePuzzleInfo.worldDimensions;
     const [spriteImages, setSpriteImages] = useContext(SpriteImagesContext);

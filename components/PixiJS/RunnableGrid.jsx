@@ -220,7 +220,6 @@ const RunnableGrid = forwardRef(function RunnableGrid(props, ref) {
         },
 
         takeBeeper(){
-            console.log("taking beeper");
             let newKarel = {...karel};
             //check if there is a beeper in the beeperlist
             let beeperExists = currentBeeperList.find(beeper => beeper.x === newKarel.x && beeper.y === newKarel.y);
@@ -260,7 +259,6 @@ const RunnableGrid = forwardRef(function RunnableGrid(props, ref) {
             }
             setKarel(newKarel);
             setKarelRunning(newKarel);
-            console.log("beeper taken");
         },
 
         //direction logic
