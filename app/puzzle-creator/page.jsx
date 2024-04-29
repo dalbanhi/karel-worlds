@@ -112,13 +112,15 @@ const PuzzleCreator = () => {
     const [submitting, setSubmitting] = useState(false);
 
     const handleSubmit = async (e) => {
-        //check if user is authenticatedq
+        //check if user is authenticated
+        e.preventDefault();
+        
         if(status !== 'authenticated'){
             alert('You must be logged in to create a puzzle');
             return;
         }
         
-        e.preventDefault();
+        
         setSubmitting(true);
         //here I will save information about the images and the world dimensions (and hints) to the database
 
@@ -170,6 +172,13 @@ const PuzzleCreator = () => {
         }
 
     };
+
+    if(status === 'loading'){
+        return <div>Loading...</div>
+    }
+    // else if(status === 'unauthenticated'){
+    //     router.push('/');
+    // }
 
     return (
         <SpriteImagesContext.Provider value={[spriteImages, setSpriteImages]}>

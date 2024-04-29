@@ -15,7 +15,7 @@ const Puzzles = () => {
     const [puzzles, setPuzzles] = useState([]);
 
     useEffect(() => {
-        if (status === 'authenticated') {
+        // if (status === 'authenticated') {
 
             const fetchPuzzles = async () => {
                 const res = await fetch('/api/puzzle');
@@ -23,14 +23,22 @@ const Puzzles = () => {
                 setPuzzles(data);
             }
             fetchPuzzles();
-        }
-        else{
-            router.push('/');
-        }
+        // }
+        // else{
+        //     router.push('/');
+        // }
     }, [status]);
 
     const handlePuzzleClick = (puzzle) => {
+        
+        //check if there is a user
+        if (!user) {
+            alert("You must be logged in to play a puzzle");
+            return;
+        }
+        
         //check if the user is the creator of the puzzle
+
         if (user.id === puzzle.creator._id) {
             alert("Editing puzzles will be available soon!")
             // router.push(`/puzzle-creator/${puzzle.id}`);

@@ -59,7 +59,7 @@ const Nav = () => {
                         >
                             Sign Out
                         </button>
-                        <Link href="/profile">
+                        <Link href="/">
                             <Image 
                                 src = {session?.user.image}
                                 alt="Profile"
@@ -72,6 +72,21 @@ const Nav = () => {
                     </div>
                 ) : (
                     <>
+                    <Link 
+                        href="/puzzle/662d4ab0de5f8685952594eb" 
+                        className='nav_link main_nav_link'>
+                            Example Puzzle
+                    </Link>
+                    <Link 
+                            href="/puzzle-creator" 
+                            className='nav_link main_nav_link'>
+                                Create a Puzzle
+                        </Link>
+                    <Link 
+                        href="/puzzles" 
+                        className='nav_link main_nav_link'>
+                            Puzzles
+                    </Link>
                     {providers &&
                         Object.values(providers).map((provider) => (
                             <button

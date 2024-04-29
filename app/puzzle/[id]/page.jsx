@@ -116,19 +116,19 @@ const Puzzle = () => {
 
     //getting the puzzle info from the backend
     useEffect(() => {
-        if(status === 'unauthenticated'){
-            router.push('/');
-        }
-        else{
+        // if(status === 'unauthenticated'){
+        //     router.push('/');
+        // }
+        // else{
             //get the puzzle info from backend
             const fetchPuzzle = async () => {
                 const response = await fetch(`/api/puzzle/${id}`);
                 const data = await response.json();
-                console.log(data);
+                // console.log(data);
                 setPuzzle(data);
             };
             fetchPuzzle();  
-        }
+        // }
     }, [status]);
 
     //getting the toolbox data from data folder
@@ -262,8 +262,6 @@ const Puzzle = () => {
                     alert('Beepers are not equal');
                 }
             }
-
-
         }
         catch(error){
             console.error(error);
@@ -271,12 +269,17 @@ const Puzzle = () => {
         finally{
             setShouldCheckSolution(false);
         }
-
     }
 
     if(!puzzle || !toolboxData || !worldDimensions || !karelStart || !karelGoal || beeper.img === '' || !startWorldBeeperList || !goalWorldBeeperList || !karelStart.img || !karelGoal.img){
         return <div className='mt-12'>Loading...</div>
     }
+    if(status === 'loading'){
+        return <div>Loading...</div>
+    }
+    // else if(status === 'unauthenticated'){
+    //     router.push('/');
+    // }
     return (
         <section className="mt-12 pb-4 w-full flex-center flex-col">
             <h1 className="main_heading text-center mb-4">{puzzle.puzzleInfo?.name}</h1>
@@ -373,4 +376,4 @@ const Puzzle = () => {
     )
 }
 
-export default Puzzle
+export default Puzzle;
