@@ -183,7 +183,7 @@ const RunnableGrid = forwardRef(function RunnableGrid(props, ref) {
         putBeeper() {
             let newKarel = {...karel};
             //check if karel still has beepers left
-            if(newKarel.beeperBag <= 0){
+            if(newKarel.beeperBag < 0){
                 throw new Error("Karel does not have any beepers left");
             }
 
