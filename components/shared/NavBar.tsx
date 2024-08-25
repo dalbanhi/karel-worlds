@@ -8,7 +8,9 @@ import {
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
 
-import { Button, buttonVariants } from "@/components/ui/button";
+import { SignInButton, SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
+
+import { buttonVariants } from "@/components/ui/button";
 import { PlusIcon } from "@radix-ui/react-icons";
 
 import { sourceCodePro, montserrat } from "@/app/fonts";
@@ -72,13 +74,24 @@ const NavBar = () => {
             </div>
           </Button> */}
           <Link
-            className={"flex gap-1 " + buttonVariants({ variant: "default" })}
+            className={
+              "flex gap-1 hover:bg-primary-foreground hover:text-primary hover:border hover:border-primary " +
+              buttonVariants({ variant: "default" })
+            }
             href="/login"
             passHref
           >
             <PlusIcon />
-            Login
+            New Puzzle
           </Link>
+          <SignedOut>
+            <div className="rounded-md bg-primary p-2 text-sm text-white hover:border hover:border-primary hover:bg-primary-foreground hover:text-primary">
+              <SignInButton />
+            </div>
+          </SignedOut>
+          <SignedIn>
+            <UserButton />
+          </SignedIn>
         </div>
       </div>
     </header>
