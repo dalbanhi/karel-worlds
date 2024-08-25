@@ -30,7 +30,23 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <ClerkProvider>
+    <ClerkProvider
+      appearance={{
+        variables: {
+          colorPrimary: "#5faba8",
+          colorDanger: "#ff8b42",
+          colorSuccess: "#adf0d2",
+          colorWarning: "#ffc83d",
+          colorNeutral: "#c5c4d4",
+          colorText: "#1f2141",
+          colorTextOnPrimaryBackground: "#fcfcfd",
+          colorTextSecondary: "#5faba8",
+          colorBackground: "#fcfcfd",
+          colorInputText: "#1f2141",
+          colorInputBackground: "#fcfcfd",
+        },
+      }}
+    >
       <html lang="en">
         <body className={openSans.className}>
           <main className="flex min-h-screen w-full flex-col">
