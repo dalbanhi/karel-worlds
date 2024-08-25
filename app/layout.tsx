@@ -6,6 +6,9 @@ import type { Viewport } from "next";
 export const metadata: Metadata = {
   title: "Karel Worlds",
   description: "A fun way to learn programming",
+  icons: {
+    icon: "/public/images/icon.svg",
+  },
 };
 
 import NavBar from "@/components/shared/NavBar";
