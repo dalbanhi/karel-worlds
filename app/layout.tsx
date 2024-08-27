@@ -37,7 +37,7 @@ export default function RootLayout({
           colorDanger: "#ff8b42",
           colorSuccess: "#adf0d2",
           colorWarning: "#ffc83d",
-          colorNeutral: "#c5c4d4",
+          colorNeutral: "#1f2141",
           colorText: "#1f2141",
           colorTextOnPrimaryBackground: "#fcfcfd",
           colorTextSecondary: "#5faba8",
@@ -49,7 +49,7 @@ export default function RootLayout({
     >
       <html lang="en">
         <body className={openSans.className}>
-          <main className="flex min-h-screen w-full flex-col">
+          <main className="relative min-h-screen w-full flex-col">
             <NavBar />
             {children}
             <Footer />

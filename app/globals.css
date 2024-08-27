@@ -41,4 +41,8 @@
   body {
     @apply bg-background text-foreground;
   }
+
+  .link_underline {
+    @apply hover:text-accent hover:underline;
+  }
 }
