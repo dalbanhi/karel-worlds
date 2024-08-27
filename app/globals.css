@@ -45,4 +45,9 @@
   .link_underline {
     @apply hover:text-accent hover:underline;
   }
+
+  .group:hover .inner_icon {
+    /* @apply bg-gradient-to-r from-accent via-primary to-ring; */
+    background-color: red;
+  }
 }

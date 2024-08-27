@@ -8,9 +8,16 @@ import {
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
 
-import { SignInButton, SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
+import {
+  SignInButton,
+  SignUp,
+  SignUpButton,
+  SignedIn,
+  SignedOut,
+  UserButton,
+} from "@clerk/nextjs";
 
-import { buttonVariants } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { PlusIcon } from "@radix-ui/react-icons";
 
 import { sourceCodePro, montserrat } from "@/app/fonts";
@@ -52,19 +59,19 @@ const DesktopNav = () => {
       <div className="flex items-center gap-4">
         <Link
           className={
-            "flex gap-1 hover:bg-primary-foreground hover:text-primary hover:border hover:border-primary " +
-            buttonVariants({ variant: "default" })
+            "flex gap-1 group " + buttonVariants({ variant: "gradient" })
           }
           href="/new-puzzle"
           passHref
         >
           <PlusIcon />
-          New Puzzle
+          <span>New Puzzle</span>
         </Link>
         <SignedOut>
-          <div className="rounded-md bg-primary p-2 text-sm text-white hover:border hover:border-primary hover:bg-primary-foreground hover:text-primary">
-            <SignInButton />
-          </div>
+          <SignUpButton />
+          <SignInButton>
+            <Button variant="default">Sign In</Button>
+          </SignInButton>
         </SignedOut>
         <SignedIn>
           <UserButton />
@@ -84,7 +91,7 @@ const NavBar = () => {
           passHref
         >
           <div
-            className={`${sourceCodePro.className} flex w-full items-center justify-center text-2xl font-semibold *:flex`}
+            className={`${sourceCodePro.className} flex w-full items-center justify-center text-2xl font-semibold`}
           >
             <Image
               src="/images/icon.svg"
@@ -92,7 +99,7 @@ const NavBar = () => {
               width={55}
               height={55}
             />
-            <h1 className="w-full whitespace-nowrap">Karel Worlds</h1>
+            <h1 className="w-full whitespace-nowrap text-ring">Karel Worlds</h1>
           </div>
         </Link>
         <span className="sr-only">Karel Worlds</span>
