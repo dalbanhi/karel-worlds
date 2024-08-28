@@ -18,15 +18,5 @@ export const checkUser = async () => {
     return dbUser;
   }
 
-  const newUser = await db.user.create({
-    data: {
-      clerkUserId: user.id,
-      role: "STUDENT",
-      name: `${user.firstName} ${user.lastName}`,
-      imageUrl: user.imageUrl,
-      email: user.emailAddresses[0].emailAddress,
-    },
-  });
-
-  return newUser;
+  return null;
 };

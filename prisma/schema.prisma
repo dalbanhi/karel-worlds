@@ -19,6 +19,7 @@ model User {
   clerkUserId       String       @unique
   email             String       @unique
   role              Role
+  onboardingComplete Boolean      @default(false)
   name              String?
   imageUrl          String?
   createdAt         DateTime     @default(now())
