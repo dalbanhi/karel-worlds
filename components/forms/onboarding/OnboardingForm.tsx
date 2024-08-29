@@ -6,7 +6,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { onboardingSchema } from "@/lib/validators/onboarding.schema";
 import { createUser } from "@/lib/actions/users";
-import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 interface OnboardingFormProps {
   baseUserInfo: {
@@ -18,10 +18,10 @@ interface OnboardingFormProps {
 }
 
 const OnboardingForm: React.FC<OnboardingFormProps> = ({ baseUserInfo }) => {
+  const router = useRouter();
   const {
     handleSubmit,
     setValue,
-    watch,
     formState: { errors },
   } = useForm({
     resolver: zodResolver(onboardingSchema),
@@ -34,13 +34,9 @@ const OnboardingForm: React.FC<OnboardingFormProps> = ({ baseUserInfo }) => {
     },
   });
 
-  const form = watch();
-
   const onSubmit = async (data: any) => {
-    console.log(data);
-    const u = await createUser(data);
-    console.log(u);
-    // redirect("/my-stuff");
+    await createUser(data);
+    router.push("/my-stuff");
   };
 
   const handleRoleSubmit = (role: "TEACHER" | "STUDENT") => {

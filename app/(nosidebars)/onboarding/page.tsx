@@ -11,14 +11,6 @@ const OnboardingPage = async () => {
     redirect("/sign-in");
   }
 
-  //   clerkUserId: clerkUser.id,
-  //   name: clerkUser.fullName,
-  //   imageUrl: clerkUser.imageUrl,
-  //   email: clerkUser.emailAddresses[0].emailAddress,
-  //   role: data.role,
-  //   onboardingComplete: true,
-  // },
-
   const baseUserInfo = {
     clerkUserId: clerkUser.id,
     name: clerkUser.fullName || null,
