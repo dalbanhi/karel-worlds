@@ -2,7 +2,7 @@ import { currentUser } from "@clerk/nextjs/server";
 
 import { db } from "@/lib/db";
 
-export const checkUser = async () => {
+export const getCurrentUser = async () => {
   const user = await currentUser();
   if (!user) {
     return null;
