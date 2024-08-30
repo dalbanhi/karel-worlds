@@ -18,10 +18,10 @@ const OnboardingPage = async () => {
     email: clerkUser.emailAddresses[0].emailAddress,
   };
 
-  //   const myCurrentUser = await getCurrentUser();
-  //   if (myCurrentUser?.onboardingComplete) {
-  //     redirect("/my-stuff");
-  //   }
+  const myCurrentUser = await getCurrentUser();
+  if (myCurrentUser?.onboardingComplete) {
+    redirect("/my-stuff");
+  }
 
   return (
     <div className="w-96 flex flex-col border rounded-md align-stretch justify-start max-w shadow-2xl p-10">
@@ -32,7 +32,10 @@ const OnboardingPage = async () => {
           </div>
           <h1 className="text-xl font-semibold text-center">
             Welcome to Karel Worlds,{" "}
-            <span className="text-primary">{clerkUser.firstName}</span>!
+            <span className="text-primary">
+              {clerkUser.firstName !== null ? clerkUser.firstName : "Explorer"}
+            </span>
+            !
           </h1>
           <p className=" text-xs text-center text-primary">
             Pick a username and your role below to get started

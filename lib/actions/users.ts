@@ -3,6 +3,16 @@ import { unstable_cache as cache, revalidateTag } from "next/cache";
 import { onboardingSchema } from "../validators/onboarding.schema";
 import { db } from "../db";
 
+export async function checkUsername(username: string): Promise<boolean> {
+  // This function checks if a username is already taken
+  const existingUser = await db.user.findUnique({
+    where: {
+      username,
+    },
+  });
+  return !!existingUser;
+}
+
 async function _createUser(data: any) {
   onboardingSchema.parse(data);
   // This function creates a user
@@ -15,12 +25,14 @@ async function _createUser(data: any) {
         email: data.email,
         role: data.role,
         onboardingComplete: true,
+        username: data.username,
       },
     });
     return newUser;
-  } catch (error) {
+  } catch (error: any) {
     console.error(error);
-    throw new Error("Failed to create user");
+    // return { error: error.message };
+    throw new Error(`Failed to create user: ${error.message}`);
   }
 }
 

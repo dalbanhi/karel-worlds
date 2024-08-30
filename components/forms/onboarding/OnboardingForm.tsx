@@ -8,6 +8,8 @@ import { onboardingSchema } from "@/lib/validators/onboarding.schema";
 import { createUser } from "@/lib/actions/users";
 import { useRouter } from "next/navigation";
 import { Input } from "@/components/ui/input";
+import { showError } from "@/components/shared/utils/FormSubmissionHandlers";
+import { useUsernameValidation } from "@/lib/hooks/useUsernameValidation";
 import { z } from "zod";
 
 import {
@@ -46,9 +48,25 @@ interface OnboardingFormProps {
 
 const OnboardingForm: React.FC<OnboardingFormProps> = ({ baseUserInfo }) => {
   const router = useRouter();
+  const { isUsernameTaken, validateUsername } = useUsernameValidation();
+  const [emailUsernameEqual, setEmailUsernameEqual] = useState(false);
+  const [usernameContainsName, setUsernameContainsName] = useState(false);
+  const isSubmitDisabled =
+    isUsernameTaken || emailUsernameEqual || usernameContainsName;
 
   const onSubmit = async (data: z.infer<typeof onboardingSchema>) => {
-    console.log("submitting", data);
+    //check that the username is not the same as the email
+    // if (data.username === data.email) {
+    //   showError("Username cannot be the same as email");
+    //   return;
+    // }
+
+    // //check that the username does not contain the name
+    // if (data.name && data.name.includes(data.username)) {
+    //   showError("Don't include your name in your username");
+    //   return;
+    // }
+
     await createUser(data);
     router.push("/my-stuff");
   };
@@ -67,7 +85,7 @@ const OnboardingForm: React.FC<OnboardingFormProps> = ({ baseUserInfo }) => {
 
   useEffect(() => {
     const generatedUsername = uniqueUsernameGenerator(config);
-
+    // add the generated username to the form once
     form.reset({
       ...form.getValues(),
       username: generatedUsername,
@@ -79,7 +97,20 @@ const OnboardingForm: React.FC<OnboardingFormProps> = ({ baseUserInfo }) => {
     form.handleSubmit(onSubmit)();
   };
 
-  console.log(form.formState.errors);
+  const checkUsernameCompletely = async (possibleUsername: string) => {
+    await validateUsername(possibleUsername);
+    setEmailUsernameEqual(possibleUsername === form.getValues().email);
+    let name = form.getValues().name?.toLowerCase();
+    if (possibleUsername === "") {
+      setUsernameContainsName(false);
+    } else {
+      if (name && name.includes(possibleUsername.toLowerCase())) {
+        setUsernameContainsName(true);
+      } else {
+        setUsernameContainsName(false);
+      }
+    }
+  };
 
   return (
     <Form {...form}>
@@ -95,17 +126,33 @@ const OnboardingForm: React.FC<OnboardingFormProps> = ({ baseUserInfo }) => {
                   autoFocus
                   placeholder="Choose a username..."
                   {...field}
+                  onChange={async (e) => {
+                    field.onChange(e);
+                    checkUsernameCompletely(e.target.value);
+                  }}
                 />
               </FormControl>
+
+              {form.formState.errors.username && (
+                <FormMessage>{`Error: ${form.formState.errors.username.message}`}</FormMessage>
+              )}
+              {isUsernameTaken && (
+                <FormMessage>This username is already taken.</FormMessage>
+              )}
+              {emailUsernameEqual && (
+                <FormMessage>Your username cannot be your email. </FormMessage>
+              )}
+              {usernameContainsName && (
+                <FormMessage>
+                  Try to not include your name in your username.
+                </FormMessage>
+              )}
               <FormDescription className="text-xs">
                 This is your public display name. <br />
                 Use the random one or choose your own. <br />
                 Do <strong>not</strong> make it your email or make it identical
                 to your actual name! 🙂
               </FormDescription>
-              {form.formState.errors.username && (
-                <FormMessage>{`Error: ${form.formState.errors.username.message}`}</FormMessage>
-              )}
             </FormItem>
           )}
         />
@@ -116,6 +163,7 @@ const OnboardingForm: React.FC<OnboardingFormProps> = ({ baseUserInfo }) => {
               className="size-36 flex flex-col text-primary"
               variant="outline"
               type="button"
+              disabled={isSubmitDisabled}
               onClick={() => handleRoleSubmit("TEACHER")}
             >
               <Image
@@ -131,6 +179,7 @@ const OnboardingForm: React.FC<OnboardingFormProps> = ({ baseUserInfo }) => {
               className="size-36 flex flex-col text-primary"
               variant="outline"
               type="button"
+              disabled={isSubmitDisabled}
               onClick={() => handleRoleSubmit("STUDENT")}
             >
               <Image
