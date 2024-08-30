@@ -18,23 +18,24 @@ const OnboardingPage = async () => {
     email: clerkUser.emailAddresses[0].emailAddress,
   };
 
-  const myCurrentUser = await getCurrentUser();
-  if (myCurrentUser?.onboardingComplete) {
-    redirect("/my-stuff");
-  }
+  //   const myCurrentUser = await getCurrentUser();
+  //   if (myCurrentUser?.onboardingComplete) {
+  //     redirect("/my-stuff");
+  //   }
+
   return (
-    <div className="w-96 flex flex-col border rounded-sm align-stretch justify-start max-w shadow-2xl p-10">
+    <div className="w-96 flex flex-col border rounded-md align-stretch justify-start max-w shadow-2xl p-10">
       <div className="w-full">
-        <div className="flex flex-col items-stretch justify-start">
+        <div className="flex flex-col items-stretch justify-start p-4">
           <div className="flex items-center justify-center">
             <Image src="/images/icon.svg" alt="logo" width={48} height={48} />
           </div>
           <h1 className="text-xl font-semibold text-center">
-            Welcome to Karel Worlds, {clerkUser.firstName}!
+            Welcome to Karel Worlds,{" "}
+            <span className="text-primary">{clerkUser.firstName}</span>!
           </h1>
-          <p className="text-primary text-xs text-center">
-            {" "}
-            Please select your primary role below
+          <p className=" text-xs text-center text-primary">
+            Pick a username and your role below to get started
           </p>
         </div>
         <OnboardingForm baseUserInfo={baseUserInfo} />

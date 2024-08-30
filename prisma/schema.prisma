@@ -18,6 +18,7 @@ model User {
   id                String       @id @default(uuid())
   clerkUserId       String       @unique
   email             String       @unique
+  // username          String       @unique
   role              Role
   onboardingComplete Boolean      @default(false)
   name              String?

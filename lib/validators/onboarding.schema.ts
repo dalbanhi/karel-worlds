@@ -7,4 +7,5 @@ export const onboardingSchema = z.object({
   imageUrl: z.string(),
   clerkUserId: z.string(),
   role: z.enum([Role.STUDENT, Role.TEACHER]),
+  username: z.string().min(2, "Username must be at least 2 characters"),
 });
