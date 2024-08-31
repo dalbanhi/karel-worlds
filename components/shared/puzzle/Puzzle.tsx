@@ -1,43 +1,19 @@
 "use client";
-import React, { useEffect, useState } from "react";
-import { BlocklyWorkspace } from "react-blockly";
-import {
-  serialization,
-  WorkspaceSvg,
-  getMainWorkspace,
-  BlockSvg,
-  Events,
-} from "blockly";
+import React, { useState } from "react";
+import { serialization, WorkspaceSvg, Events, getMainWorkspace } from "blockly";
 import "@/utils/custom/blocks/CustomBlocks";
 import { javascriptGenerator } from "blockly/javascript";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
-import CustomTheme from "@/utils/custom/blocks/CustomTheme";
+import MyBlocklyWorkspace from "./MyBlocklyWorkspace";
 
 const Puzzle = () => {
-  const [toolboxData, setToolboxData] = useState(null);
   const [userJavaScriptCode, setUserJavaScriptCode] = useState("");
+  const [workspaceState, setWorkspaceState] = useState({});
 
   const [editorMode, setEditorMode] = useState("block");
 
-  //getting the toolbox data from data folder
-  useEffect(() => {
-    const fetchToolboxData = async () => {
-      try {
-        const response = await fetch("/data/toolbox-data.json");
-        if (!response.ok) {
-          throw new Error("Failed to fetch toolbox data");
-        }
-        const data = await response.json();
-        setToolboxData(data);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-    fetchToolboxData();
-  }, []);
-
-  function workspaceDidChange(workspace: WorkspaceSvg) {
+  const workspaceDidChange = (workspace: WorkspaceSvg) => {
     //TODO: Add block highlighting
     // javascriptGenerator.STATEMENT_PREFIX = 'highlightBlock(%1);\n';
     // javascriptGenerator.addReservedWords('highlightBlock');
@@ -47,39 +23,40 @@ const Puzzle = () => {
     setUserJavaScriptCode(code);
     workspace.addChangeListener(Events.disableOrphans);
 
-    const workSpaceState = serialization.workspaces.save(workspace);
+    const currWorkspaceSave = serialization.workspaces.save(workspace);
+    // setWorkspaceState(currWorkspaceSave);
     //TODO: Save workspace state to local storage and for saving the code as it's being written / to translate back to JS
     // Blockly.serialization.workspaces.load(state, myWorkspace);
-    console.log(userJavaScriptCode);
-  }
+  };
 
-  useEffect(() => {
-    const workspace = getMainWorkspace();
-    console.log("workspace", workspace);
-    if (workspace) {
-      const startBlock = workspace.newBlock("starting_point") as BlockSvg;
-      startBlock.initSvg();
-      startBlock.render();
-      // Lock the starting block position
-      startBlock.setMovable(false);
-      startBlock.setDeletable(false);
-      console.log("Start block added");
-      const moveBlock = workspace.newBlock("move_forward") as BlockSvg;
-      moveBlock.initSvg();
-      moveBlock.render();
-      moveBlock.previousConnection.connect(startBlock.nextConnection);
-    }
-  }, [toolboxData]);
   return (
     <section className=" w-full flex-col items-center p-4">
       <h2 className="mb-4 text-center">Example Puzzle</h2>
       <section className="flex w-full justify-between gap-6 border">
-        <div className="flex min-h-96 w-7/12 flex-col gap-4  p-2">
-          <div className="flex items-center justify-center gap-2 ">
+        <div className="flex min-h-96 w-7/12 flex-col gap-4  border border-blue-500 p-2">
+          <div className="flex items-center justify-center gap-2">
             <Switch
               id="editor-mode"
               defaultChecked={editorMode === "block"}
               onCheckedChange={(checked) => {
+                const goingToBlockMode = checked;
+
+                if (goingToBlockMode) {
+                  console.log("going to block mode");
+                  //going to block mode
+                  // check to see if the code is valid
+                  //check to see if the code is the same as the saved block code
+                  // if it is, convert it to blocks
+                  // if it's not, show an error message and don't change the mode
+                } else {
+                  //going to text mode
+                  //save the workspace state so it can be loaded back in
+                  const workspace = getMainWorkspace();
+                  const currWorkspaceSave =
+                    serialization.workspaces.save(workspace);
+                  setWorkspaceState(currWorkspaceSave);
+                }
+
                 setEditorMode(checked ? "block" : "text");
               }}
             />
@@ -88,34 +65,35 @@ const Puzzle = () => {
               className="capitalize"
             >{`${editorMode} Mode`}</Label>
           </div>
-          {toolboxData && (
-            <BlocklyWorkspace
-              toolboxConfiguration={toolboxData}
-              onWorkspaceChange={workspaceDidChange}
-              className="size-full"
-              workspaceConfiguration={{
-                collapse: false,
-                comments: false,
-                disable: false,
-                maxBlocks: Infinity,
-                trashcan: true,
-                horizontalLayout: false,
-                toolboxPosition: "start",
-                theme: CustomTheme,
-                css: true,
-                rtl: false,
-                scrollbars: true,
-                sounds: true,
-                oneBasedIndex: false,
-                grid: {
-                  spacing: 20,
-                  length: 3,
-                  colour: "#1f2141",
-                  snap: true,
-                },
-              }}
+          {editorMode === "block" && (
+            <MyBlocklyWorkspace
+              workspaceDidChange={workspaceDidChange}
+              savedWorkspaceState={workspaceState}
             />
           )}
+          {/* {editorMode === "text" && (
+            <AceEditor
+              mode="javascript"
+              theme="github"
+              name="userJavaScriptCodeOnAce"
+              width="100%"
+              height="100%"
+              onChange={(value) => onAceChange(value)}
+              fontSize={14}
+              showPrintMargin={true}
+              showGutter={true}
+              highlightActiveLine={true}
+              readOnly={true}
+              value={userJavaScriptCode}
+              enableLiveAutocompletion={true}
+              enableBasicAutocompletion={true}
+              enableSnippets={true}
+              setOptions={{
+                showLineNumbers: true,
+                tabSize: 5,
+              }}
+            />
+          )} */}
         </div>
       </section>
     </section>
