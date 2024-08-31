@@ -16,8 +16,10 @@
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
   "cSpell.words": [
+    "Blockly",
     "brcypt",
     "cmdk",
+    "colour",
     "gitnote",
     "Karel",
     "Onboarded",

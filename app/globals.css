@@ -46,11 +46,6 @@
     @apply hover:text-primary hover:underline text-xs md:text-sm text-center;
   }
 
-  .group:hover .inner_icon {
-    /* @apply bg-gradient-to-r from-accent via-primary to-ring; */
-    background-color: red;
-  }
-
   /* width */
   ::-webkit-scrollbar {
     width: 7.5px;
@@ -70,5 +65,10 @@
   /* Handle on hover */
   ::-webkit-scrollbar-thumb:hover {
     background: hsl(var(--primary));
+  }
+
+  /* Fix for flyout scrollbar */
+  svg[display="none"] {
+    display: none;
   }
 }
