@@ -49,9 +49,9 @@ export default function RootLayout({
     >
       <html lang="en">
         <body className={openSans.className}>
-          <main className="relative min-h-screen w-full flex-col">
+          <main className="flex min-h-screen w-full flex-col">
             <NavBar />
-            {children}
+            <div className="grow">{children}</div>
             <Footer />
           </main>
         </body>
