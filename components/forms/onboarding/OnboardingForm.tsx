@@ -77,7 +77,7 @@ const OnboardingForm: React.FC<OnboardingFormProps> = ({ baseUserInfo }) => {
       ...form.getValues(),
       username: generatedUsername,
     });
-  }, []);
+  }, [form]);
 
   const handleRoleSubmit = (role: "TEACHER" | "STUDENT") => {
     form.setValue("role", role, { shouldValidate: true });
@@ -145,7 +145,7 @@ const OnboardingForm: React.FC<OnboardingFormProps> = ({ baseUserInfo }) => {
         />
         <FormItem>
           <FormLabel>Role</FormLabel>
-          <div className="flex wrap gap-4">
+          <div className="flex flex-wrap gap-4">
             <Button
               className="size-36 flex flex-col text-primary"
               variant="outline"

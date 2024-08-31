@@ -24,7 +24,7 @@ const OnboardingPage = async () => {
   }
 
   return (
-    <div className="w-96 flex flex-col border rounded-md align-stretch justify-start max-w shadow-2xl p-10">
+    <div className="w-96 flex flex-col border rounded-md justify-start shadow-2xl p-10">
       <div className="w-full">
         <div className="flex flex-col items-stretch justify-start p-4">
           <div className="flex items-center justify-center">
