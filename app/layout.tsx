@@ -12,7 +12,6 @@ export const metadata: Metadata = {
 };
 
 import { ClerkProvider } from "@clerk/nextjs";
-import ToastProvider from "@/lib/providers/ToastProvider";
 
 import NavBar from "@/components/shared/NavBar";
 import Footer from "@/components/shared/Footer";
@@ -52,9 +51,7 @@ export default function RootLayout({
         <body className={openSans.className}>
           <main className="flex min-h-screen w-full flex-col">
             <NavBar />
-            <ToastProvider>
-              <div className="flex-grow">{children}</div>
-            </ToastProvider>
+            <div className="flex-grow">{children}</div>
             <Footer />
           </main>
         </body>

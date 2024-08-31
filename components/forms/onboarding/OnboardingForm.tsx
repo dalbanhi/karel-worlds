@@ -8,7 +8,6 @@ import { onboardingSchema } from "@/lib/validators/onboarding.schema";
 import { createUser } from "@/lib/actions/users";
 import { useRouter } from "next/navigation";
 import { Input } from "@/components/ui/input";
-import { showError } from "@/components/shared/utils/FormSubmissionHandlers";
 import { useUsernameValidation } from "@/lib/hooks/useUsernameValidation";
 import { z } from "zod";
 
@@ -55,18 +54,6 @@ const OnboardingForm: React.FC<OnboardingFormProps> = ({ baseUserInfo }) => {
     isUsernameTaken || emailUsernameEqual || usernameContainsName;
 
   const onSubmit = async (data: z.infer<typeof onboardingSchema>) => {
-    //check that the username is not the same as the email
-    // if (data.username === data.email) {
-    //   showError("Username cannot be the same as email");
-    //   return;
-    // }
-
-    // //check that the username does not contain the name
-    // if (data.name && data.name.includes(data.username)) {
-    //   showError("Don't include your name in your username");
-    //   return;
-    // }
-
     await createUser(data);
     router.push("/my-stuff");
   };
@@ -144,7 +131,7 @@ const OnboardingForm: React.FC<OnboardingFormProps> = ({ baseUserInfo }) => {
               )}
               {usernameContainsName && (
                 <FormMessage>
-                  Try to not include your name in your username.
+                  Your full username should not be found in your name.
                 </FormMessage>
               )}
               <FormDescription className="text-xs">
