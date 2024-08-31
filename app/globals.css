@@ -43,7 +43,7 @@
   }
 
   .link_underline {
-    @apply hover:text-accent hover:underline;
+    @apply hover:text-primary hover:underline text-sm md:text-base text-center;
   }
 
   .group:hover .inner_icon {

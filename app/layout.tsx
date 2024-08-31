@@ -13,8 +13,8 @@ export const metadata: Metadata = {
 
 import { ClerkProvider } from "@clerk/nextjs";
 
-import NavBar from "@/components/shared/NavBar";
-import Footer from "@/components/shared/Footer";
+import NavBar from "@/components/shared/layout/NavBar";
+import Footer from "@/components/shared/layout/Footer";
 
 export const viewport: Viewport = {
   width: "device-width",
