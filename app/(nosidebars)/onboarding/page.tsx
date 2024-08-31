@@ -24,20 +24,20 @@ const OnboardingPage = async () => {
   }
 
   return (
-    <div className="w-96 flex flex-col border rounded-md justify-start shadow-2xl p-10">
+    <div className="flex w-96 flex-col justify-start rounded-md border p-10 shadow-2xl">
       <div className="w-full">
         <div className="flex flex-col items-stretch justify-start p-4">
           <div className="flex items-center justify-center">
             <Image src="/images/icon.svg" alt="logo" width={48} height={48} />
           </div>
-          <h1 className="text-xl font-semibold text-center">
+          <h1 className="text-center text-xl font-semibold">
             Welcome to Karel Worlds,{" "}
             <span className="text-primary">
               {clerkUser.firstName !== null ? clerkUser.firstName : "Explorer"}
             </span>
             !
           </h1>
-          <p className=" text-xs text-center text-primary">
+          <p className=" text-center text-xs text-primary">
             Pick a username and your role below to get started
           </p>
         </div>

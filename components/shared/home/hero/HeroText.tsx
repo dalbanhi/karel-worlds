@@ -6,7 +6,7 @@ import Link from "next/link";
 const HeroText = () => {
   return (
     <div
-      className={`flex flex-col max-md:max-w-sm max-md:h-fit gap-2 p-4 bg-primary-foreground/70 items-center ${montserrat.className}`}
+      className={`flex flex-col items-center gap-2 bg-primary-foreground/70 p-4 max-md:h-fit max-md:max-w-sm ${montserrat.className}`}
     >
       <h1 className="text-4xl md:text-5xl">
         Solve <span className="text-primary">Karel</span> puzzles, learn to{" "}

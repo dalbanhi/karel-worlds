@@ -4,13 +4,13 @@ import HeroImage from "./HeroImage";
 
 const HeroDesktop = () => {
   return (
-    <div className="hidden md:flex w-full max-h-fit h-full">
-      <div className="flex justify-center items-center bg-accent-semi p-8 w-1/2">
+    <div className="hidden size-full max-h-fit md:flex">
+      <div className="flex w-1/2 items-center justify-center bg-accent-semi p-8">
         <HeroText />
       </div>
-      <div className="relative justify-center items-center grow w-1/2">
+      <div className="relative w-1/2 grow items-center justify-center">
         <HeroImage />
-        <div className="absolute top-0 left-0 w-full h-full bg-accent/30"></div>
+        <div className="absolute left-0 top-0 size-full bg-accent/30"></div>
       </div>
     </div>
   );

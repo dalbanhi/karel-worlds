@@ -37,7 +37,7 @@ const MobileNav = () => {
   };
 
   return (
-    <nav className="flex md:hidden justify-end grow gap-2 items-center">
+    <nav className="flex grow items-center justify-end gap-2 md:hidden">
       <SignedOut>
         <SignInButton>
           <Button variant="default">Sign In</Button>

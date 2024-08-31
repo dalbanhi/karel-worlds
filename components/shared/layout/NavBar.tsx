@@ -29,7 +29,7 @@ import MobileNav from "./MobileNav";
 
 const DesktopNav = () => {
   return (
-    <div className="hidden md:flex grow justify-between ">
+    <div className="hidden grow justify-between md:flex ">
       <NavigationMenu className="flex items-center justify-start gap-2">
         <NavigationMenuList>
           <NavigationMenuItem>
@@ -91,7 +91,7 @@ const NavBar = () => {
           passHref
         >
           <div
-            className={`${sourceCodePro.className} flex w-full items-center justify-center text-lg md:text-2xl font-semibold`}
+            className={`${sourceCodePro.className} flex w-full items-center justify-center text-lg font-semibold md:text-2xl`}
           >
             <Image
               src="/images/icon.svg"
