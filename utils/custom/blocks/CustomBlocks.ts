@@ -307,6 +307,6 @@ javascriptGenerator.forBlock["no_beepers_present"] = function (
 };
 
 javascriptGenerator.forBlock["starting_point"] = function (block, generator) {
-  let code = null;
+  let code = "";
   return code;
 };

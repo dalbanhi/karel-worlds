@@ -50,6 +50,7 @@ const Puzzle = () => {
     const workSpaceState = serialization.workspaces.save(workspace);
     //TODO: Save workspace state to local storage and for saving the code as it's being written / to translate back to JS
     // Blockly.serialization.workspaces.load(state, myWorkspace);
+    console.log(userJavaScriptCode);
   }
 
   useEffect(() => {
