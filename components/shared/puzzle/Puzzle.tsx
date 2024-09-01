@@ -1,5 +1,6 @@
 "use client";
-import React, { useState } from "react";
+
+import React, { useState, useEffect } from "react";
 import { serialization, WorkspaceSvg, Events, getMainWorkspace } from "blockly";
 import "@/utils/custom/blocks/CustomBlocks";
 import { javascriptGenerator } from "blockly/javascript";
@@ -7,11 +8,43 @@ import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import MyBlocklyWorkspace from "./MyBlocklyWorkspace";
 
+import AceEditor from "react-ace";
+import "ace-builds/src-noconflict/mode-jsx";
+const languages = ["javascript"];
+const themes = ["textmate"];
+
+import "ace-builds/src-noconflict/ace";
+import "ace-builds/webpack-resolver";
+import "ace-builds/src-noconflict/mode-javascript";
+// import "ace-builds/src-noconflict/theme-github";
+import "ace-builds/src-noconflict/theme-textmate";
+import "ace-builds/src-noconflict/ext-language_tools";
+import "ace-builds/src-noconflict/snippets/javascript";
+
+languages.forEach((lang) => {
+  require(`ace-builds/src-noconflict/mode-${lang}`);
+  require(`ace-builds/src-noconflict/snippets/${lang}`);
+});
+
+themes.forEach((theme) => require(`ace-builds/src-noconflict/theme-${theme}`));
+
 const Puzzle = () => {
   const [userJavaScriptCode, setUserJavaScriptCode] = useState("");
   const [workspaceState, setWorkspaceState] = useState({});
 
   const [editorMode, setEditorMode] = useState("block");
+
+  // State to track when the component has mounted
+  const [hasMounted, setHasMounted] = useState(false);
+
+  useEffect(() => {
+    setHasMounted(true);
+  }, []);
+
+  const onAceChange = (value: string) => {
+    // setUserJavaScriptCode(value);
+    console.log("ace value", value);
+  };
 
   const workspaceDidChange = (workspace: WorkspaceSvg) => {
     //TODO: Add block highlighting
@@ -30,7 +63,10 @@ const Puzzle = () => {
   };
 
   return (
-    <section className=" w-full flex-col items-center p-4">
+    <section
+      suppressHydrationWarning
+      className=" w-full flex-col items-center p-4"
+    >
       <h2 className="mb-4 text-center">Example Puzzle</h2>
       <section className="flex w-full justify-between gap-6 border">
         <div className="flex min-h-96 w-7/12 flex-col gap-4  border border-blue-500 p-2">
@@ -71,10 +107,10 @@ const Puzzle = () => {
               savedWorkspaceState={workspaceState}
             />
           )}
-          {/* {editorMode === "text" && (
+          {hasMounted && editorMode === "text" && (
             <AceEditor
               mode="javascript"
-              theme="github"
+              theme="textmate"
               name="userJavaScriptCodeOnAce"
               width="100%"
               height="100%"
@@ -93,7 +129,7 @@ const Puzzle = () => {
                 tabSize: 5,
               }}
             />
-          )} */}
+          )}
         </div>
       </section>
     </section>
