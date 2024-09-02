@@ -7,12 +7,14 @@ import { javascriptGenerator } from "blockly/javascript";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import MyBlocklyWorkspace from "./MyBlocklyWorkspace";
+import { useToast } from "@/hooks/use-toast";
 
 import AceEditor from "react-ace";
 import "ace-builds/src-noconflict/mode-jsx";
 const languages = ["javascript"];
 const themes = ["textmate"];
 
+import "ace-builds/webpack-resolver";
 import "ace-builds/src-noconflict/ace";
 import "ace-builds/webpack-resolver";
 import "ace-builds/src-noconflict/mode-javascript";
@@ -29,6 +31,7 @@ languages.forEach((lang) => {
 themes.forEach((theme) => require(`ace-builds/src-noconflict/theme-${theme}`));
 
 const Puzzle = () => {
+  const { toast } = useToast();
   const [userJavaScriptCode, setUserJavaScriptCode] = useState("");
   const [workspaceState, setWorkspaceState] = useState({});
 
@@ -62,6 +65,29 @@ const Puzzle = () => {
     // Blockly.serialization.workspaces.load(state, myWorkspace);
   };
 
+  const handleEditorModeChange = (checked: boolean) => {
+    const goingToBlockMode = checked;
+
+    if (goingToBlockMode) {
+      //   console.log("going to block mode");
+      //going to block mode
+      // check to see if the code is valid
+      //check to see if the code is the same as the saved block code
+      // if it is, convert it to blocks
+      //   console.log("this is the previous workspace state", workspaceState);
+      //   console.log(workspaceState);
+      // if it's not, show an error message and don't change the mode
+    } else {
+      //going to text mode
+      //save the workspace state so it can be loaded back in
+      const workspace = getMainWorkspace();
+      const currWorkspaceSave = serialization.workspaces.save(workspace);
+      setWorkspaceState(currWorkspaceSave);
+    }
+
+    setEditorMode(checked ? "block" : "text");
+  };
+
   return (
     <section
       suppressHydrationWarning
@@ -74,32 +100,12 @@ const Puzzle = () => {
             <Switch
               id="editor-mode"
               defaultChecked={editorMode === "block"}
-              onCheckedChange={(checked) => {
-                const goingToBlockMode = checked;
-
-                if (goingToBlockMode) {
-                  console.log("going to block mode");
-                  //going to block mode
-                  // check to see if the code is valid
-                  //check to see if the code is the same as the saved block code
-                  // if it is, convert it to blocks
-                  // if it's not, show an error message and don't change the mode
-                } else {
-                  //going to text mode
-                  //save the workspace state so it can be loaded back in
-                  const workspace = getMainWorkspace();
-                  const currWorkspaceSave =
-                    serialization.workspaces.save(workspace);
-                  setWorkspaceState(currWorkspaceSave);
-                }
-
-                setEditorMode(checked ? "block" : "text");
-              }}
+              onCheckedChange={(checked) => handleEditorModeChange(checked)}
             />
             <Label
               htmlFor="editor-mode"
               className="capitalize"
-            >{`${editorMode} Mode`}</Label>
+            >{`${editorMode} Mode ${editorMode === "text" ? "(Read Only" : ""}`}</Label>
           </div>
           {editorMode === "block" && (
             <MyBlocklyWorkspace
@@ -115,6 +121,14 @@ const Puzzle = () => {
               width="100%"
               height="100%"
               onChange={(value) => onAceChange(value)}
+              onFocus={(e) => {
+                console.log("focus", e);
+                toast({
+                  variant: "destructive",
+                  title: "Coming soon",
+                  description: "Text to block conversion is coming soon",
+                });
+              }}
               fontSize={14}
               showPrintMargin={true}
               showGutter={true}

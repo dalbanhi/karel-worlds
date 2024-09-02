@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { openSans } from "./fonts";
 import type { Viewport } from "next";
+import { Toaster } from "@/components/ui/toaster";
 
 export const metadata: Metadata = {
   title: "Karel Worlds",
@@ -53,6 +54,7 @@ export default function RootLayout({
             <NavBar />
             <div className="grow">{children}</div>
             <Footer />
+            <Toaster />
           </main>
         </body>
       </html>
