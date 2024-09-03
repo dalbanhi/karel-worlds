@@ -1,6 +1,12 @@
 import React from "react";
 import { montserrat } from "@/app/fonts";
 import Puzzle from "@/components/shared/puzzle/Puzzle";
+import {
+  examplePuzzleWorldDimensions,
+  examplePuzzleWorldImages,
+  examplePuzzleWorldEnd,
+  examplePuzzleWorldStart,
+} from "@/constants/example-puzzle";
 
 const TryItOut = () => {
   return (
@@ -18,7 +24,12 @@ const TryItOut = () => {
         </p>
       </div>
       <div className="h-fit w-11/12 bg-card">
-        <Puzzle />
+        <Puzzle
+          worldDimensions={examplePuzzleWorldDimensions}
+          puzzleImages={examplePuzzleWorldImages}
+          startWorldInfo={examplePuzzleWorldStart}
+          goalWorldInfo={examplePuzzleWorldEnd}
+        />
       </div>
     </div>
   );

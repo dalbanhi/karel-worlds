@@ -7,42 +7,30 @@ import { javascriptGenerator } from "blockly/javascript";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import MyBlocklyWorkspace from "./MyBlocklyWorkspace";
-import { useToast } from "@/hooks/use-toast";
+import MyAceEditor from "./MyAceEditor";
+import RunnableWorld from "@/components/karel-worlds/RunnableWorld";
+import ViewableWorld from "@/components/karel-worlds/ViewableWorld";
+import { useCanvasSize } from "@/lib/hooks/useWindowSize";
+import { worldInfoType, puzzleImagesType } from "@/types/karelWorld";
 
-import AceEditor from "react-ace";
-import "ace-builds/src-noconflict/mode-jsx";
-const languages = ["javascript"];
-const themes = ["textmate"];
+interface PuzzleProps {
+  worldDimensions: { width: number; height: number };
+  startWorldInfo: worldInfoType;
+  goalWorldInfo: worldInfoType;
+  puzzleImages: puzzleImagesType;
+}
 
-import "ace-builds/webpack-resolver";
-import "ace-builds/src-noconflict/ace";
-import "ace-builds/webpack-resolver";
-import "ace-builds/src-noconflict/mode-javascript";
-// import "ace-builds/src-noconflict/theme-github";
-import "ace-builds/src-noconflict/theme-textmate";
-import "ace-builds/src-noconflict/ext-language_tools";
-import "ace-builds/src-noconflict/snippets/javascript";
-
-languages.forEach((lang) => {
-  require(`ace-builds/src-noconflict/mode-${lang}`);
-  require(`ace-builds/src-noconflict/snippets/${lang}`);
-});
-
-themes.forEach((theme) => require(`ace-builds/src-noconflict/theme-${theme}`));
-
-const Puzzle = () => {
-  const { toast } = useToast();
+const Puzzle: React.FC<PuzzleProps> = ({
+  worldDimensions,
+  startWorldInfo,
+  goalWorldInfo,
+  puzzleImages,
+}) => {
+  const canvasSize = useCanvasSize();
   const [userJavaScriptCode, setUserJavaScriptCode] = useState("");
   const [workspaceState, setWorkspaceState] = useState({});
 
   const [editorMode, setEditorMode] = useState("block");
-
-  // State to track when the component has mounted
-  const [hasMounted, setHasMounted] = useState(false);
-
-  useEffect(() => {
-    setHasMounted(true);
-  }, []);
 
   const onAceChange = (value: string) => {
     // setUserJavaScriptCode(value);
@@ -95,7 +83,34 @@ const Puzzle = () => {
     >
       <h2 className="mb-4 text-center">Example Puzzle</h2>
       <section className="flex w-full justify-between gap-6 border">
-        <div className="flex min-h-96 w-7/12 flex-col gap-4  border border-blue-500 p-2">
+        <div className="flex flex-col">
+          <h3 className="">Solve the Puzzle...</h3>
+          {/* <RunnableWorld
+          // name={puzzle.puzzleInfo?.name}
+          // canvasSize={canvasSize}
+          // worldDimensions={worldDimensions}
+          // rawCode={userJavaScriptCode}
+          // initialKarel={karelStart}
+          // initialBeepersList={startWorldBeeperList}
+          // initialBeeper={beeper}
+          // maxWorldWH={maxWorldWH}
+          // setKarelRunning={setKarelRunning}
+          // setRunningWorldBeeperList={setRunningWorldBeeperList}
+          // setShouldCheckSolution={setShouldCheckSolution}
+          /> */}
+          <p className="puzzle_instructions">
+            The puzzle should look like the world below:
+          </p>
+          <ViewableWorld
+            name={"Example Puzzle"}
+            canvasSize={canvasSize}
+            worldDimensions={worldDimensions}
+            // hints={puzzle.puzzleInfo?.hints}
+            worldInfo={goalWorldInfo}
+            images={puzzleImages}
+          />
+        </div>
+        <div className="flex min-h-96 w-full flex-col gap-4  border border-blue-500 p-2">
           <div className="flex items-center justify-center gap-2">
             <Switch
               id="editor-mode"
@@ -113,35 +128,10 @@ const Puzzle = () => {
               savedWorkspaceState={workspaceState}
             />
           )}
-          {hasMounted && editorMode === "text" && (
-            <AceEditor
-              mode="javascript"
-              theme="textmate"
-              name="userJavaScriptCodeOnAce"
-              width="100%"
-              height="100%"
-              onChange={(value) => onAceChange(value)}
-              onFocus={(e) => {
-                console.log("focus", e);
-                toast({
-                  variant: "destructive",
-                  title: "Coming soon",
-                  description: "Text to block conversion is coming soon",
-                });
-              }}
-              fontSize={14}
-              showPrintMargin={true}
-              showGutter={true}
-              highlightActiveLine={true}
-              readOnly={true}
-              value={userJavaScriptCode}
-              enableLiveAutocompletion={true}
-              enableBasicAutocompletion={true}
-              enableSnippets={true}
-              setOptions={{
-                showLineNumbers: true,
-                tabSize: 5,
-              }}
+          {editorMode === "text" && (
+            <MyAceEditor
+              onAceChange={onAceChange}
+              userJavaScriptCode={userJavaScriptCode}
             />
           )}
         </div>
