@@ -98,9 +98,7 @@ const Puzzle: React.FC<PuzzleProps> = ({
           // setRunningWorldBeeperList={setRunningWorldBeeperList}
           // setShouldCheckSolution={setShouldCheckSolution}
           /> */}
-          <p className="puzzle_instructions">
-            The puzzle should look like the world below:
-          </p>
+          <p className="">The puzzle should look like the world below:</p>
           <ViewableWorld
             name={"Example Puzzle"}
             canvasSize={canvasSize}

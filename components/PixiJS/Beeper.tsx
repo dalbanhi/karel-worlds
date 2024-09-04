@@ -24,6 +24,10 @@ const Beeper: React.FC<BeeperProps> = ({ x, y, width, height, beeper }) => {
     fill: "white",
   });
 
+  if (beeper.img === "") {
+    beeper.img = "/images/pixi-js/classic-beeper.png";
+  }
+
   return (
     <>
       <Sprite

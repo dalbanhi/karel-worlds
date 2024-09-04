@@ -26,6 +26,10 @@ const Karel: React.FC<KarelProps> = ({
     north: 270,
   };
 
+  if (karelImage === "") {
+    karelImage = "/images/pixi-js/classic-karel.png";
+  }
+
   return (
     <Sprite
       x={x}

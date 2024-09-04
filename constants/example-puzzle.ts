@@ -37,6 +37,13 @@ export const examplePuzzleWorldEnd: worldInfoType = {
       count: 1,
       subtype: "beeper",
     },
+    {
+      x: 1,
+      y: 0,
+      type: "beeper",
+      count: 1,
+      subtype: "beeper",
+    },
   ],
 };
 

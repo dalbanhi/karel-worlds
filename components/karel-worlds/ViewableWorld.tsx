@@ -1,8 +1,10 @@
 "use client";
 import React from "react";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { Stage, Container } from "@pixi/react";
+import { PixiComponent } from "@pixi/react";
+import { Graphics } from "pixi.js";
 
 import Grid from "@/components/PixiJS/Grid";
 // import TestGrid from "@/components/PixiJS/TestGrid";
@@ -44,13 +46,22 @@ const ViewableWorld: React.FC<ViewableWorldProps> = ({
   hints,
   images,
 }) => {
-  //   console.log("worldInfo", worldInfo);
-  const initialKarel: KarelElement = new KarelElement(
-    worldInfo.karel.x,
-    worldInfo.karel.y,
-    worldInfo.karel.direction,
-    worldInfo.karel.backpack,
-    worldInfo.karel.infiniteBackpack
+  const initialKarel = useMemo(
+    () =>
+      new KarelElement(
+        worldInfo.karel.x,
+        worldInfo.karel.y,
+        worldInfo.karel.direction,
+        worldInfo.karel.backpack,
+        worldInfo.karel.infiniteBackpack
+      ),
+    [
+      worldInfo.karel.x,
+      worldInfo.karel.y,
+      worldInfo.karel.direction,
+      worldInfo.karel.backpack,
+      worldInfo.karel.infiniteBackpack,
+    ]
   );
   const initialBeepers = worldInfo.gridElements.filter(
     (element) => element.type === "beeper"
@@ -71,9 +82,6 @@ const ViewableWorld: React.FC<ViewableWorldProps> = ({
 
   useEffect(() => {
     let newGrid = makeNewGrid(worldDimensions.width, worldDimensions.height);
-    console.log("newGrid", newGrid);
-    console.log("karel", karel);
-    console.log("beepers", beepers);
 
     //add beepers to the grid
     beepers.forEach((beeper) => {
@@ -120,13 +128,14 @@ const ViewableWorld: React.FC<ViewableWorldProps> = ({
         ),
       ];
     }
-    // setInternalGrid(newGrid);
-  }, [initialKarel, initialBeepers]);
+    console.log("newGrid after karel", newGrid);
+    setInternalGrid(newGrid);
+  }, [worldDimensions.width, worldDimensions.height, karel, beepers]);
 
   return (
     <>
       <div suppressHydrationWarning>
-        {name && <h1 className="text-xl font-extrabold">{name}'s Goal</h1>}
+        {name && <h1 className="text-xl font-extrabold">{name}&#39;s Goal</h1>}
         {/* {hints && (
           <>
             <h2 className="text-lg font-bold">Hints</h2>
@@ -150,12 +159,21 @@ const ViewableWorld: React.FC<ViewableWorldProps> = ({
           </>
         )} */}
         <Stage
+          suppressHydrationWarning
           width={canvasSize.width}
           height={canvasSize.height}
           options={{ background: 0xffffff }}
         >
           <Container x={0} y={0} sortableChildren={true}>
-            {/* <Grid
+            {/* <Rectangle
+              x={100}
+              y={100}
+              width={100}
+              height={100}
+              color={0xff0000}
+            /> */}
+
+            <Grid
               pxWidth={canvasSize.width}
               pxHeight={canvasSize.height}
               rows={worldDimensions.width}
@@ -163,7 +181,7 @@ const ViewableWorld: React.FC<ViewableWorldProps> = ({
               internalGrid={internalGrid}
               karel={karel}
               images={images}
-            /> */}
+            />
             {/* <TestGrid /> */}
             {/* <Circle x={100} y={100} radius={10} color={0x0000ff} /> */}
           </Container>
@@ -174,3 +192,21 @@ const ViewableWorld: React.FC<ViewableWorldProps> = ({
 };
 
 export default ViewableWorld;
+
+interface RectangleProps {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+  color: number;
+}
+
+const Rectangle = PixiComponent<RectangleProps, Graphics>("Rectangle", {
+  create: () => new Graphics(),
+  applyProps: (ins, _, props) => {
+    ins.x = props.x;
+    ins.beginFill(props.color);
+    ins.drawRect(props.x, props.y, props.width, props.height);
+    ins.endFill();
+  },
+});

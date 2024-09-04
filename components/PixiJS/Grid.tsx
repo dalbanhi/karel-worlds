@@ -70,7 +70,7 @@ const Grid: React.FC<GridProps> = ({
       g.drawRect(0, 0, currPxWidth, currPxHeight);
       g.endFill();
     },
-    [pxWidth, pxHeight, rows, cols]
+    [currPxWidth, currPxHeight]
   );
 
   return (
@@ -114,17 +114,17 @@ const Grid: React.FC<GridProps> = ({
                           );
                         } else {
                           return (
-                            <Graphics
+                            <Circle
                               key={`${colIndex}-${rowIndex}-${elementIndex}-grid-dot`}
                               x={colIndex * xPxStep + xPxStep / 2}
                               y={rowIndex * yPXStep + yPXStep / 2}
-                              //   radius={radius}
+                              radius={radius}
                               color={gridDotColor}
                               //   eventMode="static"
                               //TODO: Add onclick to edit the grid
-                              click={() => {}}
+                              // click={() => {}}
                               //   geometry={circle.current}
-                              zIndex={1}
+                              // zIndex={1}
                             />
                           );
                         }

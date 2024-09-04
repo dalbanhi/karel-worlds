@@ -33,7 +33,7 @@ const MyBlocklyWorkspace: React.FC<MyBlocklyWorkspaceProps> = ({
       // check if there is a saved workspace state
       // if there is, load it in
       if (!isEmpty(savedWorkspaceState)) {
-        console.log("loading workspace state");
+        // console.log("loading workspace state");
         serialization.workspaces.load(savedWorkspaceState, workspace);
       } else {
         // if there isn't, add the starting block
@@ -43,14 +43,13 @@ const MyBlocklyWorkspace: React.FC<MyBlocklyWorkspaceProps> = ({
         // Lock the starting block position
         startBlock.setMovable(false);
         startBlock.setDeletable(false);
-        console.log("Start block added");
         const moveBlock = workspace.newBlock("move_forward") as BlockSvg;
         moveBlock.initSvg();
         moveBlock.render();
         moveBlock.previousConnection.connect(startBlock.nextConnection);
       }
     }
-  }, []);
+  }, [savedWorkspaceState]);
 
   return (
     <React.Fragment>
