@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import { Sprite } from "@pixi/react";
 import { KarelElement } from "@/utils/custom/KarelElement/KarelElement";

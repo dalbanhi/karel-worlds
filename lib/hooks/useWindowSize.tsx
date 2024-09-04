@@ -24,8 +24,8 @@ export function useWindowSize() {
 export function useCanvasSize() {
   const windowSize = useWindowSize();
   const canvasSize = {
-    width: windowSize === undefined ? 0 : windowSize.width / 3,
-    height: windowSize === undefined ? 0 : windowSize.width / 3,
+    width: windowSize === undefined ? 0 : windowSize.width * (3 / 10),
+    height: windowSize === undefined ? 0 : windowSize.width * (3 / 10),
   };
 
   return canvasSize;

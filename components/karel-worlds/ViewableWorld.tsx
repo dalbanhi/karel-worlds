@@ -5,9 +5,9 @@ import { useState, useEffect, useMemo } from "react";
 import { Stage, Container } from "@pixi/react";
 import { PixiComponent } from "@pixi/react";
 import { Graphics } from "pixi.js";
-
+import { Button } from "@/components/ui/button";
+import { DoubleArrowDownIcon, DoubleArrowUpIcon } from "@radix-ui/react-icons";
 import Grid from "@/components/PixiJS/Grid";
-// import TestGrid from "@/components/PixiJS/TestGrid";
 
 import {
   GridElement,
@@ -15,7 +15,6 @@ import {
 } from "@/utils/custom/KarelElement/KarelElement";
 import { puzzleImagesType, worldInfoType } from "@/types/karelWorld";
 import { windowSizeType } from "@/types";
-import Circle from "../PixiJS/Circle";
 
 function makeNewGrid(rows: number, cols: number): GridElement[][][] {
   let newGrid: GridElement[][][] = [];
@@ -46,6 +45,7 @@ const ViewableWorld: React.FC<ViewableWorldProps> = ({
   hints,
   images,
 }) => {
+  const [showGoal, setShowGoal] = useState(false);
   const initialKarel = useMemo(
     () =>
       new KarelElement(
@@ -128,14 +128,21 @@ const ViewableWorld: React.FC<ViewableWorldProps> = ({
         ),
       ];
     }
-    console.log("newGrid after karel", newGrid);
+    // console.log("newGrid after karel", newGrid);
     setInternalGrid(newGrid);
   }, [worldDimensions.width, worldDimensions.height, karel, beepers]);
 
   return (
     <>
       <div suppressHydrationWarning>
-        {name && <h1 className="text-xl font-extrabold">{name}&#39;s Goal</h1>}
+        {name && (
+          <h4 className="text-base font-extrabold">{name}&#39;s Goal</h4>
+        )}
+        <div className="flex items-center justify-center">
+          <Button onClick={() => setShowGoal(!showGoal)}>
+            {showGoal ? <DoubleArrowUpIcon /> : <DoubleArrowDownIcon />}
+          </Button>
+        </div>
         {/* {hints && (
           <>
             <h2 className="text-lg font-bold">Hints</h2>
@@ -158,34 +165,37 @@ const ViewableWorld: React.FC<ViewableWorldProps> = ({
             </>
           </>
         )} */}
-        <Stage
-          suppressHydrationWarning
-          width={canvasSize.width}
-          height={canvasSize.height}
-          options={{ background: 0xffffff }}
-        >
-          <Container x={0} y={0} sortableChildren={true}>
-            {/* <Rectangle
-              x={100}
-              y={100}
-              width={100}
-              height={100}
-              color={0xff0000}
-            /> */}
-
-            <Grid
-              pxWidth={canvasSize.width}
-              pxHeight={canvasSize.height}
-              rows={worldDimensions.width}
-              cols={worldDimensions.height}
-              internalGrid={internalGrid}
-              karel={karel}
-              images={images}
-            />
-            {/* <TestGrid /> */}
-            {/* <Circle x={100} y={100} radius={10} color={0x0000ff} /> */}
-          </Container>
-        </Stage>
+        {showGoal && (
+          <React.Fragment>
+            <Stage
+              suppressHydrationWarning
+              width={canvasSize.width}
+              height={canvasSize.height}
+              options={{ background: 0xffffff }}
+            >
+              <Container x={0} y={0} sortableChildren={true}>
+                {/* <Rectangle
+                x={100}
+                y={100}
+                width={100}
+                height={100}
+                color={0xff0000}
+              /> */}
+                <Grid
+                  pxWidth={canvasSize.width}
+                  pxHeight={canvasSize.height}
+                  rows={worldDimensions.width}
+                  cols={worldDimensions.height}
+                  internalGrid={internalGrid}
+                  karel={karel}
+                  images={images}
+                />
+                {/* <TestGrid /> */}
+                {/* <Circle x={100} y={100} radius={10} color={0x0000ff} /> */}
+              </Container>
+            </Stage>
+          </React.Fragment>
+        )}
       </div>
     </>
   );

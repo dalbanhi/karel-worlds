@@ -29,6 +29,7 @@ const Puzzle: React.FC<PuzzleProps> = ({
   const canvasSize = useCanvasSize();
   const [userJavaScriptCode, setUserJavaScriptCode] = useState("");
   const [workspaceState, setWorkspaceState] = useState({});
+  const [karelRunning, setKarelRunning] = useState(false);
 
   const [editorMode, setEditorMode] = useState("block");
 
@@ -85,20 +86,21 @@ const Puzzle: React.FC<PuzzleProps> = ({
       <section className="flex w-full justify-between gap-6 border">
         <div className="flex flex-col">
           <h3 className="">Solve the Puzzle...</h3>
-          {/* <RunnableWorld
-          // name={puzzle.puzzleInfo?.name}
-          // canvasSize={canvasSize}
-          // worldDimensions={worldDimensions}
-          // rawCode={userJavaScriptCode}
-          // initialKarel={karelStart}
-          // initialBeepersList={startWorldBeeperList}
-          // initialBeeper={beeper}
-          // maxWorldWH={maxWorldWH}
-          // setKarelRunning={setKarelRunning}
-          // setRunningWorldBeeperList={setRunningWorldBeeperList}
-          // setShouldCheckSolution={setShouldCheckSolution}
-          /> */}
-          <p className="">The puzzle should look like the world below:</p>
+          <RunnableWorld
+            name={"Example Puzzle"}
+            canvasSize={canvasSize}
+            worldDimensions={worldDimensions}
+            rawCode={userJavaScriptCode}
+            worldInfo={startWorldInfo}
+            images={puzzleImages}
+            // setKarelRunning={setKarelRunning}
+            // setRunningWorldBeeperList={setRunningWorldBeeperList}
+            // setShouldCheckSolution={setShouldCheckSolution}
+          />
+          <p className="">
+            The puzzle should look like the world below (click the arrow to
+            expand).
+          </p>
           <ViewableWorld
             name={"Example Puzzle"}
             canvasSize={canvasSize}
