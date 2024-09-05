@@ -10,7 +10,7 @@ import {
 
 const TryItOut = () => {
   return (
-    <div className={`flex flex-col items-center gap-2 p-4 `}>
+    <div className={`flex w-11/12 flex-col items-center gap-2 p-4 `}>
       <div className="w-7/12">
         <h1
           className={`text-center text-lg font-bold md:text-2xl ${montserrat.className}`}

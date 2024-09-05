@@ -31,8 +31,7 @@ function makeNewGrid(rows: number, cols: number): GridElement[][][] {
 interface RunnableGridProps {
   pxWidth: number;
   pxHeight: number;
-  rows: number;
-  cols: number;
+  worldDimensions: { width: number; height: number };
   images: puzzleImagesType;
   worldInfo: worldInfoType;
   // maxWorldWH: number;
@@ -72,14 +71,9 @@ const RunnableGrid = forwardRef<RunnableGridHandle, RunnableGridProps>(
     const {
       pxWidth,
       pxHeight,
-      rows,
-      cols,
+      worldDimensions,
       images,
       worldInfo,
-      // maxWorldWH,
-      // initialKarel,
-      // initialBeeper,
-      // initialBeepersList,
       // setKarelRunning,
       // setRunningWorldBeeperList,
     } = props;
@@ -108,51 +102,65 @@ const RunnableGrid = forwardRef<RunnableGridHandle, RunnableGridProps>(
     const [karel, setKarel] = useState<KarelElement>(initialKarel);
     const [beepers, setBeepers] = useState([...initialBeepers]);
 
-    const initialNewGrid = makeNewGrid(rows, cols);
+    const firstEmptyGrid = makeNewGrid(
+      worldDimensions.width,
+      worldDimensions.height
+    );
 
-    const [internalGrid, setInternalGrid] = useState(initialNewGrid);
+    const [internalGrid, setInternalGrid] = useState(firstEmptyGrid);
 
     useEffect(() => {
-      //update grid
-      //   let newGrid = makeNewGrid(rows, cols);
-      //   //add beepers to the grid
-      //   currentBeeperList.forEach((beeper) => {
-      //     let placeToPutBeeper = newGrid[beeper.x][beeper.y];
-      //     if (placeToPutBeeper[0].type === "empty") {
-      //       newGrid[beeper.x][beeper.y] = [beeper];
-      //     }
-      //   });
-      //   //add walls to the grid
-      //   //update Karel's location
-      //   //only unshift if there are beepers. if it's empty, replace the first element
-      //   let boundKarelX = karel.x >= rows ? rows - 1 : karel.x;
-      //   let boundKarelY = karel.y >= cols ? cols - 1 : karel.y;
-      //   // //only unshift if there is a beeper, otherwise, replace
-      //   if (newGrid[boundKarelX][boundKarelY][0].type === "beeper") {
-      //     newGrid[boundKarelX][boundKarelY].unshift(
-      //       new KarelElement(
-      //         boundKarelX,
-      //         boundKarelY,
-      //         karel.direction,
-      //         karel.backpack,
-      //         karel.infiniteBackpack
-      //       )
-      //     );
-      //   } else {
-      //     newGrid[boundKarelX][boundKarelY] = [
-      //       new KarelElement(
-      //         boundKarelX,
-      //         boundKarelY,
-      //         karel.direction,
-      //         karel.backpack,
-      //         karel.infiniteBackpack
-      //       ),
-      //     ];
-      //   }
-      //   setInternalGrid(newGrid);
-      //   setKarel({ ...karel });
-      //   setKarelRunning({ ...karel });
-    }, [rows, cols]);
+      let newGrid = makeNewGrid(worldDimensions.width, worldDimensions.height);
+
+      //add beepers to the grid
+      beepers.forEach((beeper) => {
+        let boundBeeperX =
+          beeper.x >= worldDimensions.width
+            ? worldDimensions.width - 1
+            : beeper.x;
+        let boundBeeperY =
+          beeper.y >= worldDimensions.height
+            ? worldDimensions.height - 1
+            : beeper.y;
+
+        newGrid[boundBeeperX][boundBeeperY] = [
+          new GridElement("beeper", boundBeeperX, boundBeeperY, beeper.count),
+        ];
+      });
+
+      //   //add karel to the grid
+      let boundKarelX =
+        karel.x >= worldDimensions.width ? worldDimensions.width - 1 : karel.x;
+      let boundKarelY =
+        karel.y >= worldDimensions.height
+          ? worldDimensions.height - 1
+          : karel.y;
+
+      // //only unshift if there is a beeper, otherwise, replace
+      if (newGrid[boundKarelX][boundKarelY][0].type === "beeper") {
+        newGrid[boundKarelX][boundKarelY].unshift(
+          new KarelElement(
+            boundKarelX,
+            boundKarelY,
+            karel.direction,
+            karel.backpack,
+            karel.infiniteBackpack
+          )
+        );
+      } else {
+        newGrid[boundKarelX][boundKarelY] = [
+          new KarelElement(
+            boundKarelX,
+            boundKarelY,
+            karel.direction,
+            karel.backpack,
+            karel.infiniteBackpack
+          ),
+        ];
+      }
+      console.log("newGrid after karel", newGrid);
+      setInternalGrid(newGrid);
+    }, [worldDimensions.width, worldDimensions.height, karel, beepers]);
 
     // useImperativeHandle(ref, () => ({
     //   //not callable by user code
@@ -188,7 +196,7 @@ const RunnableGrid = forwardRef<RunnableGridHandle, RunnableGridProps>(
     //     let newKarel = { ...karel };
 
     //     const onEdgeError = new Error(
-    //       "Karel cannot move forward. Karel is at the edge of the grid"
+    //       "Karel cannot move forward. Karel is at the edge of the grid."
     //     );
     //     const wouldHitWallError = new Error(
     //       "Karel cannot move forward. Karel would hit a wall"
@@ -259,7 +267,7 @@ const RunnableGrid = forwardRef<RunnableGridHandle, RunnableGridProps>(
     //       throw new Error("Karel does not have any beepers left");
     //     }
 
-    //     // //check if there is already a beeper in the beeperlist
+    //     // //check if there is already a beeper in the beeper list
     //     let beeperExists = currentBeeperList.find(
     //       (beeper) => beeper.x === newKarel.x && beeper.y === newKarel.y
     //     );
@@ -501,8 +509,8 @@ const RunnableGrid = forwardRef<RunnableGridHandle, RunnableGridProps>(
         <Grid
           pxWidth={pxWidth}
           pxHeight={pxHeight}
-          rows={rows}
-          cols={cols}
+          rows={worldDimensions.width}
+          cols={worldDimensions.height}
           internalGrid={internalGrid}
           karel={karel}
           images={images}

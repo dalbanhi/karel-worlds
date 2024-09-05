@@ -98,7 +98,6 @@ const ViewableWorld: React.FC<ViewableWorldProps> = ({
         new GridElement("beeper", boundBeeperX, boundBeeperY, beeper.count),
       ];
     });
-    console.log("newGrid after beepers", newGrid);
 
     //   //add karel to the grid
     let boundKarelX =

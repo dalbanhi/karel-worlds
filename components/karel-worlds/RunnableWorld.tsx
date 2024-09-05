@@ -12,7 +12,7 @@ import { Slider } from "@/components/ui/slider";
 import TickMarkSlider from "./RunnableWorld/TickMarkSlider";
 import Image from "next/image";
 
-// import Interpreter from 'js-interpreter';
+import Interpreter from "js-interpreter";
 // import KarelElement from "@utils/karel-elements/KarelElement";
 //from: https://overreacted.io/making-setinterval-declarative-with-react-hooks/
 // function useInterval(callback, delay){
@@ -32,13 +32,6 @@ import Image from "next/image";
 //         }
 //     }, [delay])
 // }
-
-// name={"Example Puzzle"}
-// canvasSize={canvasSize}
-// worldDimensions={worldDimensions}
-// rawCode={userJavaScriptCode}
-// worldInfo={startWorldInfo}
-// images={puzzleImages}
 
 interface RunnableWorldProps {
   name: string;
@@ -62,7 +55,6 @@ const RunnableWorld: React.FC<RunnableWorldProps> = ({
 }) => {
   //references for grid, interpreter and runLoop
   const runLoop = useRef(false);
-  let x = 5;
   const interpreter = useRef(null);
   const gridRef = useRef(null);
   const shouldCheckPuzzle = useRef(false);
@@ -122,7 +114,7 @@ const RunnableWorld: React.FC<RunnableWorldProps> = ({
   //     interpreter.setProperty(globalObject, 'noBeepersPresent', interpreter.createNativeFunction(() => {return gridRef.current.noBeepersPresent()}));
   // }
 
-  //js-interpreter to run code
+  // js-interpreter to run code
 
   // let interpreter = new Interpreter(rawCode, initApi);
   // let stack = [];
@@ -214,32 +206,29 @@ const RunnableWorld: React.FC<RunnableWorldProps> = ({
   return (
     <section>
       {name && <h1 className="text-xl font-extrabold">{name}</h1>}
-      <section className="mb-2 flex flex-col gap-2">
+      <section className="mb-2 flex flex-col gap-2 p-4">
         <div className="flex items-center justify-center gap-4">
-          <Button className="flex items-center justify-center gap-2">
+          <Button
+            onClick={() => {
+              console.log("Running code");
+              // gridRef.current.resetGrid();//reset the grid
+              // interpreter.current = new Interpreter(rawCode, initApi); //reset the interpreter with the new code
+              // runLoop.current = true; //continue the loop
+            }}
+            className="flex items-center justify-center gap-2"
+          >
             Run
             <PlayIcon />
           </Button>
-          {/* <button
-          // onClick={() => {
-          //     gridRef.current.resetGrid();//reset the grid
-          //     interpreter.current = new Interpreter(rawCode, initApi); //reset the interpreter with the new code
-          //     runLoop.current = true; //continue the loop
-          // }}
-          // className='form_button'
+          <Button
+            onClick={() => {
+              console.log("Resetting grid");
+              // gridRef.current.resetGrid();
+              // interpreter.current = new Interpreter(rawCode, initApi);
+              // runLoop.current = false;
+            }}
+            className="flex items-center justify-center gap-2"
           >
-            Run
-          </button> */}
-          {/* <button
-          // className='form_button'
-          // onClick={() => {
-          //     gridRef.current.resetGrid(); //reset the grid
-          //     runLoop.current = false; //stop the loop
-          // }}
-          >
-            Reset
-          </button> */}
-          <Button className="flex items-center justify-center gap-2">
             Reset
             <ResetIcon />
           </Button>
@@ -256,7 +245,7 @@ const RunnableWorld: React.FC<RunnableWorldProps> = ({
           <Slider
             id="karelSpeed"
             name="karelSpeed"
-            value={[karelSpeed || 0]}
+            value={[karelSpeed || 50]}
             min={50}
             max={500}
             step={50}
@@ -272,35 +261,6 @@ const RunnableWorld: React.FC<RunnableWorldProps> = ({
             />
           </span>
         </div>
-        {/* <TickMarkSlider karelSpeed={karelSpeed} setKarelSpeed={setKarelSpeed} /> */}
-        {/* Slow{" "}
-        <input
-          type="range"
-          id="karelSpeed"
-          name="karelSpeed"
-          min={`50`}
-          max={`500`}
-          value={karelSpeed || 250}
-          step={`50`}
-          className=""
-          list="tickmarks"
-          onChange={(e) => {
-            setKarelSpeed(e.target.value as unknown as number);
-          }}
-        />{" "}
-        Fast
-        <datalist id="tickmarks">
-          <option value="50" label="Slow" />
-          <option value="100" />
-          <option value="150" />
-          <option value="200" />
-          <option value="250" />
-          <option value="300" />
-          <option value="350" />
-          <option value="400" />
-          <option value="450" />
-          <option value="500" label="Fast" />
-        </datalist> */}
       </section>
 
       <Stage
@@ -315,14 +275,10 @@ const RunnableWorld: React.FC<RunnableWorldProps> = ({
           <RunnableGrid
             pxWidth={canvasSize.width}
             pxHeight={canvasSize.height}
-            rows={worldDimensions?.width}
-            cols={worldDimensions?.height}
+            worldDimensions={worldDimensions}
             ref={gridRef}
             images={images}
             worldInfo={worldInfo}
-            // initialKarel={initialKarel}
-            // initialBeeper={initialBeeper}
-            // initialBeepersList={initialBeepersList}
             // setKarelRunning={setKarelRunning}
             // setRunningWorldBeeperList={setRunningWorldBeeperList}
           />

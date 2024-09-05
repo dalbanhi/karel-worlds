@@ -82,10 +82,8 @@ const Puzzle: React.FC<PuzzleProps> = ({
       suppressHydrationWarning
       className=" w-full flex-col items-center p-4"
     >
-      <h2 className="mb-4 text-center">Example Puzzle</h2>
       <section className="flex w-full justify-between gap-6 border">
-        <div className="flex flex-col">
-          <h3 className="">Solve the Puzzle...</h3>
+        <div className="flex flex-col gap-2 p-4">
           <RunnableWorld
             name={"Example Puzzle"}
             canvasSize={canvasSize}
