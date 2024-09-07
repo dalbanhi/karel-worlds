@@ -12,7 +12,9 @@ import { Slider } from "@/components/ui/slider";
 import Image from "next/image";
 
 import Interpreter from "js-interpreter";
-// import KarelElement from "@utils/karel-elements/KarelElement";
+import { useToast } from "@/hooks/use-toast";
+import { ToastAction } from "@/components/ui/toast";
+
 //from: https://overreacted.io/making-setinterval-declarative-with-react-hooks/
 function useInterval(callback: () => void, delay: number | null) {
   const savedCallback = useRef<() => void>();
@@ -54,9 +56,13 @@ const RunnableWorld: React.FC<RunnableWorldProps> = ({
   //   setRunningWorldBeeperList,
   //   setShouldCheckSolution,
 }) => {
+  //slider values for speed
   const minSliderValue = 50;
   const stepValue = 50;
   const maxSliderValue = 500;
+
+  const { toast } = useToast();
+
   //references for grid, interpreter and runLoop
   const runLoop = useRef(false);
   const interpreter = useRef<typeof Interpreter | null>(null);
@@ -231,6 +237,11 @@ const RunnableWorld: React.FC<RunnableWorldProps> = ({
     );
   }
 
+  const resetGridWithNewCode = () => {
+    gridRef.current.resetGrid();
+    interpreter.current = new Interpreter(rawCode, initApi);
+  };
+
   // js-interpreter to run code
 
   // let internalInterpreter = new Interpreter(rawCode, initApi);
@@ -310,9 +321,26 @@ const RunnableWorld: React.FC<RunnableWorldProps> = ({
     if (runLoop.current) {
       try {
         stepCode();
-      } catch (e) {
-        alert(e); // An error occurred, show a toast
+      } catch (e: any) {
+        //immediately stop the loop
         runLoop.current = false;
+
+        toast({
+          variant: "destructive",
+          title: "Error",
+          description: e.message,
+          action: (
+            <ToastAction
+              onClick={() => {
+                console.log("reset");
+                resetGridWithNewCode();
+              }}
+              altText="Reset"
+            >
+              Reset
+            </ToastAction>
+          ),
+        });
       }
       // app.renderer.render(app.stage);
 
@@ -331,8 +359,7 @@ const RunnableWorld: React.FC<RunnableWorldProps> = ({
           <Button
             onClick={() => {
               console.log("Running code");
-              gridRef.current.resetGrid(); //reset the grid
-              interpreter.current = new Interpreter(rawCode, initApi); //reset the interpreter with the new code
+              resetGridWithNewCode();
               runLoop.current = true; //continue the loop
             }}
             className="flex items-center justify-center gap-2"
@@ -343,8 +370,7 @@ const RunnableWorld: React.FC<RunnableWorldProps> = ({
           <Button
             onClick={() => {
               console.log("Resetting grid");
-              gridRef.current.resetGrid();
-              interpreter.current = new Interpreter(rawCode, initApi);
+              resetGridWithNewCode();
               runLoop.current = false;
             }}
             className="flex items-center justify-center gap-2"

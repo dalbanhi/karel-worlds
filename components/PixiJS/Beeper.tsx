@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import { Sprite, Text } from "@pixi/react";
 import { TextStyle } from "@pixi/text";
@@ -42,7 +43,7 @@ const Beeper: React.FC<BeeperProps> = ({ x, y, width, height, beeper }) => {
       <Text
         x={x}
         y={y}
-        text={`${beeper.beeperCount}`}
+        text={`${beeper.beeperCount > 1 ? beeper.beeperCount : ""}`}
         style={myTextStyle}
         anchor={0.5}
         zIndex={4}
