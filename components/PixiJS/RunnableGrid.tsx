@@ -34,7 +34,7 @@ interface RunnableGridProps {
   worldDimensions: { width: number; height: number };
   images: puzzleImagesType;
   worldInfo: worldInfoType;
-  // maxWorldWH: number;
+  runningWorldInfo: worldInfoType;
   // initialKarel: KarelElement;
   // initialBeeper: KarelElement;
   // initialBeepersList: KarelElement[];
@@ -74,6 +74,7 @@ const RunnableGrid = forwardRef<RunnableGridHandle, RunnableGridProps>(
       worldDimensions,
       images,
       worldInfo,
+      runningWorldInfo,
       // setKarelRunning,
       // setRunningWorldBeeperList,
     } = props;
@@ -81,7 +82,6 @@ const RunnableGrid = forwardRef<RunnableGridHandle, RunnableGridProps>(
     const rows = worldDimensions.width;
     const cols = worldDimensions.height;
 
-    const propsRef = useRef(props);
     const initialKarel = useMemo(
       () =>
         new KarelElement(
@@ -161,13 +161,14 @@ const RunnableGrid = forwardRef<RunnableGridHandle, RunnableGridProps>(
           ),
         ];
       }
-      console.log("newGrid after karel", newGrid);
+
       setInternalGrid(newGrid);
     }, [worldDimensions.width, worldDimensions.height, karel, beepers]);
 
     useImperativeHandle(ref, () => ({
       //not callable by user code
       resetGrid() {
+        console.log("resetting the grid in runnable grid");
         let newGrid = makeNewGrid(
           worldDimensions.width,
           worldDimensions.height
@@ -186,19 +187,28 @@ const RunnableGrid = forwardRef<RunnableGridHandle, RunnableGridProps>(
         //add any walls
 
         //prepend karel to the grid only if there are beepers, otherwise, replace the first element
-        newGrid[initialKarel.x][initialKarel.y].unshift(
-          new KarelElement(
-            initialKarel.x,
-            initialKarel.y,
-            initialKarel.direction,
-            initialKarel.backpack,
-            initialKarel.infiniteBackpack
-          )
-        );
+        let boundKarelX =
+          initialKarel.x >= worldDimensions.width
+            ? worldDimensions.width - 1
+            : karel.x;
+        let boundKarelY =
+          initialKarel.y >= worldDimensions.height
+            ? worldDimensions.height - 1
+            : initialKarel.y;
+
+        // //only unshift if there is a beeper, otherwise, replace
+        if (newGrid[boundKarelX][boundKarelY][0].type === "beeper") {
+          newGrid[boundKarelX][boundKarelY].unshift(initialKarel);
+        } else {
+          newGrid[boundKarelX][boundKarelY] = [initialKarel];
+        }
+        console.log("my reset grid", newGrid);
+        console.log("my initial karel", initialKarel);
 
         // setCurrentBeeperList([...initialBeepersList]);
         // setRunningWorldBeeperList([...initialBeepersList]);
         setInternalGrid(newGrid);
+        setBeepers([...initialBeepers]);
         setKarel(initialKarel);
         //update grandpa state
         // setKarelRunning({ ...initialKarel });

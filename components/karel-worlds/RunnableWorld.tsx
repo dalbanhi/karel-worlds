@@ -42,6 +42,7 @@ interface RunnableWorldProps {
   canvasSize: windowSizeType;
   worldDimensions: { width: number; height: number };
   worldInfo: worldInfoType;
+  runningWorldInfo: worldInfoType;
   images: puzzleImagesType;
 }
 
@@ -51,6 +52,7 @@ const RunnableWorld: React.FC<RunnableWorldProps> = ({
   worldDimensions,
   rawCode,
   worldInfo,
+  runningWorldInfo,
   images,
   //   setKarelRunning,
   //   setRunningWorldBeeperList,
@@ -369,9 +371,9 @@ const RunnableWorld: React.FC<RunnableWorldProps> = ({
           </Button>
           <Button
             onClick={() => {
-              console.log("Resetting grid");
+              console.log("Resetting grid on runnable world");
               resetGridWithNewCode();
-              runLoop.current = false;
+              runLoop.current = false; //reset the loop
             }}
             className="flex items-center justify-center gap-2"
           >
@@ -427,6 +429,7 @@ const RunnableWorld: React.FC<RunnableWorldProps> = ({
             ref={gridRef}
             images={images}
             worldInfo={worldInfo}
+            runningWorldInfo={runningWorldInfo}
             // setKarelRunning={setKarelRunning}
             // setRunningWorldBeeperList={setRunningWorldBeeperList}
           />

@@ -28,12 +28,10 @@ const MyBlocklyWorkspace: React.FC<MyBlocklyWorkspaceProps> = ({
     const workspace = getMainWorkspace();
     //check if the workspace is empty
     //if it is, add the starting block
-    // console.log("workspace", workspace);
     if (workspace) {
       // check if there is a saved workspace state
       // if there is, load it in
       if (!isEmpty(savedWorkspaceState)) {
-        // console.log("loading workspace state");
         serialization.workspaces.load(savedWorkspaceState, workspace);
       } else {
         // if there isn't, add the starting block

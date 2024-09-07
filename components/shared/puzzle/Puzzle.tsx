@@ -11,7 +11,16 @@ import MyAceEditor from "./MyAceEditor";
 import RunnableWorld from "@/components/karel-worlds/RunnableWorld";
 import ViewableWorld from "@/components/karel-worlds/ViewableWorld";
 import { useCanvasSize } from "@/lib/hooks/useWindowSize";
-import { worldInfoType, puzzleImagesType } from "@/types/karelWorld";
+import {
+  worldInfoType,
+  puzzleImagesType,
+  SimpleGridElementType,
+} from "@/types/karelWorld";
+import {
+  GridElement,
+  KarelElement,
+} from "@/utils/custom/KarelElement/KarelElement";
+import { start } from "repl";
 
 interface PuzzleProps {
   worldDimensions: { width: number; height: number };
@@ -29,7 +38,9 @@ const Puzzle: React.FC<PuzzleProps> = ({
   const canvasSize = useCanvasSize();
   const [userJavaScriptCode, setUserJavaScriptCode] = useState("");
   const [workspaceState, setWorkspaceState] = useState({});
-  const [karelRunning, setKarelRunning] = useState(false);
+  const [shouldCheckSolution, setShouldCheckSolution] = useState(false);
+  const [runningWorldInfo, setRunningWorldInfo] =
+    useState<worldInfoType>(startWorldInfo);
 
   const [editorMode, setEditorMode] = useState("block");
 
@@ -77,6 +88,63 @@ const Puzzle: React.FC<PuzzleProps> = ({
     setEditorMode(checked ? "block" : "text");
   };
 
+  // function karelEquality(karel1: SimpleGridElementType, karel2: SimpleGridElementType) {
+  //   let xs = Number(karel1.x) === Number(karel2.x);
+  //   let ys = Number(karel1.y) === Number(karel2.y);
+  //   let dirs = karel1.direction === karel2.direction;
+  //   let beeperBag = Number(karel1.backpack) === Number(karel2.backpack);
+  //   return xs && ys && dirs && beeperBag;
+  // }
+
+  // function beepersListEquality(
+  //   beepers1: GridElement[],
+  //   beepers2: GridElement[]
+  // ) {
+  //   if (beepers1.length !== beepers2.length) {
+  //     return false;
+  //   }
+  //   for (let i = 0; i < beepers1.length; i++) {
+  //     if (
+  //       Number(beepers1[i].x) !== Number(beepers2[i].x) ||
+  //       Number(beepers1[i].y) !== Number(beepers2[i].y) ||
+  //       Number(beepers1[i].count) !== Number(beepers2[i].count)
+  //     ) {
+  //       return false;
+  //     }
+  //   }
+  //   return true;
+  // }
+
+  const checkPuzzleSolution = () => {
+    // try {
+    //   console.log("checking solution");
+    //   let karelsEqual = karelEquality(goalWorldInfo.karel, karelRunning);
+    //   let beepersEqual = beepersListEquality(
+    //     goalWorldBeeperList,
+    //     runningWorldBeeperList
+    //   );
+    //   if (karelsEqual && beepersEqual) {
+    //     alert("Puzzle Solved!");
+    //   } else {
+    //     if (!karelsEqual) {
+    //       alert("Karels are not equal");
+    //     } else {
+    //       alert("Beepers are not equal");
+    //     }
+    //   }
+    // } catch (error) {
+    //   console.error(error);
+    // } finally {
+    //   setShouldCheckSolution(false);
+    // }
+  };
+
+  useEffect(() => {
+    if (shouldCheckSolution) {
+      checkPuzzleSolution();
+    }
+  }, [shouldCheckSolution]);
+
   return (
     <section
       suppressHydrationWarning
@@ -91,6 +159,7 @@ const Puzzle: React.FC<PuzzleProps> = ({
             rawCode={userJavaScriptCode}
             worldInfo={startWorldInfo}
             images={puzzleImages}
+            runningWorldInfo={runningWorldInfo}
             // setKarelRunning={setKarelRunning}
             // setRunningWorldBeeperList={setRunningWorldBeeperList}
             // setShouldCheckSolution={setShouldCheckSolution}
