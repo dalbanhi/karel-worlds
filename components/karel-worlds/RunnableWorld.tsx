@@ -9,7 +9,6 @@ import { worldInfoType, puzzleImagesType } from "@/types/karelWorld";
 import { Button } from "@/components/ui/button";
 import { PlayIcon, ResetIcon } from "@radix-ui/react-icons";
 import { Slider } from "@/components/ui/slider";
-import TickMarkSlider from "./RunnableWorld/TickMarkSlider";
 import Image from "next/image";
 
 import Interpreter from "js-interpreter";
@@ -55,6 +54,9 @@ const RunnableWorld: React.FC<RunnableWorldProps> = ({
   //   setRunningWorldBeeperList,
   //   setShouldCheckSolution,
 }) => {
+  const minSliderValue = 50;
+  const stepValue = 50;
+  const maxSliderValue = 500;
   //references for grid, interpreter and runLoop
   const runLoop = useRef(false);
   const interpreter = useRef<typeof Interpreter | null>(null);
@@ -300,7 +302,8 @@ const RunnableWorld: React.FC<RunnableWorldProps> = ({
   isLine.oldStack_ = stack.slice();
 
   const [app, setApp] = useState();
-  const [karelSpeed, setKarelSpeed] = useState(500);
+  const [sliderValue, setSliderValue] = useState<number>(50);
+  const karelSpeed = maxSliderValue - (sliderValue - minSliderValue);
 
   //interval to run code
   useInterval(() => {
@@ -308,7 +311,7 @@ const RunnableWorld: React.FC<RunnableWorldProps> = ({
       try {
         stepCode();
       } catch (e) {
-        alert(e);
+        alert(e); // An error occurred, show a toast
         runLoop.current = false;
       }
       // app.renderer.render(app.stage);
@@ -362,11 +365,13 @@ const RunnableWorld: React.FC<RunnableWorldProps> = ({
           <Slider
             id="karelSpeed"
             name="karelSpeed"
-            value={[karelSpeed || 50]}
-            min={50}
-            max={500}
-            step={50}
-            onValueChange={(value) => setKarelSpeed(value[0])}
+            value={[sliderValue]}
+            min={minSliderValue}
+            max={maxSliderValue}
+            step={stepValue}
+            onValueChange={(value) => {
+              setSliderValue(value[0]);
+            }}
             className="flex-1"
           />
           <span>
