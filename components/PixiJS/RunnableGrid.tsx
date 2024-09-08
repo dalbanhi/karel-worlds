@@ -208,7 +208,7 @@ const RunnableGrid = forwardRef<RunnableGridHandle, RunnableGridProps>(
         // setCurrentBeeperList([...initialBeepersList]);
         // setRunningWorldBeeperList([...initialBeepersList]);
         setInternalGrid(newGrid);
-        setBeepers([...initialBeepers]);
+        setBeepers([...initialBeepers]); // reset the beepers!
         setKarel(initialKarel);
         //update grandpa state
         // setKarelRunning({ ...initialKarel });

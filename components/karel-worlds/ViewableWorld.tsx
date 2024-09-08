@@ -127,7 +127,6 @@ const ViewableWorld: React.FC<ViewableWorldProps> = ({
         ),
       ];
     }
-    // console.log("newGrid after karel", newGrid);
     setInternalGrid(newGrid);
   }, [worldDimensions.width, worldDimensions.height, karel, beepers]);
 

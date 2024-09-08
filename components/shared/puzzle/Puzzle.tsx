@@ -12,6 +12,10 @@ import RunnableWorld from "@/components/karel-worlds/RunnableWorld";
 import ViewableWorld from "@/components/karel-worlds/ViewableWorld";
 import { useCanvasSize } from "@/lib/hooks/useWindowSize";
 import {
+  RunningKarelProvider,
+  useRunningKarelContext,
+} from "@/lib/context/RunningKarelContext";
+import {
   worldInfoType,
   puzzleImagesType,
   SimpleGridElementType,
@@ -35,13 +39,29 @@ const Puzzle: React.FC<PuzzleProps> = ({
   goalWorldInfo,
   puzzleImages,
 }) => {
+  return (
+    <RunningKarelProvider>
+      <PuzzleContent
+        worldDimensions={worldDimensions}
+        startWorldInfo={startWorldInfo}
+        goalWorldInfo={goalWorldInfo}
+        puzzleImages={puzzleImages}
+      />
+    </RunningKarelProvider>
+  );
+};
+
+const PuzzleContent: React.FC<PuzzleProps> = ({
+  worldDimensions,
+  startWorldInfo,
+  goalWorldInfo,
+  puzzleImages,
+}) => {
   const canvasSize = useCanvasSize();
   const [userJavaScriptCode, setUserJavaScriptCode] = useState("");
   const [workspaceState, setWorkspaceState] = useState({});
   const [shouldCheckSolution, setShouldCheckSolution] = useState(false);
-  const [runningWorldInfo, setRunningWorldInfo] =
-    useState<worldInfoType>(startWorldInfo);
-
+  const { runningKarel, setRunningKarel } = useRunningKarelContext();
   const [editorMode, setEditorMode] = useState("block");
 
   const onAceChange = (value: string) => {
@@ -69,7 +89,6 @@ const Puzzle: React.FC<PuzzleProps> = ({
     const goingToBlockMode = checked;
 
     if (goingToBlockMode) {
-      //   console.log("going to block mode");
       //going to block mode
       // check to see if the code is valid
       //check to see if the code is the same as the saved block code
