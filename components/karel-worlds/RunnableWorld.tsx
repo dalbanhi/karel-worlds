@@ -14,6 +14,7 @@ import Image from "next/image";
 import Interpreter from "js-interpreter";
 import { useToast } from "@/hooks/use-toast";
 import { ToastAction } from "@/components/ui/toast";
+import { useRunningKarelContext } from "@/lib/context/RunningKarelContext";
 
 //from: https://overreacted.io/making-setinterval-declarative-with-react-hooks/
 function useInterval(callback: () => void, delay: number | null) {
@@ -42,8 +43,9 @@ interface RunnableWorldProps {
   canvasSize: windowSizeType;
   worldDimensions: { width: number; height: number };
   worldInfo: worldInfoType;
-  runningWorldInfo: worldInfoType;
+  // runningWorldInfo: worldInfoType;
   images: puzzleImagesType;
+  setShouldCheckSolution: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const RunnableWorld: React.FC<RunnableWorldProps> = ({
@@ -52,12 +54,14 @@ const RunnableWorld: React.FC<RunnableWorldProps> = ({
   worldDimensions,
   rawCode,
   worldInfo,
-  runningWorldInfo,
+  // runningWorldInfo,
   images,
   //   setKarelRunning,
   //   setRunningWorldBeeperList,
-  //   setShouldCheckSolution,
+  setShouldCheckSolution,
 }) => {
+  const { runningWorldInfo, setRunningWorldInfo } = useRunningKarelContext();
+  console.log("runningWorldInfo", runningWorldInfo);
   //slider values for speed
   const minSliderValue = 50;
   const stepValue = 50;
@@ -318,6 +322,8 @@ const RunnableWorld: React.FC<RunnableWorldProps> = ({
   const [sliderValue, setSliderValue] = useState<number>(50);
   const karelSpeed = maxSliderValue - (sliderValue - minSliderValue);
 
+  // const should
+
   //interval to run code
   useInterval(() => {
     if (runLoop.current) {
@@ -334,7 +340,6 @@ const RunnableWorld: React.FC<RunnableWorldProps> = ({
           action: (
             <ToastAction
               onClick={() => {
-                console.log("reset");
                 resetGridWithNewCode();
               }}
               altText="Reset"
@@ -347,7 +352,7 @@ const RunnableWorld: React.FC<RunnableWorldProps> = ({
       // app.renderer.render(app.stage);
 
       if (shouldCheckPuzzle.current) {
-        // setShouldCheckSolution(true);
+        setShouldCheckSolution(true);
         // shouldCheckPuzzle.current = false;
       }
     }
@@ -360,7 +365,6 @@ const RunnableWorld: React.FC<RunnableWorldProps> = ({
         <div className="flex items-center justify-center gap-4">
           <Button
             onClick={() => {
-              console.log("Running code");
               resetGridWithNewCode();
               runLoop.current = true; //continue the loop
             }}
@@ -371,7 +375,6 @@ const RunnableWorld: React.FC<RunnableWorldProps> = ({
           </Button>
           <Button
             onClick={() => {
-              console.log("Resetting grid on runnable world");
               resetGridWithNewCode();
               runLoop.current = false; //reset the loop
             }}
@@ -429,7 +432,7 @@ const RunnableWorld: React.FC<RunnableWorldProps> = ({
             ref={gridRef}
             images={images}
             worldInfo={worldInfo}
-            runningWorldInfo={runningWorldInfo}
+            // runningWorldInfo={runningWorldInfo}
             // setKarelRunning={setKarelRunning}
             // setRunningWorldBeeperList={setRunningWorldBeeperList}
           />

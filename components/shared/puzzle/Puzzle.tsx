@@ -24,7 +24,6 @@ import {
   GridElement,
   KarelElement,
 } from "@/utils/custom/KarelElement/KarelElement";
-import { start } from "repl";
 
 interface PuzzleProps {
   worldDimensions: { width: number; height: number };
@@ -61,7 +60,7 @@ const PuzzleContent: React.FC<PuzzleProps> = ({
   const [userJavaScriptCode, setUserJavaScriptCode] = useState("");
   const [workspaceState, setWorkspaceState] = useState({});
   const [shouldCheckSolution, setShouldCheckSolution] = useState(false);
-  const { runningKarel, setRunningKarel } = useRunningKarelContext();
+  const { runningWorldInfo, setRunningWorldInfo } = useRunningKarelContext();
   const [editorMode, setEditorMode] = useState("block");
 
   const onAceChange = (value: string) => {
@@ -99,9 +98,9 @@ const PuzzleContent: React.FC<PuzzleProps> = ({
     } else {
       //going to text mode
       //save the workspace state so it can be loaded back in
-      const workspace = getMainWorkspace();
-      const currWorkspaceSave = serialization.workspaces.save(workspace);
-      setWorkspaceState(currWorkspaceSave);
+      // const workspace = getMainWorkspace();
+      // const currWorkspaceSave = serialization.workspaces.save(workspace);
+      // setWorkspaceState(currWorkspaceSave);
     }
 
     setEditorMode(checked ? "block" : "text");
@@ -134,35 +133,36 @@ const PuzzleContent: React.FC<PuzzleProps> = ({
   //   return true;
   // }
 
-  const checkPuzzleSolution = () => {
-    // try {
-    //   console.log("checking solution");
-    //   let karelsEqual = karelEquality(goalWorldInfo.karel, karelRunning);
-    //   let beepersEqual = beepersListEquality(
-    //     goalWorldBeeperList,
-    //     runningWorldBeeperList
-    //   );
-    //   if (karelsEqual && beepersEqual) {
-    //     alert("Puzzle Solved!");
-    //   } else {
-    //     if (!karelsEqual) {
-    //       alert("Karels are not equal");
-    //     } else {
-    //       alert("Beepers are not equal");
-    //     }
-    //   }
-    // } catch (error) {
-    //   console.error(error);
-    // } finally {
-    //   setShouldCheckSolution(false);
-    // }
-  };
-
   useEffect(() => {
     if (shouldCheckSolution) {
+      const checkPuzzleSolution = () => {
+        try {
+          console.log("checking solution");
+          console.log("goal world info", goalWorldInfo);
+          console.log("running world info", runningWorldInfo);
+          // let karelsEqual = karelEquality(goalWorldInfo.karel, karelRunning);
+          // let beepersEqual = beepersListEquality(
+          //   goalWorldBeeperList,
+          //   runningWorldBeeperList
+          // );
+          // if (karelsEqual && beepersEqual) {
+          //   alert("Puzzle Solved!");
+          // } else {
+          //   if (!karelsEqual) {
+          //     alert("Karels are not equal");
+          //   } else {
+          //     alert("Beepers are not equal");
+          //   }
+          // }
+        } catch (error) {
+          console.error(error);
+        } finally {
+          setShouldCheckSolution(false);
+        }
+      };
       checkPuzzleSolution();
     }
-  }, [shouldCheckSolution]);
+  }, [goalWorldInfo, runningWorldInfo, shouldCheckSolution]);
 
   return (
     <section
@@ -171,30 +171,30 @@ const PuzzleContent: React.FC<PuzzleProps> = ({
     >
       <section className="flex w-full justify-between gap-6 border">
         <div className="flex flex-col gap-2 p-4">
-          <RunnableWorld
+          {/* <RunnableWorld
             name={"Example Puzzle"}
             canvasSize={canvasSize}
             worldDimensions={worldDimensions}
             rawCode={userJavaScriptCode}
             worldInfo={startWorldInfo}
             images={puzzleImages}
-            runningWorldInfo={runningWorldInfo}
+            // runningWorldInfo={runningWorldInfo}
             // setKarelRunning={setKarelRunning}
             // setRunningWorldBeeperList={setRunningWorldBeeperList}
-            // setShouldCheckSolution={setShouldCheckSolution}
-          />
+            setShouldCheckSolution={setShouldCheckSolution}
+          /> */}
           <p className="">
             The puzzle should look like the world below (click the arrow to
             expand).
           </p>
-          <ViewableWorld
+          {/* <ViewableWorld
             name={"Example Puzzle"}
             canvasSize={canvasSize}
             worldDimensions={worldDimensions}
             // hints={puzzle.puzzleInfo?.hints}
             worldInfo={goalWorldInfo}
             images={puzzleImages}
-          />
+          /> */}
         </div>
         <div className="flex min-h-96 w-full flex-col gap-4  border border-blue-500 p-2">
           <div className="flex items-center justify-center gap-2">

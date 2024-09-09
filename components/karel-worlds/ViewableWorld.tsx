@@ -131,71 +131,36 @@ const ViewableWorld: React.FC<ViewableWorldProps> = ({
   }, [worldDimensions.width, worldDimensions.height, karel, beepers]);
 
   return (
-    <>
-      <div suppressHydrationWarning>
-        {name && (
+    <div>
+      {/* {name && (
           <h4 className="text-base font-extrabold">{name}&#39;s Goal</h4>
-        )}
-        <div className="flex items-center justify-center">
+        )} */}
+      {/* <div className="flex items-center justify-center">
           <Button onClick={() => setShowGoal(!showGoal)}>
             {showGoal ? <DoubleArrowUpIcon /> : <DoubleArrowDownIcon />}
           </Button>
-        </div>
-        {/* {hints && (
-          <>
-            <h2 className="text-lg font-bold">Hints</h2>
-            <>
-              <div className="text-sm flex gap-1">
-                {hints.map((hint, index) => {
-                  if (hint !== "") {
-                    return (
-                      <button
-                        key={index}
-                        className="text-sm hint_button"
-                        onClick={() => alert(hint)}
-                      >
-                        {`Hint ${index + 1}`}
-                      </button>
-                    );
-                  }
-                })}
-              </div>
-            </>
-          </>
+        </div> */}
+      {/* {showGoal && (
+          <Stage
+            suppressHydrationWarning
+            width={canvasSize.width}
+            height={canvasSize.height}
+            options={{ background: 0xffffff }}
+          >
+            <Container x={0} y={0} sortableChildren={true}>
+              <Grid
+                pxWidth={canvasSize.width}
+                pxHeight={canvasSize.height}
+                rows={worldDimensions.width}
+                cols={worldDimensions.height}
+                internalGrid={internalGrid}
+                karel={karel}
+                images={images}
+              />
+            </Container>
+          </Stage>
         )} */}
-        {showGoal && (
-          <React.Fragment>
-            <Stage
-              suppressHydrationWarning
-              width={canvasSize.width}
-              height={canvasSize.height}
-              options={{ background: 0xffffff }}
-            >
-              <Container x={0} y={0} sortableChildren={true}>
-                {/* <Rectangle
-                x={100}
-                y={100}
-                width={100}
-                height={100}
-                color={0xff0000}
-              /> */}
-                <Grid
-                  pxWidth={canvasSize.width}
-                  pxHeight={canvasSize.height}
-                  rows={worldDimensions.width}
-                  cols={worldDimensions.height}
-                  internalGrid={internalGrid}
-                  karel={karel}
-                  images={images}
-                />
-                {/* <TestGrid /> */}
-                {/* <Circle x={100} y={100} radius={10} color={0x0000ff} /> */}
-              </Container>
-            </Stage>
-          </React.Fragment>
-        )}
-      </div>
-    </>
+    </div>
   );
 };
 

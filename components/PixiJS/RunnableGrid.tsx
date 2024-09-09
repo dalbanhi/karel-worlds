@@ -12,6 +12,7 @@ import {
   KarelElement,
 } from "@/utils/custom/KarelElement/KarelElement";
 import { puzzleImagesType, worldInfoType } from "@/types/karelWorld";
+import { useRunningKarelContext } from "@/lib/context/RunningKarelContext";
 
 //why is this context not working?
 // import { RunningWorldStateContext } from '@app/puzzle/[id]/page';
@@ -34,7 +35,7 @@ interface RunnableGridProps {
   worldDimensions: { width: number; height: number };
   images: puzzleImagesType;
   worldInfo: worldInfoType;
-  runningWorldInfo: worldInfoType;
+  // runningWorldInfo: worldInfoType;
   // initialKarel: KarelElement;
   // initialBeeper: KarelElement;
   // initialBeepersList: KarelElement[];
@@ -68,13 +69,16 @@ interface RunnableGridHandle {
 
 const RunnableGrid = forwardRef<RunnableGridHandle, RunnableGridProps>(
   function RunnableGrid(props, ref) {
+    const { runningWorldInfo, setRunningWorldInfo } = useRunningKarelContext();
+    console.log("runningWorldInfo", runningWorldInfo);
+
     const {
       pxWidth,
       pxHeight,
       worldDimensions,
       images,
       worldInfo,
-      runningWorldInfo,
+      // runningWorldInfo,
       // setKarelRunning,
       // setRunningWorldBeeperList,
     } = props;
@@ -111,6 +115,37 @@ const RunnableGrid = forwardRef<RunnableGridHandle, RunnableGridProps>(
     );
 
     const [internalGrid, setInternalGrid] = useState(firstEmptyGrid);
+
+    const updateBeepers = (
+      prevWorld: worldInfoType,
+      indexOfBeeperToUpdate: number,
+      addOne: boolean
+    ) => {
+      let oldBeepers = prevWorld.gridElements.filter(
+        (element) => element.type === "beeper"
+      );
+      let newBeepers = [...oldBeepers];
+      let updatedBeeper = new GridElement(
+        "beeper",
+        karel.x,
+        karel.y,
+        oldBeepers[indexOfBeeperToUpdate].count
+      );
+
+      if (addOne) updatedBeeper.addOne();
+      else updatedBeeper.subtractOne();
+      newBeepers[indexOfBeeperToUpdate] = updatedBeeper;
+      //make newGridElements equal to the newBeepers + the other elements, all in one long array
+      let newGridElements = [...prevWorld.gridElements];
+      newGridElements = newGridElements.filter(
+        (element) => element.type !== "beeper"
+      );
+      newGridElements = [...newGridElements, ...newBeepers];
+      return {
+        ...prevWorld,
+        gridElements: newGridElements,
+      };
+    };
 
     useEffect(() => {
       let newGrid = makeNewGrid(worldDimensions.width, worldDimensions.height);
@@ -168,7 +203,6 @@ const RunnableGrid = forwardRef<RunnableGridHandle, RunnableGridProps>(
     useImperativeHandle(ref, () => ({
       //not callable by user code
       resetGrid() {
-        console.log("resetting the grid in runnable grid");
         let newGrid = makeNewGrid(
           worldDimensions.width,
           worldDimensions.height
@@ -202,13 +236,16 @@ const RunnableGrid = forwardRef<RunnableGridHandle, RunnableGridProps>(
         } else {
           newGrid[boundKarelX][boundKarelY] = [initialKarel];
         }
-        console.log("my reset grid", newGrid);
-        console.log("my initial karel", initialKarel);
 
         // setCurrentBeeperList([...initialBeepersList]);
         // setRunningWorldBeeperList([...initialBeepersList]);
         setInternalGrid(newGrid);
         setBeepers([...initialBeepers]); // reset the beepers!
+        setRunningWorldInfo((prev) => ({
+          ...prev,
+          karel: initialKarel.toJSON(),
+          gridElements: beepers.map((beeper) => beeper),
+        }));
         setKarel(initialKarel);
         //update grandpa state
         // setKarelRunning({ ...initialKarel });
@@ -266,7 +303,10 @@ const RunnableGrid = forwardRef<RunnableGridHandle, RunnableGridProps>(
             break;
         }
         setKarel(newKarel);
-        // setKarelRunning(newKarel);
+        setRunningWorldInfo((prev) => ({
+          ...prev,
+          karel: initialKarel.toJSON(),
+        }));
       },
 
       turnLeft() {
@@ -292,7 +332,10 @@ const RunnableGrid = forwardRef<RunnableGridHandle, RunnableGridProps>(
             break;
         }
         setKarel(newKarel);
-        // setKarelRunning(newKarel);
+        setRunningWorldInfo((prev) => ({
+          ...prev,
+          karel: initialKarel.toJSON(),
+        }));
       },
 
       //beeper actions
@@ -349,6 +392,31 @@ const RunnableGrid = forwardRef<RunnableGridHandle, RunnableGridProps>(
           //   newBeepers[index] = updatedBeeper;
           //   return newBeepers;
           // });
+          setRunningWorldInfo((prev) => {
+            return updateBeepers(prev, index, true);
+            // let oldBeepers = prev.gridElements.filter(
+            //   (element) => element.type === "beeper"
+            // );
+            // let newBeepers = [...oldBeepers];
+            // let updatedBeeper = new GridElement(
+            //   "beeper",
+            //   karel.x,
+            //   karel.y,
+            //   oldBeepers[index].count
+            // );
+            // updatedBeeper.addOne();
+            // newBeepers[index] = updatedBeeper;
+            // //make newGridElements equal to the newBeepers + the other elements, all in one long array
+            // let newGridElements = [...prev.gridElements];
+            // newGridElements = newGridElements.filter(
+            //   (element) => element.type !== "beeper"
+            // );
+            // newGridElements = [...newGridElements, ...newBeepers];
+            // return {
+            //   ...prev,
+            //   gridElements: newGridElements,
+            // };
+          });
         }
       },
 
@@ -383,6 +451,10 @@ const RunnableGrid = forwardRef<RunnableGridHandle, RunnableGridProps>(
               newBeepers[index] = updatedBeeper;
             }
             return newBeepers;
+          });
+
+          setRunningWorldInfo((prev) => {
+            return updateBeepers(prev, index, true);
           });
           //setting grandfather state
           // setRunningWorldBeeperList((prevBeepers) => {
@@ -458,10 +530,30 @@ const RunnableGrid = forwardRef<RunnableGridHandle, RunnableGridProps>(
         }
       },
       frontIsBlocked() {
-        return false; //temporary -- please remove
-        // {
-        //   return !this.frontIsClear();
-        // }
+        switch (karel.direction) {
+          case "north":
+            let newYN = karel.y - 1;
+            if (newYN < 0) return true;
+            let newCellN = internalGrid[karel.x][newYN];
+            return newCellN.some((element) => element.isWall());
+          case "south":
+            let newYS = karel.y + 1;
+            if (newYS >= cols) return true;
+            let newCellS = internalGrid[karel.x][newYS];
+            return newCellS.some((element) => element.isWall());
+          case "east":
+            let newXE = karel.x + 1;
+            if (newXE >= rows) return true;
+            let newCellE = internalGrid[newXE][karel.y];
+            return newCellE.some((element) => element.isWall());
+          case "west":
+            let newXW = karel.x - 1;
+            if (newXW < 0) return true;
+            let newCellW = internalGrid[newXW][karel.y];
+            return newCellW.some((element) => element.isWall());
+          default:
+            return false;
+        }
       },
 
       leftIsClear() {
@@ -491,10 +583,30 @@ const RunnableGrid = forwardRef<RunnableGridHandle, RunnableGridProps>(
         }
       },
       leftIsBlocked() {
-        return false; //temporary -- please remove
-        // {
-        //   return !this.leftIsClear();
-        // }
+        switch (karel.direction) {
+          case "north":
+            let newXW = karel.x - 1;
+            if (newXW < 0) return true;
+            let newCellW = internalGrid[newXW][karel.y];
+            return newCellW.some((element) => element.isWall());
+          case "south":
+            let newXE = karel.x + 1;
+            if (newXE >= rows) return true;
+            let newCellE = internalGrid[newXE][karel.y];
+            return newCellE.some((element) => element.isWall());
+          case "east":
+            let newYN = karel.y - 1;
+            if (newYN < 0) return true;
+            let newCellN = internalGrid[karel.x][newYN];
+            return newCellN.some((element) => element.isWall());
+          case "west":
+            let newYS = karel.y + 1;
+            if (newYS >= cols) return true;
+            let newCellS = internalGrid[karel.x][newYS];
+            return newCellS.some((element) => element.isWall());
+          default:
+            return false;
+        }
       },
 
       rightIsClear() {
@@ -524,10 +636,30 @@ const RunnableGrid = forwardRef<RunnableGridHandle, RunnableGridProps>(
         }
       },
       rightIsBlocked() {
-        return false; //temporary -- please remove
-        // {
-        //   return !this.rightIsClear();
-        // }
+        switch (karel.direction) {
+          case "north":
+            let newXE = karel.x + 1;
+            if (newXE >= rows) return true;
+            let newCellE = internalGrid[newXE][karel.y];
+            return newCellE.some((element) => element.isWall());
+          case "south":
+            let newXW = karel.x - 1;
+            if (newXW < 0) return true;
+            let newCellW = internalGrid[newXW][karel.y];
+            return newCellW.some((element) => element.isWall());
+          case "east":
+            let newYS = karel.y + 1;
+            if (newYS >= cols) return true;
+            let newCellS = internalGrid[karel.x][newYS];
+            return newCellS.some((element) => element.isWall());
+          case "west":
+            let newYN = karel.y - 1;
+            if (newYN < 0) return true;
+            let newCellN = internalGrid[karel.x][newYN];
+            return newCellN.some((element) => element.isWall());
+          default:
+            return false;
+        }
       },
 
       //beeper logic
@@ -536,10 +668,8 @@ const RunnableGrid = forwardRef<RunnableGridHandle, RunnableGridProps>(
         return newCell.some((element) => element.isBeeper());
       },
       noBeepersPresent() {
-        return false; //temporary -- please remove
-        // {
-        //   return !this.beepersPresent();
-        // }
+        let newCell = internalGrid[karel.x][karel.y];
+        return !newCell.some((element) => element.isBeeper());
       },
     }));
 

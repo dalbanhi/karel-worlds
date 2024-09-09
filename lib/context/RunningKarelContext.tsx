@@ -1,32 +1,41 @@
+"use client";
 import React, { createContext, useState, useContext, ReactNode } from "react";
-import { SimpleKarelElementType } from "@/types/karelWorld";
+import { worldInfoType } from "@/types/karelWorld";
 
 interface RunningKarelContextProps {
-  runningKarel: SimpleKarelElementType;
-  setRunningKarel: React.Dispatch<React.SetStateAction<SimpleKarelElementType>>;
+  runningWorldInfo: worldInfoType;
+  setRunningWorldInfo: React.Dispatch<React.SetStateAction<worldInfoType>>;
 }
 
 const RunningKarelContext = createContext<RunningKarelContextProps | undefined>(
   undefined
 );
 
-const defaultKarelState: SimpleKarelElementType = {
-  x: 0,
-  y: 0,
-  direction: "east",
-  backpack: 0,
-  infiniteBackpack: false,
-  type: "karel",
-  count: 1,
-  subtype: "karel",
+const defaultRunningWorldState: worldInfoType = {
+  gridElements: [],
+  karel: {
+    x: 0,
+    y: 0,
+    type: "karel",
+    subtype: "karel",
+    count: 1,
+    direction: "east",
+    backpack: 0,
+    infiniteBackpack: false,
+  },
 };
 
 export const RunningKarelProvider = ({ children }: { children: ReactNode }) => {
-  const [runningKarel, setRunningKarel] =
-    useState<SimpleKarelElementType>(defaultKarelState);
+  const [runningWorldInfo, setRunningWorldInfo] = useState<worldInfoType>(
+    defaultRunningWorldState
+  );
+
+  console.log("Provider runningWorldInfo", runningWorldInfo);
 
   return (
-    <RunningKarelContext.Provider value={{ runningKarel, setRunningKarel }}>
+    <RunningKarelContext.Provider
+      value={{ runningWorldInfo, setRunningWorldInfo }}
+    >
       {children}
     </RunningKarelContext.Provider>
   );

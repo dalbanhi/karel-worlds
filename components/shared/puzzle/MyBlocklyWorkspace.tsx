@@ -50,7 +50,7 @@ const MyBlocklyWorkspace: React.FC<MyBlocklyWorkspaceProps> = ({
   }, [savedWorkspaceState]);
 
   return (
-    <React.Fragment>
+    <div>
       {toolboxData && (
         <BlocklyWorkspace
           toolboxConfiguration={toolboxData}
@@ -79,7 +79,7 @@ const MyBlocklyWorkspace: React.FC<MyBlocklyWorkspaceProps> = ({
           }}
         />
       )}
-    </React.Fragment>
+    </div>
   );
 };
 

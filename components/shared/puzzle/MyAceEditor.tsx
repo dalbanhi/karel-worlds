@@ -1,26 +1,39 @@
-import { useToast } from "@/hooks/use-toast";
+"use client";
+
+import dynamic from "next/dynamic";
 import React, { useEffect, useState } from "react";
+import { useToast } from "@/hooks/use-toast";
+import AceEditor from "react-ace-builds";
 
-import AceEditor from "react-ace";
-import "ace-builds/src-noconflict/mode-jsx";
-const languages = ["javascript"];
-const themes = ["textmate"];
+import "react-ace-builds/webpack-resolver-min";
 
-import "ace-builds/webpack-resolver";
-import "ace-builds/src-noconflict/ace";
-import "ace-builds/webpack-resolver";
-import "ace-builds/src-noconflict/mode-javascript";
-// import "ace-builds/src-noconflict/theme-github";
-import "ace-builds/src-noconflict/theme-textmate";
-import "ace-builds/src-noconflict/ext-language_tools";
-import "ace-builds/src-noconflict/snippets/javascript";
+// Dynamically import AceEditor only on the client side
+// const AceEditor = dynamic(() => import("react-ace-builds"), { ssr: false });
 
-languages.forEach((lang) => {
-  require(`ace-builds/src-noconflict/mode-${lang}`);
-  require(`ace-builds/src-noconflict/snippets/${lang}`);
-});
+// Utility to load Ace builds and attach to global `window` object
+// const loadAceBuilds = async () => {
+//   try {
+//     // Load core Ace library and necessary extensions
+//     await Promise.all([
+//       import("ace-builds/src-noconflict/ace"),
+//       import("ace-builds/src-noconflict/ext-language_tools"),
+//     ]);
 
-themes.forEach((theme) => require(`ace-builds/src-noconflict/theme-${theme}`));
+//     // Load languages and themes
+//     await Promise.all([
+//       import("ace-builds/src-noconflict/mode-javascript"),
+//       import("ace-builds/src-noconflict/theme-textmate"),
+//     ]);
+
+//     // Attach `ace` to global object
+//     if (typeof window !== "undefined") {
+//       window.ace = window.ace || {};
+//       window.ace.require = window.ace.require || (() => {});
+//     }
+//   } catch (error) {
+//     console.error("Failed to load ace builds: ", error);
+//   }
+// };
 
 interface MyAceEditorProps {
   onAceChange: (value: string) => void;
@@ -31,44 +44,44 @@ const MyAceEditor: React.FC<MyAceEditorProps> = ({
   onAceChange,
   userJavaScriptCode,
 }) => {
-  // State to track when the component has mounted
   const [hasMounted, setHasMounted] = useState(false);
+  const { toast } = useToast();
 
   useEffect(() => {
     setHasMounted(true);
   }, []);
-  const { toast } = useToast();
+
+  if (!hasMounted) return <div>Loading editor...</div>;
+
   return (
-    hasMounted && (
-      <AceEditor
-        mode="javascript"
-        theme="textmate"
-        name="userJavaScriptCodeOnAce"
-        width="100%"
-        height="100%"
-        onChange={(value: string) => onAceChange(value)}
-        onFocus={(e) => {
-          toast({
-            variant: "destructive",
-            title: "Coming soon",
-            description: "Text to block conversion is coming soon",
-          });
-        }}
-        fontSize={14}
-        showPrintMargin={true}
-        showGutter={true}
-        highlightActiveLine={true}
-        readOnly={true}
-        value={userJavaScriptCode}
-        enableLiveAutocompletion={true}
-        enableBasicAutocompletion={true}
-        enableSnippets={true}
-        setOptions={{
-          showLineNumbers: true,
-          tabSize: 5,
-        }}
-      />
-    )
+    <AceEditor
+      mode="javascript"
+      theme="textmate"
+      name="userJavaScriptCodeOnAce"
+      width="100%"
+      height="100%"
+      onChange={(value: string) => onAceChange(value)}
+      onFocus={() => {
+        toast({
+          variant: "destructive",
+          title: "Coming soon",
+          description: "Text to block conversion is coming soon",
+        });
+      }}
+      fontSize={14}
+      showPrintMargin={true}
+      showGutter={true}
+      highlightActiveLine={true}
+      readOnly={true}
+      value={userJavaScriptCode}
+      enableLiveAutocompletion={true}
+      enableBasicAutocompletion={true}
+      enableSnippets={true}
+      setOptions={{
+        showLineNumbers: true,
+        tabSize: 5,
+      }}
+    />
   );
 };
 
