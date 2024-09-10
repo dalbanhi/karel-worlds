@@ -1,5 +1,3 @@
-import Image from "next/image";
-
 import { getCurrentUser } from "@/lib/auth/checkUser";
 import { redirect } from "next/navigation";
 import HeroDesktop from "@/components/shared/home/hero/HeroDesktop";

@@ -11,20 +11,14 @@ import MyAceEditor from "./MyAceEditor";
 import RunnableWorld from "@/components/karel-worlds/RunnableWorld";
 import ViewableWorld from "@/components/karel-worlds/ViewableWorld";
 import { useCanvasSize } from "@/lib/hooks/useWindowSize";
-import {
-  RunningKarelProvider,
-  useRunningKarelContext,
-} from "@/lib/context/RunningKarelContext";
+import { RunningKarelProvider } from "@/lib/context/RunningKarelContext";
 import {
   worldInfoType,
   puzzleImagesType,
   SimpleKarelElementType,
   SimpleGridElementType,
 } from "@/types/karelWorld";
-import {
-  GridElement,
-  KarelElement,
-} from "@/utils/custom/KarelElement/KarelElement";
+import { GridElement } from "@/utils/custom/KarelElement/KarelElement";
 import { useToast } from "@/hooks/use-toast";
 
 function makeNewGrid(rows: number, cols: number): GridElement[][][] {
@@ -175,21 +169,21 @@ const PuzzleContent: React.FC<PuzzleProps> = ({
           );
           if (karelsEqual && beepersEqual) {
             toast({
-              variant: "default",
+              variant: "success",
               title: "Puzzle Solved",
               description: "You have successfully solved the puzzle!",
             });
           } else {
             if (!karelsEqual) {
               toast({
-                variant: "destructive",
-                title: "Puzzle Not Solved: Karel is in the wrong place",
+                variant: "warning",
+                title: "Puzzle Not Solved: Karel is not correctly placed",
                 description:
                   "The karel at the end of your code is not the same as the Karel in the Goal World",
               });
             } else {
               toast({
-                variant: "destructive",
+                variant: "warning",
                 title: "Puzzle Not Solved: Beepers are in the wrong place",
                 description:
                   "The beepers at the end of your code are not the same as the beepers in the Goal World",
@@ -204,7 +198,7 @@ const PuzzleContent: React.FC<PuzzleProps> = ({
       };
       checkPuzzleSolution();
     }
-  }, [goalWorldInfo, runningWorldInfo, shouldCheckSolution]);
+  }, [goalWorldInfo, runningWorldInfo, shouldCheckSolution, toast]);
 
   return (
     <section className=" w-full flex-col items-center p-4">

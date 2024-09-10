@@ -1,3 +1,4 @@
+"use client";
 import { useState, useEffect } from "react";
 import { windowSizeType } from "@/types/index";
 
@@ -24,8 +25,8 @@ export function useWindowSize() {
 export function useCanvasSize() {
   const windowSize = useWindowSize();
   const canvasSize = {
-    width: windowSize === undefined ? 0 : windowSize.width * (3 / 10),
-    height: windowSize === undefined ? 0 : windowSize.width * (3 / 10),
+    width: windowSize === undefined ? 0 : windowSize.width * (3 / 20),
+    height: windowSize === undefined ? 0 : windowSize.width * (3 / 20),
   };
 
   return canvasSize;
