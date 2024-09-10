@@ -15,6 +15,7 @@ import Interpreter from "js-interpreter";
 import { toast, useToast } from "@/hooks/use-toast";
 import { ToastAction } from "@/components/ui/toast";
 import { Application, ICanvas } from "pixi.js";
+import { init } from "next/dist/compiled/webpack/webpack";
 
 //from: https://overreacted.io/making-setinterval-declarative-with-react-hooks/
 function useInterval(callback: () => void, delay: number | null) {
@@ -77,7 +78,7 @@ const RunnableWorld: React.FC<RunnableWorldProps> = ({
         interpreter.createNativeFunction(async () => {
           try {
             await gridRef.current.moveForward();
-            // gridRef.current.updateRunningWorld();
+            gridRef.current.updateRunningWorld();
           } catch (e) {
             throw e;
           }
@@ -89,7 +90,7 @@ const RunnableWorld: React.FC<RunnableWorldProps> = ({
         "turnLeft",
         interpreter.createNativeFunction(async () => {
           await gridRef.current.turnLeft();
-          // gridRef.current.updateRunningWorld();
+          gridRef.current.updateRunningWorld();
         })
       );
 
@@ -100,6 +101,7 @@ const RunnableWorld: React.FC<RunnableWorldProps> = ({
         interpreter.createNativeFunction(async () => {
           try {
             await gridRef.current.putBeeper();
+            gridRef.current.updateRunningWorld();
           } catch (e) {
             throw e;
           }
@@ -111,6 +113,7 @@ const RunnableWorld: React.FC<RunnableWorldProps> = ({
         interpreter.createNativeFunction(async () => {
           try {
             await gridRef.current.takeBeeper();
+            gridRef.current.updateRunningWorld();
           } catch (e) {
             throw e;
           }
@@ -240,173 +243,7 @@ const RunnableWorld: React.FC<RunnableWorldProps> = ({
   // interpreter.current = new Interpreter(rawCode, initApi);
   const interpreter = useMemo(() => {
     return new Interpreter(rawCode, initApi);
-  }, [rawCode]);
-
-  //js-interpreter api
-  // function initApi(interpreter: typeof Interpreter, globalObject: any) {
-  //   //movement actions
-  //   interpreter.setProperty(
-  //     globalObject,
-  //     "moveForward",
-  //     interpreter.createNativeFunction(() => {
-  //       try {
-  //         return gridRef.current.moveForward(); //movement functions
-  //       } catch (e) {
-  //         throw e;
-  //       }
-  //     })
-  //   );
-
-  //   interpreter.setProperty(
-  //     globalObject,
-  //     "turnLeft",
-  //     interpreter.createNativeFunction(() => {
-  //       return gridRef.current.turnLeft();
-  //     })
-  //   );
-
-  //   //beeper actions
-  //   interpreter.setProperty(
-  //     globalObject,
-  //     "putBeeper",
-  //     interpreter.createNativeFunction(() => {
-  //       try {
-  //         gridRef.current.putBeeper();
-  //       } catch (e) {
-  //         throw e;
-  //       }
-  //     })
-  //   );
-  //   interpreter.setProperty(
-  //     globalObject,
-  //     "takeBeeper",
-  //     interpreter.createNativeFunction(() => {
-  //       try {
-  //         gridRef.current.takeBeeper();
-  //       } catch (e) {
-  //         throw e;
-  //       }
-  //     })
-  //   );
-
-  //   //direction logic
-  //   interpreter.setProperty(
-  //     globalObject,
-  //     "isFacingEast",
-  //     interpreter.createNativeFunction(() => {
-  //       return gridRef.current.isFacingEast();
-  //     })
-  //   );
-  //   interpreter.setProperty(
-  //     globalObject,
-  //     "isFacingNorth",
-  //     interpreter.createNativeFunction(() => {
-  //       return gridRef.current.isFacingNorth();
-  //     })
-  //   );
-  //   interpreter.setProperty(
-  //     globalObject,
-  //     "isFacingWest",
-  //     interpreter.createNativeFunction(() => {
-  //       return gridRef.current.isFacingWest();
-  //     })
-  //   );
-  //   interpreter.setProperty(
-  //     globalObject,
-  //     "isFacingSouth",
-  //     interpreter.createNativeFunction(() => {
-  //       return gridRef.current.isFacingSouth();
-  //     })
-  //   );
-  //   interpreter.setProperty(
-  //     globalObject,
-  //     "isNotFacingEast",
-  //     interpreter.createNativeFunction(() => {
-  //       return gridRef.current.isNotFacingEast();
-  //     })
-  //   );
-  //   interpreter.setProperty(
-  //     globalObject,
-  //     "isNotFacingNorth",
-  //     interpreter.createNativeFunction(() => {
-  //       return gridRef.current.isNotFacingNorth();
-  //     })
-  //   );
-  //   interpreter.setProperty(
-  //     globalObject,
-  //     "isNotFacingWest",
-  //     interpreter.createNativeFunction(() => {
-  //       return gridRef.current.isNotFacingWest();
-  //     })
-  //   );
-  //   interpreter.setProperty(
-  //     globalObject,
-  //     "isNotFacingSouth",
-  //     interpreter.createNativeFunction(() => {
-  //       return gridRef.current.isNotFacingSouth();
-  //     })
-  //   );
-
-  //   //block/clear logic
-  //   interpreter.setProperty(
-  //     globalObject,
-  //     "frontIsClear",
-  //     interpreter.createNativeFunction(() => {
-  //       return gridRef.current.frontIsClear();
-  //     })
-  //   );
-  //   interpreter.setProperty(
-  //     globalObject,
-  //     "frontIsBlocked",
-  //     interpreter.createNativeFunction(() => {
-  //       return gridRef.current.frontIsBlocked();
-  //     })
-  //   );
-  //   interpreter.setProperty(
-  //     globalObject,
-  //     "leftIsClear",
-  //     interpreter.createNativeFunction(() => {
-  //       return gridRef.current.leftIsClear();
-  //     })
-  //   );
-  //   interpreter.setProperty(
-  //     globalObject,
-  //     "leftIsBlocked",
-  //     interpreter.createNativeFunction(() => {
-  //       return gridRef.current.leftIsBlocked();
-  //     })
-  //   );
-  //   interpreter.setProperty(
-  //     globalObject,
-  //     "rightIsClear",
-  //     interpreter.createNativeFunction(() => {
-  //       return gridRef.current.rightIsClear();
-  //     })
-  //   );
-  //   interpreter.setProperty(
-  //     globalObject,
-  //     "rightIsBlocked",
-  //     interpreter.createNativeFunction(() => {
-  //       return gridRef.current.rightIsBlocked();
-  //     })
-  //   );
-
-  //   //beeper logic
-  //   interpreter.setProperty(
-  //     globalObject,
-  //     "beepersPresent",
-  //     interpreter.createNativeFunction(() => {
-  //       return gridRef.current.beepersPresent();
-  //     })
-  //   );
-  //   interpreter.setProperty(
-  //     globalObject,
-  //     "noBeepersPresent",
-  //     interpreter.createNativeFunction(() => {
-  //       return gridRef.current.noBeepersPresent();
-  //     })
-  //   );
-  // }
+  }, [rawCode, initApi]);
 
   const resetGridWithNewCode = () => {
     gridRef.current.resetGrid();
@@ -496,7 +333,7 @@ const RunnableWorld: React.FC<RunnableWorldProps> = ({
   sliderValueRef.current = sliderValue;
   const karelSpeed = useMemo(
     () => 500 - (sliderValueRef.current - 50),
-    [sliderValue]
+    [sliderValueRef]
   );
 
   const handleValueChange = useCallback((value: number[]) => {
@@ -538,8 +375,7 @@ const RunnableWorld: React.FC<RunnableWorldProps> = ({
   }, karelSpeed);
 
   return (
-    <section>
-      {name && <h1 className="text-xl font-extrabold">{name}</h1>}
+    <section className="flex flex-col justify-center items-center">
       <section className="mb-2 flex flex-col gap-2 p-4">
         <div className="flex items-center justify-center gap-4">
           <Button

@@ -183,36 +183,38 @@ const PuzzleContent: React.FC<PuzzleProps> = ({
       checkPuzzleSolution();
     }
   }, [goalWorldInfo, runningWorldInfo, shouldCheckSolution, toast]);
-
+  const puzzleName = "Example Puzzle";
   return (
-    <section className=" w-full flex-col items-center p-4">
-      <section className="flex w-full justify-between gap-6 border">
+    <section className=" w-full flex-col items-center p2">
+      <section className="flex w-full justify-between gap-6">
         <div className="flex flex-col gap-2 p-4">
-          <RunnableWorld
-            name={"Example Puzzle"}
-            canvasSize={canvasSize}
-            worldDimensions={worldDimensions}
-            rawCode={userJavaScriptCode}
-            worldInfo={startWorldInfo}
-            images={puzzleImages}
-            runningWorldInfo={runningWorldInfo}
-            setRunningWorldInfo={setRunningWorldInfo}
-            setShouldCheckSolution={setShouldCheckSolution}
-          />
-          <p className="">
-            The puzzle should look like the world below (click the arrow to
-            expand).
-          </p>
-          <ViewableWorld
-            name={"Example Puzzle"}
-            canvasSize={canvasSize}
-            worldDimensions={worldDimensions}
-            // hints={puzzle.puzzleInfo?.hints}
-            worldInfo={goalWorldInfo}
-            images={puzzleImages}
-          />
+          {puzzleName && (
+            <h1 className="text-xl font-extrabold">{puzzleName}</h1>
+          )}
+          <p>{`Use the double arrows below to show/hide the goal.`}</p>
+          <div className="flex max-lg:flex-col w-full">
+            <RunnableWorld
+              name={puzzleName}
+              canvasSize={canvasSize}
+              worldDimensions={worldDimensions}
+              rawCode={userJavaScriptCode}
+              worldInfo={startWorldInfo}
+              images={puzzleImages}
+              runningWorldInfo={runningWorldInfo}
+              setRunningWorldInfo={setRunningWorldInfo}
+              setShouldCheckSolution={setShouldCheckSolution}
+            />
+            <ViewableWorld
+              name={puzzleName}
+              canvasSize={canvasSize}
+              worldDimensions={worldDimensions}
+              // hints={puzzle.puzzleInfo?.hints}
+              worldInfo={goalWorldInfo}
+              images={puzzleImages}
+            />
+          </div>
         </div>
-        <div className="flex min-h-96 w-full flex-col gap-4  border border-blue-500 p-2">
+        <div className="flex min-h-96 w-full flex-col gap-4 p-2">
           <div className="flex items-center justify-center gap-2">
             <Switch
               id="editor-mode"

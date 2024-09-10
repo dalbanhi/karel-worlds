@@ -10,7 +10,7 @@ import {
 
 const TryItOut = () => {
   return (
-    <div className={`flex w-11/12 flex-col items-center gap-2 p-4 `}>
+    <div className={`flex w-full flex-col items-center gap-2 p-4 `}>
       <div className="w-7/12">
         <h1
           className={`text-center text-lg font-bold md:text-2xl ${montserrat.className}`}
@@ -23,7 +23,7 @@ const TryItOut = () => {
           Puzzle!
         </p>
       </div>
-      <div className="h-fit w-11/12 bg-card">
+      <div className="h-fit w-full bg-card">
         <Puzzle
           worldDimensions={examplePuzzleWorldDimensions}
           puzzleImages={examplePuzzleWorldImages}

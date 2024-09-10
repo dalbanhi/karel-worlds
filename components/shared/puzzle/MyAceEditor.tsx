@@ -34,7 +34,7 @@ const MyAceEditor: React.FC<MyAceEditorProps> = ({
       onChange={(value: string) => onAceChange(value)}
       onFocus={() => {
         toast({
-          variant: "destructive",
+          variant: "warning",
           title: "Coming soon",
           description: "Text to block conversion is coming soon",
         });

@@ -24,9 +24,16 @@ export function useWindowSize() {
 
 export function useCanvasSize() {
   const windowSize = useWindowSize();
+  const ratioLg = 3 / 20;
+  const ratioSm = 3 / 10;
+  if (windowSize === undefined) {
+    return { width: 0, height: 0 };
+  }
+  const isSmall = windowSize.width <= 768;
+  const ratio = isSmall ? ratioSm : ratioLg;
   const canvasSize = {
-    width: windowSize === undefined ? 0 : windowSize.width * (3 / 20),
-    height: windowSize === undefined ? 0 : windowSize.width * (3 / 20),
+    width: windowSize === undefined ? 0 : windowSize.width * ratio,
+    height: windowSize === undefined ? 0 : windowSize.width * ratio,
   };
 
   return canvasSize;

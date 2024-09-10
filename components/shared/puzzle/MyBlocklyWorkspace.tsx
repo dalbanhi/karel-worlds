@@ -57,7 +57,7 @@ const MyBlocklyWorkspace: React.FC<MyBlocklyWorkspaceProps> = ({
           onWorkspaceChange={workspaceDidChange}
           className="size-full"
           workspaceConfiguration={{
-            collapse: false,
+            collapse: true,
             comments: false,
             disable: false,
             maxBlocks: Infinity,

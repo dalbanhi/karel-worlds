@@ -3,10 +3,13 @@ import React from "react";
 
 import { useState, useEffect, useMemo } from "react";
 import { Stage, Container } from "@pixi/react";
-import { PixiComponent } from "@pixi/react";
-import { Graphics } from "pixi.js";
 import { Button } from "@/components/ui/button";
-import { DoubleArrowDownIcon, DoubleArrowUpIcon } from "@radix-ui/react-icons";
+import {
+  DoubleArrowDownIcon,
+  DoubleArrowUpIcon,
+  DoubleArrowLeftIcon,
+  DoubleArrowRightIcon,
+} from "@radix-ui/react-icons";
 import Grid from "@/components/PixiJS/Grid";
 
 import {
@@ -28,6 +31,32 @@ function makeNewGrid(rows: number, cols: number): GridElement[][][] {
   return newGrid;
 }
 
+interface ShowHideArrowProps {
+  showGoal: boolean;
+  setShowGoal: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+const ShowHideArrow: React.FC<ShowHideArrowProps> = ({
+  showGoal,
+  setShowGoal,
+}) => {
+  return (
+    <Button onClick={() => setShowGoal(!showGoal)}>
+      {showGoal ? (
+        <React.Fragment>
+          <DoubleArrowLeftIcon className="block max-lg:hidden" />
+          <DoubleArrowUpIcon className="hidden max-lg:block" />
+        </React.Fragment>
+      ) : (
+        <React.Fragment>
+          <DoubleArrowRightIcon className="block max-lg:hidden" />
+          <DoubleArrowDownIcon className="hidden max-lg:block" />
+        </React.Fragment>
+      )}
+    </Button>
+  );
+};
+
 interface ViewableWorldProps {
   name: string;
   canvasSize: windowSizeType;
@@ -45,7 +74,7 @@ const ViewableWorld: React.FC<ViewableWorldProps> = ({
   hints,
   images,
 }) => {
-  const [showGoal, setShowGoal] = useState(false);
+  const [showGoal, setShowGoal] = useState(true);
   const initialKarel = useMemo(
     () =>
       new KarelElement(
@@ -131,34 +160,33 @@ const ViewableWorld: React.FC<ViewableWorldProps> = ({
   }, [worldDimensions.width, worldDimensions.height, karel, beepers]);
 
   return (
-    <div>
-      {name && <h4 className="text-base font-extrabold">{name}&#39;s Goal</h4>}
+    <section className="flex max-lg:flex-col h-full justify-center items-center p-2 gap-2">
       <div className="flex items-center justify-center">
-        <Button onClick={() => setShowGoal(!showGoal)}>
-          {showGoal ? <DoubleArrowUpIcon /> : <DoubleArrowDownIcon />}
-        </Button>
+        <ShowHideArrow showGoal={showGoal} setShowGoal={setShowGoal} />
       </div>
-      {showGoal && (
-        <Stage
-          suppressHydrationWarning
-          width={canvasSize.width}
-          height={canvasSize.height}
-          options={{ background: 0xffffff }}
-        >
-          <Container x={0} y={0} sortableChildren={true}>
-            <Grid
-              pxWidth={canvasSize.width}
-              pxHeight={canvasSize.height}
-              rows={worldDimensions.width}
-              cols={worldDimensions.height}
-              internalGrid={internalGrid}
-              karel={karel}
-              images={images}
-            />
-          </Container>
-        </Stage>
-      )}
-    </div>
+      <div className="flex h-full flex-col justify-end">
+        {showGoal && (
+          <Stage
+            suppressHydrationWarning
+            width={canvasSize.width}
+            height={canvasSize.height}
+            options={{ background: 0xffffff }}
+          >
+            <Container x={0} y={0} sortableChildren={true}>
+              <Grid
+                pxWidth={canvasSize.width}
+                pxHeight={canvasSize.height}
+                rows={worldDimensions.width}
+                cols={worldDimensions.height}
+                internalGrid={internalGrid}
+                karel={karel}
+                images={images}
+              />
+            </Container>
+          </Stage>
+        )}
+      </div>
+    </section>
   );
 };
 
