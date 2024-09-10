@@ -18,20 +18,7 @@ import {
   SimpleKarelElementType,
   SimpleGridElementType,
 } from "@/types/karelWorld";
-import { GridElement } from "@/utils/custom/KarelElement/KarelElement";
 import { useToast } from "@/hooks/use-toast";
-
-function makeNewGrid(rows: number, cols: number): GridElement[][][] {
-  let newGrid: GridElement[][][] = [];
-  for (let i = 0; i < rows; i++) {
-    let newRow: GridElement[][] = [];
-    newGrid.push(newRow);
-    for (let j = 0; j < cols; j++) {
-      newGrid[i].push([new GridElement("empty", i, j)]); // Push an array with a single empty Karel Element object
-    }
-  }
-  return newGrid;
-}
 
 interface PuzzleProps {
   worldDimensions: { width: number; height: number };
@@ -150,9 +137,6 @@ const PuzzleContent: React.FC<PuzzleProps> = ({
     if (shouldCheckSolution) {
       const checkPuzzleSolution = () => {
         try {
-          // console.log("checking solution");
-          // console.log("goal world info", goalWorldInfo);
-          // console.log("running world info", runningWorldInfo);
           let karelsEqual = karelEquality(
             goalWorldInfo.karel,
             runningWorldInfo.karel
