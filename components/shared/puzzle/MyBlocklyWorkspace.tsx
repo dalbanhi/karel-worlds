@@ -62,7 +62,7 @@ const MyBlocklyWorkspace: React.FC<MyBlocklyWorkspaceProps> = ({
             disable: false,
             maxBlocks: Infinity,
             trashcan: true,
-            horizontalLayout: false,
+            horizontalLayout: true,
             toolboxPosition: "start",
             theme: CustomTheme,
             css: true,
