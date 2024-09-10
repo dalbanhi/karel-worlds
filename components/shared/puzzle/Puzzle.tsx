@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { serialization, WorkspaceSvg, Events, getMainWorkspace } from "blockly";
 import "@/utils/custom/blocks/CustomBlocks";
 import { javascriptGenerator } from "blockly/javascript";
@@ -18,12 +18,26 @@ import {
 import {
   worldInfoType,
   puzzleImagesType,
+  SimpleKarelElementType,
   SimpleGridElementType,
 } from "@/types/karelWorld";
 import {
   GridElement,
   KarelElement,
 } from "@/utils/custom/KarelElement/KarelElement";
+import { useToast } from "@/hooks/use-toast";
+
+function makeNewGrid(rows: number, cols: number): GridElement[][][] {
+  let newGrid: GridElement[][][] = [];
+  for (let i = 0; i < rows; i++) {
+    let newRow: GridElement[][] = [];
+    newGrid.push(newRow);
+    for (let j = 0; j < cols; j++) {
+      newGrid[i].push([new GridElement("empty", i, j)]); // Push an array with a single empty Karel Element object
+    }
+  }
+  return newGrid;
+}
 
 interface PuzzleProps {
   worldDimensions: { width: number; height: number };
@@ -56,11 +70,13 @@ const PuzzleContent: React.FC<PuzzleProps> = ({
   goalWorldInfo,
   puzzleImages,
 }) => {
+  const { toast } = useToast();
   const canvasSize = useCanvasSize();
   const [userJavaScriptCode, setUserJavaScriptCode] = useState("");
   const [workspaceState, setWorkspaceState] = useState({});
   const [shouldCheckSolution, setShouldCheckSolution] = useState(false);
-  const { runningWorldInfo, setRunningWorldInfo } = useRunningKarelContext();
+  const [runningWorldInfo, setRunningWorldInfo] =
+    useState<worldInfoType>(startWorldInfo);
   const [editorMode, setEditorMode] = useState("block");
 
   const onAceChange = (value: string) => {
@@ -98,62 +114,88 @@ const PuzzleContent: React.FC<PuzzleProps> = ({
     } else {
       //going to text mode
       //save the workspace state so it can be loaded back in
-      // const workspace = getMainWorkspace();
-      // const currWorkspaceSave = serialization.workspaces.save(workspace);
-      // setWorkspaceState(currWorkspaceSave);
+      const workspace = getMainWorkspace();
+      const currWorkspaceSave = serialization.workspaces.save(workspace);
+      setWorkspaceState(currWorkspaceSave);
     }
 
     setEditorMode(checked ? "block" : "text");
   };
 
-  // function karelEquality(karel1: SimpleGridElementType, karel2: SimpleGridElementType) {
-  //   let xs = Number(karel1.x) === Number(karel2.x);
-  //   let ys = Number(karel1.y) === Number(karel2.y);
-  //   let dirs = karel1.direction === karel2.direction;
-  //   let beeperBag = Number(karel1.backpack) === Number(karel2.backpack);
-  //   return xs && ys && dirs && beeperBag;
-  // }
+  function karelEquality(
+    karel1: SimpleKarelElementType,
+    karel2: SimpleKarelElementType
+  ) {
+    let xs = Number(karel1.x) === Number(karel2.x);
+    let ys = Number(karel1.y) === Number(karel2.y);
+    let dirs = karel1.direction === karel2.direction;
+    let beeperBag = Number(karel1.backpack) === Number(karel2.backpack);
+    return xs && ys && dirs && beeperBag;
+  }
 
-  // function beepersListEquality(
-  //   beepers1: GridElement[],
-  //   beepers2: GridElement[]
-  // ) {
-  //   if (beepers1.length !== beepers2.length) {
-  //     return false;
-  //   }
-  //   for (let i = 0; i < beepers1.length; i++) {
-  //     if (
-  //       Number(beepers1[i].x) !== Number(beepers2[i].x) ||
-  //       Number(beepers1[i].y) !== Number(beepers2[i].y) ||
-  //       Number(beepers1[i].count) !== Number(beepers2[i].count)
-  //     ) {
-  //       return false;
-  //     }
-  //   }
-  //   return true;
-  // }
+  function beepersListEquality(
+    beepers1: SimpleGridElementType[],
+    beepers2: SimpleGridElementType[]
+  ) {
+    if (beepers1.length !== beepers2.length) {
+      return false;
+    }
+    for (let i = 0; i < beepers1.length; i++) {
+      if (
+        Number(beepers1[i].x) !== Number(beepers2[i].x) ||
+        Number(beepers1[i].y) !== Number(beepers2[i].y) ||
+        Number(beepers1[i].count) !== Number(beepers2[i].count)
+      ) {
+        return false;
+      }
+    }
+    return true;
+  }
 
   useEffect(() => {
     if (shouldCheckSolution) {
       const checkPuzzleSolution = () => {
         try {
-          console.log("checking solution");
-          console.log("goal world info", goalWorldInfo);
-          console.log("running world info", runningWorldInfo);
-          // let karelsEqual = karelEquality(goalWorldInfo.karel, karelRunning);
-          // let beepersEqual = beepersListEquality(
-          //   goalWorldBeeperList,
-          //   runningWorldBeeperList
-          // );
-          // if (karelsEqual && beepersEqual) {
-          //   alert("Puzzle Solved!");
-          // } else {
-          //   if (!karelsEqual) {
-          //     alert("Karels are not equal");
-          //   } else {
-          //     alert("Beepers are not equal");
-          //   }
-          // }
+          // console.log("checking solution");
+          // console.log("goal world info", goalWorldInfo);
+          // console.log("running world info", runningWorldInfo);
+          let karelsEqual = karelEquality(
+            goalWorldInfo.karel,
+            runningWorldInfo.karel
+          );
+          const goalWorldBeeperList = goalWorldInfo.gridElements.filter(
+            (element) => element.type === "beeper"
+          );
+          const runningWorldBeeperList = runningWorldInfo.gridElements.filter(
+            (element) => element.type === "beeper"
+          );
+          let beepersEqual = beepersListEquality(
+            goalWorldBeeperList,
+            runningWorldBeeperList
+          );
+          if (karelsEqual && beepersEqual) {
+            toast({
+              variant: "default",
+              title: "Puzzle Solved",
+              description: "You have successfully solved the puzzle!",
+            });
+          } else {
+            if (!karelsEqual) {
+              toast({
+                variant: "destructive",
+                title: "Puzzle Not Solved: Karel is in the wrong place",
+                description:
+                  "The karel at the end of your code is not the same as the Karel in the Goal World",
+              });
+            } else {
+              toast({
+                variant: "destructive",
+                title: "Puzzle Not Solved: Beepers are in the wrong place",
+                description:
+                  "The beepers at the end of your code are not the same as the beepers in the Goal World",
+              });
+            }
+          }
         } catch (error) {
           console.error(error);
         } finally {
@@ -165,36 +207,32 @@ const PuzzleContent: React.FC<PuzzleProps> = ({
   }, [goalWorldInfo, runningWorldInfo, shouldCheckSolution]);
 
   return (
-    <section
-      suppressHydrationWarning
-      className=" w-full flex-col items-center p-4"
-    >
+    <section className=" w-full flex-col items-center p-4">
       <section className="flex w-full justify-between gap-6 border">
         <div className="flex flex-col gap-2 p-4">
-          {/* <RunnableWorld
+          <RunnableWorld
             name={"Example Puzzle"}
             canvasSize={canvasSize}
             worldDimensions={worldDimensions}
             rawCode={userJavaScriptCode}
             worldInfo={startWorldInfo}
             images={puzzleImages}
-            // runningWorldInfo={runningWorldInfo}
-            // setKarelRunning={setKarelRunning}
-            // setRunningWorldBeeperList={setRunningWorldBeeperList}
+            runningWorldInfo={runningWorldInfo}
+            setRunningWorldInfo={setRunningWorldInfo}
             setShouldCheckSolution={setShouldCheckSolution}
-          /> */}
+          />
           <p className="">
             The puzzle should look like the world below (click the arrow to
             expand).
           </p>
-          {/* <ViewableWorld
+          <ViewableWorld
             name={"Example Puzzle"}
             canvasSize={canvasSize}
             worldDimensions={worldDimensions}
             // hints={puzzle.puzzleInfo?.hints}
             worldInfo={goalWorldInfo}
             images={puzzleImages}
-          /> */}
+          />
         </div>
         <div className="flex min-h-96 w-full flex-col gap-4  border border-blue-500 p-2">
           <div className="flex items-center justify-center gap-2">

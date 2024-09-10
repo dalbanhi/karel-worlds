@@ -1,5 +1,5 @@
 "use client";
-import React, { useMemo } from "react";
+import React, { MutableRefObject, useMemo } from "react";
 import { useEffect, useState, useRef, useContext } from "react";
 import { forwardRef, useImperativeHandle } from "react";
 //sub components
@@ -12,7 +12,6 @@ import {
   KarelElement,
 } from "@/utils/custom/KarelElement/KarelElement";
 import { puzzleImagesType, worldInfoType } from "@/types/karelWorld";
-import { useRunningKarelContext } from "@/lib/context/RunningKarelContext";
 
 //why is this context not working?
 // import { RunningWorldStateContext } from '@app/puzzle/[id]/page';
@@ -35,12 +34,8 @@ interface RunnableGridProps {
   worldDimensions: { width: number; height: number };
   images: puzzleImagesType;
   worldInfo: worldInfoType;
-  // runningWorldInfo: worldInfoType;
-  // initialKarel: KarelElement;
-  // initialBeeper: KarelElement;
-  // initialBeepersList: KarelElement[];
-  // setKarelRunning: Function;
-  // setRunningWorldBeeperList: Function;
+  runningWorldInfo: worldInfoType;
+  setRunningWorldInfo: React.Dispatch<React.SetStateAction<worldInfoType>>;
 }
 
 interface RunnableGridHandle {
@@ -69,18 +64,14 @@ interface RunnableGridHandle {
 
 const RunnableGrid = forwardRef<RunnableGridHandle, RunnableGridProps>(
   function RunnableGrid(props, ref) {
-    const { runningWorldInfo, setRunningWorldInfo } = useRunningKarelContext();
-    console.log("runningWorldInfo", runningWorldInfo);
-
     const {
       pxWidth,
       pxHeight,
       worldDimensions,
       images,
       worldInfo,
-      // runningWorldInfo,
-      // setKarelRunning,
-      // setRunningWorldBeeperList,
+      runningWorldInfo,
+      setRunningWorldInfo,
     } = props;
 
     const rows = worldDimensions.width;
@@ -115,37 +106,6 @@ const RunnableGrid = forwardRef<RunnableGridHandle, RunnableGridProps>(
     );
 
     const [internalGrid, setInternalGrid] = useState(firstEmptyGrid);
-
-    const updateBeepers = (
-      prevWorld: worldInfoType,
-      indexOfBeeperToUpdate: number,
-      addOne: boolean
-    ) => {
-      let oldBeepers = prevWorld.gridElements.filter(
-        (element) => element.type === "beeper"
-      );
-      let newBeepers = [...oldBeepers];
-      let updatedBeeper = new GridElement(
-        "beeper",
-        karel.x,
-        karel.y,
-        oldBeepers[indexOfBeeperToUpdate].count
-      );
-
-      if (addOne) updatedBeeper.addOne();
-      else updatedBeeper.subtractOne();
-      newBeepers[indexOfBeeperToUpdate] = updatedBeeper;
-      //make newGridElements equal to the newBeepers + the other elements, all in one long array
-      let newGridElements = [...prevWorld.gridElements];
-      newGridElements = newGridElements.filter(
-        (element) => element.type !== "beeper"
-      );
-      newGridElements = [...newGridElements, ...newBeepers];
-      return {
-        ...prevWorld,
-        gridElements: newGridElements,
-      };
-    };
 
     useEffect(() => {
       let newGrid = makeNewGrid(worldDimensions.width, worldDimensions.height);
@@ -198,10 +158,21 @@ const RunnableGrid = forwardRef<RunnableGridHandle, RunnableGridProps>(
       }
 
       setInternalGrid(newGrid);
-    }, [worldDimensions.width, worldDimensions.height, karel, beepers]);
+    }, [worldDimensions, karel, beepers]);
 
     useImperativeHandle(ref, () => ({
       //not callable by user code
+      updateRunningWorld() {
+        setRunningWorldInfo((prev: worldInfoType) => {
+          //TODO: combine the beepers and the wall arrays
+          return {
+            ...prev,
+            karel: karel.toJSON(),
+            gridElements: beepers.map((beeper) => beeper),
+          };
+        });
+      },
+
       resetGrid() {
         let newGrid = makeNewGrid(
           worldDimensions.width,
@@ -241,11 +212,11 @@ const RunnableGrid = forwardRef<RunnableGridHandle, RunnableGridProps>(
         // setRunningWorldBeeperList([...initialBeepersList]);
         setInternalGrid(newGrid);
         setBeepers([...initialBeepers]); // reset the beepers!
-        setRunningWorldInfo((prev) => ({
-          ...prev,
-          karel: initialKarel.toJSON(),
-          gridElements: beepers.map((beeper) => beeper),
-        }));
+        // setRunningWorldInfo((prev: worldInfoType) => ({
+        //   ...prev,
+        //   karel: initialKarel.toJSON(),
+        //   gridElements: initialBeepers.map((beeper) => beeper),
+        // }));
         setKarel(initialKarel);
         //update grandpa state
         // setKarelRunning({ ...initialKarel });
@@ -254,6 +225,7 @@ const RunnableGrid = forwardRef<RunnableGridHandle, RunnableGridProps>(
       //callable by user code
       //movement actions
       moveForward() {
+        console.log("moving forward");
         let newKarel = new KarelElement(
           karel.x,
           karel.y,
@@ -303,13 +275,14 @@ const RunnableGrid = forwardRef<RunnableGridHandle, RunnableGridProps>(
             break;
         }
         setKarel(newKarel);
-        setRunningWorldInfo((prev) => ({
-          ...prev,
-          karel: initialKarel.toJSON(),
-        }));
+        // setRunningWorldInfo((prev: worldInfoType) => ({
+        //   ...prev,
+        //   karel: newKarel.toJSON(),
+        // }));
       },
 
       turnLeft() {
+        console.log("turning left");
         let newKarel = new KarelElement(
           karel.x,
           karel.y,
@@ -332,14 +305,15 @@ const RunnableGrid = forwardRef<RunnableGridHandle, RunnableGridProps>(
             break;
         }
         setKarel(newKarel);
-        setRunningWorldInfo((prev) => ({
-          ...prev,
-          karel: initialKarel.toJSON(),
-        }));
+        // setRunningWorldInfo((prev: worldInfoType) => ({
+        //   ...prev,
+        //   karel: newKarel.toJSON(),
+        // }));
       },
 
       //beeper actions
       putBeeper() {
+        console.log("putting beeper");
         // let newKarel = new KarelElement(
         //   karel.x,
         //   karel.y,
@@ -392,35 +366,36 @@ const RunnableGrid = forwardRef<RunnableGridHandle, RunnableGridProps>(
           //   newBeepers[index] = updatedBeeper;
           //   return newBeepers;
           // });
-          setRunningWorldInfo((prev) => {
-            return updateBeepers(prev, index, true);
-            // let oldBeepers = prev.gridElements.filter(
-            //   (element) => element.type === "beeper"
-            // );
-            // let newBeepers = [...oldBeepers];
-            // let updatedBeeper = new GridElement(
-            //   "beeper",
-            //   karel.x,
-            //   karel.y,
-            //   oldBeepers[index].count
-            // );
-            // updatedBeeper.addOne();
-            // newBeepers[index] = updatedBeeper;
-            // //make newGridElements equal to the newBeepers + the other elements, all in one long array
-            // let newGridElements = [...prev.gridElements];
-            // newGridElements = newGridElements.filter(
-            //   (element) => element.type !== "beeper"
-            // );
-            // newGridElements = [...newGridElements, ...newBeepers];
-            // return {
-            //   ...prev,
-            //   gridElements: newGridElements,
-            // };
-          });
+          // setRunningWorldInfo((prev: worldInfoType) => {
+          //   return updateBeepers(prev, index, true);
+          // let oldBeepers = prev.gridElements.filter(
+          //   (element) => element.type === "beeper"
+          // );
+          // let newBeepers = [...oldBeepers];
+          // let updatedBeeper = new GridElement(
+          //   "beeper",
+          //   karel.x,
+          //   karel.y,
+          //   oldBeepers[index].count
+          // );
+          // updatedBeeper.addOne();
+          // newBeepers[index] = updatedBeeper;
+          // //make newGridElements equal to the newBeepers + the other elements, all in one long array
+          // let newGridElements = [...prev.gridElements];
+          // newGridElements = newGridElements.filter(
+          //   (element) => element.type !== "beeper"
+          // );
+          // newGridElements = [...newGridElements, ...newBeepers];
+          // return {
+          //   ...prev,
+          //   gridElements: newGridElements,
+          // };
+          // });
         }
       },
 
       takeBeeper() {
+        console.log("taking beeper");
         //check if there is a beeper in the beeperlist
         let beeperExists = beepers.find(
           (beeper) => beeper.x === karel.x && beeper.y === karel.y
@@ -453,9 +428,9 @@ const RunnableGrid = forwardRef<RunnableGridHandle, RunnableGridProps>(
             return newBeepers;
           });
 
-          setRunningWorldInfo((prev) => {
-            return updateBeepers(prev, index, true);
-          });
+          // setRunningWorldInfo((prev: worldInfoType) => {
+          //   return updateBeepers(prev, index, true);
+          // });
           //setting grandfather state
           // setRunningWorldBeeperList((prevBeepers) => {
           //   let newBeepers = [...prevBeepers];

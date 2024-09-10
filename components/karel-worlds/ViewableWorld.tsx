@@ -132,34 +132,32 @@ const ViewableWorld: React.FC<ViewableWorldProps> = ({
 
   return (
     <div>
-      {/* {name && (
-          <h4 className="text-base font-extrabold">{name}&#39;s Goal</h4>
-        )} */}
-      {/* <div className="flex items-center justify-center">
-          <Button onClick={() => setShowGoal(!showGoal)}>
-            {showGoal ? <DoubleArrowUpIcon /> : <DoubleArrowDownIcon />}
-          </Button>
-        </div> */}
-      {/* {showGoal && (
-          <Stage
-            suppressHydrationWarning
-            width={canvasSize.width}
-            height={canvasSize.height}
-            options={{ background: 0xffffff }}
-          >
-            <Container x={0} y={0} sortableChildren={true}>
-              <Grid
-                pxWidth={canvasSize.width}
-                pxHeight={canvasSize.height}
-                rows={worldDimensions.width}
-                cols={worldDimensions.height}
-                internalGrid={internalGrid}
-                karel={karel}
-                images={images}
-              />
-            </Container>
-          </Stage>
-        )} */}
+      {name && <h4 className="text-base font-extrabold">{name}&#39;s Goal</h4>}
+      <div className="flex items-center justify-center">
+        <Button onClick={() => setShowGoal(!showGoal)}>
+          {showGoal ? <DoubleArrowUpIcon /> : <DoubleArrowDownIcon />}
+        </Button>
+      </div>
+      {showGoal && (
+        <Stage
+          suppressHydrationWarning
+          width={canvasSize.width}
+          height={canvasSize.height}
+          options={{ background: 0xffffff }}
+        >
+          <Container x={0} y={0} sortableChildren={true}>
+            <Grid
+              pxWidth={canvasSize.width}
+              pxHeight={canvasSize.height}
+              rows={worldDimensions.width}
+              cols={worldDimensions.height}
+              internalGrid={internalGrid}
+              karel={karel}
+              images={images}
+            />
+          </Container>
+        </Stage>
+      )}
     </div>
   );
 };

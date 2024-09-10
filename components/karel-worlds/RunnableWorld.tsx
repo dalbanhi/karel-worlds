@@ -14,7 +14,15 @@ import Image from "next/image";
 import Interpreter from "js-interpreter";
 import { useToast } from "@/hooks/use-toast";
 import { ToastAction } from "@/components/ui/toast";
-import { useRunningKarelContext } from "@/lib/context/RunningKarelContext";
+import {
+  RunningKarelProvider,
+  useRunningKarelContext,
+} from "@/lib/context/RunningKarelContext";
+import { Application, ICanvas } from "pixi.js";
+import {
+  GridElement,
+  KarelElement,
+} from "@/utils/custom/KarelElement/KarelElement";
 
 //from: https://overreacted.io/making-setinterval-declarative-with-react-hooks/
 function useInterval(callback: () => void, delay: number | null) {
@@ -43,7 +51,8 @@ interface RunnableWorldProps {
   canvasSize: windowSizeType;
   worldDimensions: { width: number; height: number };
   worldInfo: worldInfoType;
-  // runningWorldInfo: worldInfoType;
+  runningWorldInfo: worldInfoType;
+  setRunningWorldInfo: React.Dispatch<React.SetStateAction<worldInfoType>>;
   images: puzzleImagesType;
   setShouldCheckSolution: React.Dispatch<React.SetStateAction<boolean>>;
 }
@@ -54,14 +63,11 @@ const RunnableWorld: React.FC<RunnableWorldProps> = ({
   worldDimensions,
   rawCode,
   worldInfo,
-  // runningWorldInfo,
+  runningWorldInfo,
+  setRunningWorldInfo,
   images,
-  //   setKarelRunning,
-  //   setRunningWorldBeeperList,
   setShouldCheckSolution,
 }) => {
-  const { runningWorldInfo, setRunningWorldInfo } = useRunningKarelContext();
-  console.log("runningWorldInfo", runningWorldInfo);
   //slider values for speed
   const minSliderValue = 50;
   const stepValue = 50;
@@ -70,10 +76,11 @@ const RunnableWorld: React.FC<RunnableWorldProps> = ({
   const { toast } = useToast();
 
   //references for grid, interpreter and runLoop
-  const runLoop = useRef(false);
+  const runLoop = useRef<boolean>(false);
   const interpreter = useRef<typeof Interpreter | null>(null);
   const gridRef = useRef<any>(null);
-  const shouldCheckPuzzle = useRef(false);
+  const shouldCheckPuzzle = useRef<boolean>(false);
+  const stepCodeRef = useRef<() => void>(() => {});
 
   interpreter.current = new Interpreter(rawCode, initApi);
 
@@ -85,7 +92,7 @@ const RunnableWorld: React.FC<RunnableWorldProps> = ({
       "moveForward",
       interpreter.createNativeFunction(() => {
         try {
-          gridRef.current.moveForward(); //movement functions
+          return gridRef.current.moveForward(); //movement functions
         } catch (e) {
           throw e;
         }
@@ -96,7 +103,7 @@ const RunnableWorld: React.FC<RunnableWorldProps> = ({
       globalObject,
       "turnLeft",
       interpreter.createNativeFunction(() => {
-        gridRef.current.turnLeft();
+        return gridRef.current.turnLeft();
       })
     );
 
@@ -266,10 +273,12 @@ const RunnableWorld: React.FC<RunnableWorldProps> = ({
         runLoop.current = false;
         stepAgain = false;
         shouldCheckPuzzle.current = true;
+        //batched update of the running world info
+        gridRef.current.updateRunningWorld();
       }
     }
     if (stepAgain) {
-      stepCode();
+      stepCodeRef.current();
     }
   }
 
@@ -318,7 +327,8 @@ const RunnableWorld: React.FC<RunnableWorldProps> = ({
   }
   isLine.oldStack_ = stack.slice();
 
-  const [app, setApp] = useState();
+  // Update the ref to ensure stepCode is up-to-date
+  const [app, setApp] = useState<Application<ICanvas>>();
   const [sliderValue, setSliderValue] = useState<number>(50);
   const karelSpeed = maxSliderValue - (sliderValue - minSliderValue);
 
@@ -349,11 +359,10 @@ const RunnableWorld: React.FC<RunnableWorldProps> = ({
           ),
         });
       }
-      // app.renderer.render(app.stage);
 
       if (shouldCheckPuzzle.current) {
         setShouldCheckSolution(true);
-        // shouldCheckPuzzle.current = false;
+        shouldCheckPuzzle.current = false;
       }
     }
   }, karelSpeed);
@@ -421,7 +430,7 @@ const RunnableWorld: React.FC<RunnableWorldProps> = ({
         height={canvasSize.height}
         raf={false}
         renderOnComponentChange={true}
-        // onMount={(app) => setApp(app)}
+        onMount={(app) => setApp(app)}
         options={{ background: 0xffffff }}
       >
         <Container x={0} y={0}>
@@ -432,9 +441,8 @@ const RunnableWorld: React.FC<RunnableWorldProps> = ({
             ref={gridRef}
             images={images}
             worldInfo={worldInfo}
-            // runningWorldInfo={runningWorldInfo}
-            // setKarelRunning={setKarelRunning}
-            // setRunningWorldBeeperList={setRunningWorldBeeperList}
+            runningWorldInfo={runningWorldInfo}
+            setRunningWorldInfo={setRunningWorldInfo}
           />
         </Container>
       </Stage>

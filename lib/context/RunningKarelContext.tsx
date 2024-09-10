@@ -7,10 +7,12 @@ interface RunningKarelContextProps {
   setRunningWorldInfo: React.Dispatch<React.SetStateAction<worldInfoType>>;
 }
 
+// Create the context with the correct typing
 const RunningKarelContext = createContext<RunningKarelContextProps | undefined>(
   undefined
 );
 
+// Default world state
 const defaultRunningWorldState: worldInfoType = {
   gridElements: [],
   karel: {
@@ -25,24 +27,29 @@ const defaultRunningWorldState: worldInfoType = {
   },
 };
 
-export const RunningKarelProvider = ({ children }: { children: ReactNode }) => {
+// RunningKarelProvider to manage and provide context
+export const RunningKarelProvider = ({
+  children,
+  value,
+}: {
+  children: ReactNode;
+  value?: RunningKarelContextProps; // Optional to support internal state or passed-in state
+}) => {
   const [runningWorldInfo, setRunningWorldInfo] = useState<worldInfoType>(
-    defaultRunningWorldState
+    value?.runningWorldInfo || defaultRunningWorldState
   );
 
-  console.log("Provider runningWorldInfo", runningWorldInfo);
+  const providerValue = value || { runningWorldInfo, setRunningWorldInfo };
 
   return (
-    <RunningKarelContext.Provider
-      value={{ runningWorldInfo, setRunningWorldInfo }}
-    >
+    <RunningKarelContext.Provider value={providerValue}>
       {children}
     </RunningKarelContext.Provider>
   );
 };
 
-// Custom hook to use the context
-export const useRunningKarelContext = () => {
+// Custom hook to access the context
+export const useRunningKarelContext = (): RunningKarelContextProps => {
   const context = useContext(RunningKarelContext);
   if (!context) {
     throw new Error(
