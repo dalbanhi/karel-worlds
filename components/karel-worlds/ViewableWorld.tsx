@@ -167,7 +167,6 @@ const ViewableWorld: React.FC<ViewableWorldProps> = ({
       <div className="flex h-full flex-col justify-end">
         {showGoal && (
           <Stage
-            suppressHydrationWarning
             width={canvasSize.width}
             height={canvasSize.height}
             options={{ background: 0xffffff }}

@@ -67,7 +67,8 @@ const Grid: React.FC<GridProps> = ({
   const draw = useCallback(
     (g: any) => {
       g.clear();
-      g.beginFill(0xebebeb);
+      g.lineStyle(2, 0xc5c4d4, 1); //c5c4d4 is the border color
+      g.beginFill(0xededf3); //ededf3 is card color
       g.drawRect(0, 0, currPxWidth, currPxHeight);
       g.endFill();
     },

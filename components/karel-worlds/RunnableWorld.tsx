@@ -375,7 +375,7 @@ const RunnableWorld: React.FC<RunnableWorldProps> = ({
   }, karelSpeed);
 
   return (
-    <section className="flex flex-col justify-center items-center">
+    <section className="flex flex-col justify-center items-center p-2">
       <section className="mb-2 flex flex-col gap-2 p-4">
         <div className="flex items-center justify-center gap-4">
           <Button
@@ -434,12 +434,9 @@ const RunnableWorld: React.FC<RunnableWorldProps> = ({
       <Stage
         width={canvasSize.width}
         height={canvasSize.height}
-        raf={false}
-        renderOnComponentChange={true}
-        onMount={(app) => setApp(app)}
         options={{ background: 0xffffff }}
       >
-        <Container x={0} y={0}>
+        <Container x={0} y={0} sortableChildren={true}>
           <RunnableGrid
             pxWidth={canvasSize.width}
             pxHeight={canvasSize.height}
