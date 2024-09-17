@@ -375,7 +375,7 @@ const RunnableWorld: React.FC<RunnableWorldProps> = ({
   }, karelSpeed);
 
   return (
-    <section className="flex flex-col justify-center items-center p-2">
+    <section className="flex flex-col items-center justify-center p-2">
       <section className="mb-2 flex flex-col gap-2 p-4">
         <div className="flex items-center justify-center gap-4">
           <Button

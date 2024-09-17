@@ -185,14 +185,14 @@ const PuzzleContent: React.FC<PuzzleProps> = ({
   }, [goalWorldInfo, runningWorldInfo, shouldCheckSolution, toast]);
   const puzzleName = "Example Puzzle";
   return (
-    <section className=" w-full flex-col items-center p2">
+    <section className=" w-full flex-col items-center p-2">
       <section className="flex w-full justify-between gap-6">
         <div className="flex flex-col gap-2 p-4">
           {puzzleName && (
             <h1 className="text-xl font-extrabold">{puzzleName}</h1>
           )}
           {/* <p>{`Use the double arrows below to show/hide the goal.`}</p> */}
-          <div className="flex max-lg:flex-col w-full">
+          <div className="flex w-full max-lg:flex-col">
             <RunnableWorld
               name={puzzleName}
               canvasSize={canvasSize}
