@@ -9,8 +9,8 @@ const HeroText = () => {
       className={`flex flex-col items-center gap-2 bg-primary-foreground/70 p-4 max-md:h-fit max-md:max-w-sm ${montserrat.className}`}
     >
       <h1 className="text-4xl md:text-5xl">
-        Solve <span className="text-primary">Karel</span> puzzles, learn to{" "}
-        <span className="text-primary">code</span>.
+        Solve <span className="bg-ring text-accent">Karel</span> puzzles, learn
+        to <span className="bg-ring text-accent">code</span>.
       </h1>
       <p className="text-sm md:text-base">
         KarelWorlds is a fun, interactive platform for computer science

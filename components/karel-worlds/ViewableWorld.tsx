@@ -44,13 +44,25 @@ const ShowHideArrow: React.FC<ShowHideArrowProps> = ({
     <Button onClick={() => setShowGoal(!showGoal)}>
       {showGoal ? (
         <React.Fragment>
-          <DoubleArrowLeftIcon className="block max-lg:hidden" />
-          <DoubleArrowUpIcon className="hidden max-lg:block" />
+          <DoubleArrowLeftIcon
+            aria-label="Hide the Goal World"
+            className="block max-lg:hidden"
+          />
+          <DoubleArrowUpIcon
+            aria-label="Hide the Goal World"
+            className="hidden max-lg:block"
+          />
         </React.Fragment>
       ) : (
         <React.Fragment>
-          <DoubleArrowRightIcon className="block max-lg:hidden" />
-          <DoubleArrowDownIcon className="hidden max-lg:block" />
+          <DoubleArrowRightIcon
+            aria-label="Show the Goal World"
+            className="block max-lg:hidden"
+          />
+          <DoubleArrowDownIcon
+            aria-label="Show the Goal World"
+            className="hidden max-lg:block"
+          />
         </React.Fragment>
       )}
     </Button>

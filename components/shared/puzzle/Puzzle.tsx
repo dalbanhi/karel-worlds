@@ -219,9 +219,11 @@ const PuzzleContent: React.FC<PuzzleProps> = ({
             <Switch
               id="editor-mode"
               defaultChecked={editorMode === "block"}
+              aria-labelledby="editor-mode-label"
               onCheckedChange={(checked) => handleEditorModeChange(checked)}
             />
             <Label
+              id="editor-mode-label"
               htmlFor="editor-mode"
               className="capitalize"
             >{`${editorMode} Mode ${editorMode === "text" ? "(Read Only" : ""}`}</Label>

@@ -410,7 +410,12 @@ const RunnableWorld: React.FC<RunnableWorldProps> = ({
           </span>
           <Slider
             id="karelSpeed"
+            aria-label="CHoose a speed for Karel"
             name="karelSpeed"
+            role="slider"
+            aria-valuemin={minSliderValue}
+            aria-valuemax={maxSliderValue}
+            aria-valuenow={sliderValue}
             value={[sliderValue]}
             min={minSliderValue}
             max={maxSliderValue}

@@ -96,7 +96,7 @@ const NavBar = () => {
           >
             <Image
               src="/images/icon.svg"
-              alt="Karel Worlds"
+              alt="Karel the Robot, the logo for Karel Worlds"
               width={55}
               height={55}
             />
