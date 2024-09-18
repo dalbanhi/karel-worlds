@@ -1,14 +1,24 @@
+"use client";
 import React from "react";
 import { montserrat } from "@/app/fonts";
+// import { GetStaticProps } from "next";
 import Puzzle from "@/components/shared/puzzle/Puzzle";
-import {
-  examplePuzzleWorldDimensions,
-  examplePuzzleWorldImages,
-  examplePuzzleWorldEnd,
-  examplePuzzleWorldStart,
-} from "@/constants/example-puzzle";
+import { puzzleImagesType, worldInfoType } from "@/types/karelWorld";
+import { windowSizeType } from "@/types";
 
-const TryItOut = () => {
+interface PuzzleProps {
+  worldDimensions: windowSizeType;
+  puzzleImages: puzzleImagesType;
+  startWorldInfo: worldInfoType;
+  goalWorldInfo: worldInfoType;
+}
+
+const TryItOut: React.FC<PuzzleProps> = ({
+  worldDimensions,
+  puzzleImages,
+  startWorldInfo,
+  goalWorldInfo,
+}) => {
   return (
     <div className={`flex w-full flex-col items-center gap-2 p-4 `}>
       <div className="w-7/12">
@@ -19,20 +29,39 @@ const TryItOut = () => {
         </h1>
         <p className="text-base font-semibold md:text-lg">
           Karel is a friendly robot who follows some simple commands. Run the
-          program with blocks or written code to try to solve your first Karel
+          program and add to it with blocks to try to solve your first Karel
           Puzzle!
         </p>
       </div>
       <div className="h-fit w-full bg-card">
         <Puzzle
-          worldDimensions={examplePuzzleWorldDimensions}
-          puzzleImages={examplePuzzleWorldImages}
-          startWorldInfo={examplePuzzleWorldStart}
-          goalWorldInfo={examplePuzzleWorldEnd}
+          worldDimensions={worldDimensions}
+          puzzleImages={puzzleImages}
+          startWorldInfo={startWorldInfo}
+          goalWorldInfo={goalWorldInfo}
         />
       </div>
     </div>
   );
 };
+
+// export const getStaticProps: GetStaticProps = async () => {
+//   // Import the constants at build time
+//   const {
+//     examplePuzzleWorldDimensions,
+//     examplePuzzleWorldImages,
+//     examplePuzzleWorldStart,
+//     examplePuzzleWorldEnd,
+//   } = await import("@/constants/example-puzzle");
+
+//   return {
+//     props: {
+//       worldDimensions: examplePuzzleWorldDimensions,
+//       puzzleImages: examplePuzzleWorldImages,
+//       startWorldInfo: examplePuzzleWorldStart,
+//       goalWorldInfo: examplePuzzleWorldEnd,
+//     },
+//   };
+// };
 
 export default TryItOut;

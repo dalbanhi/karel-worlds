@@ -1,8 +1,5 @@
-import { worldInfoType } from "@/types/karelWorld";
-import {
-  KarelElement,
-  GridElement,
-} from "@/utils/custom/KarelElement/KarelElement";
+import { windowSizeType } from "@/types";
+import { puzzleImagesType, worldInfoType } from "@/types/karelWorld";
 
 export const examplePuzzleWorldStart: worldInfoType = {
   karel: {
@@ -47,14 +44,14 @@ export const examplePuzzleWorldEnd: worldInfoType = {
   ],
 };
 
-export const examplePuzzleWorldImages = {
+export const examplePuzzleWorldImages: puzzleImagesType = {
   karel: "",
   beeper: "",
   wall: "",
   empty: "",
 };
 
-export const examplePuzzleWorldDimensions = {
+export const examplePuzzleWorldDimensions: windowSizeType = {
   width: 2,
   height: 2,
 };
