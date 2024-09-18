@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { openSans } from "./fonts";
 import type { Viewport } from "next";
+import { Toaster } from "@/components/ui/toaster";
 
 export const metadata: Metadata = {
   title: "Karel Worlds",
@@ -13,8 +14,8 @@ export const metadata: Metadata = {
 
 import { ClerkProvider } from "@clerk/nextjs";
 
-import NavBar from "@/components/shared/NavBar";
-import Footer from "@/components/shared/Footer";
+import NavBar from "@/components/shared/layout/NavBar";
+import Footer from "@/components/shared/layout/Footer";
 
 export const viewport: Viewport = {
   width: "device-width",
@@ -53,6 +54,7 @@ export default function RootLayout({
             <NavBar />
             <div className="grow">{children}</div>
             <Footer />
+            <Toaster />
           </main>
         </body>
       </html>

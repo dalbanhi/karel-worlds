@@ -147,14 +147,14 @@ const OnboardingForm: React.FC<OnboardingFormProps> = ({ baseUserInfo }) => {
           <FormLabel>Role</FormLabel>
           <div className="flex flex-wrap gap-4">
             <Button
-              className="size-36 flex flex-col text-primary"
+              className="flex size-36 flex-col text-primary"
               variant="outline"
               type="button"
               disabled={isSubmitDisabled}
               onClick={() => handleRoleSubmit("TEACHER")}
             >
               <Image
-                className="fill-primary size-12"
+                className="size-12 fill-primary"
                 src="/images/teacher.svg"
                 alt="teacher"
                 width={48}
@@ -163,14 +163,14 @@ const OnboardingForm: React.FC<OnboardingFormProps> = ({ baseUserInfo }) => {
               <span>Teacher</span>
             </Button>
             <Button
-              className="size-36 flex flex-col text-primary"
+              className="flex size-36 flex-col text-primary"
               variant="outline"
               type="button"
               disabled={isSubmitDisabled}
               onClick={() => handleRoleSubmit("STUDENT")}
             >
               <Image
-                className="fill-primary size-12"
+                className="size-12 fill-primary"
                 src="/images/student.svg"
                 alt="student"
                 width={48}
