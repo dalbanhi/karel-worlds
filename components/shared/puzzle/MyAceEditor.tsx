@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import AceEditor from "react-ace-builds";
 
-import "react-ace-builds/webpack-resolver-min";
+// import "react-ace-builds/webpack-resolver-min";
 
 interface MyAceEditorProps {
   onAceChange: (value: string) => void;
