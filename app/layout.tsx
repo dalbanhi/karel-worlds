@@ -5,7 +5,10 @@ import type { Viewport } from "next";
 import { Toaster } from "@/components/ui/toaster";
 
 export const metadata: Metadata = {
-  title: "Karel Worlds",
+  title: {
+    template: "%s | KarelWorlds",
+    default: "KarelWorlds",
+  },
   description: "A fun way to learn programming",
   icons: {
     icon: "/public/images/icon.svg",
