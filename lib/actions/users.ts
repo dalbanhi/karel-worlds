@@ -36,6 +36,20 @@ async function _createUser(data: any) {
   }
 }
 
+async function getPuzzles(userId: string, options?: any) {
+  //get puzzles created by the user
+  const puzzles = await db.puzzle.findMany({
+    where: {
+      creatorId: userId,
+    },
+  });
+  return puzzles;
+}
+
 export const createUser = cache(_createUser, ["create-user"], {
   tags: ["user"],
+});
+
+export const getUserPuzzles = cache(getPuzzles, ["get-user-puzzles"], {
+  tags: ["puzzle"],
 });
