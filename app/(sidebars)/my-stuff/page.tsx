@@ -55,7 +55,7 @@ const MyDashboard = async () => {
 
   const fakePuzzles = [examplePuzzle, examplePuzzle, examplePuzzle];
   return (
-    <section className="flex min-h-screen w-1/2 flex-col justify-start">
+    <section className="flex min-h-screen w-full md:w-1/2 flex-col justify-start">
       <h1 className="w-full bg-accent/50 p-2 text-center text-4xl font-semibold">
         {String(metadata.title ?? "Default Title")}
       </h1>
