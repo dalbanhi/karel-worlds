@@ -66,7 +66,7 @@ const MyDashboard = async () => {
           <TabsTrigger value="my-classes">My Classes</TabsTrigger>
         </TabsList>
         <TabsContent value="my-puzzles">
-          <div className="flex flex-wrap gap-2 justify-center">
+          <div className="flex flex-wrap gap-4 p-4 justify-center">
             {fakePuzzles.map((puzzle) => {
               return <PuzzleCard key={puzzle.id} puzzleInfo={puzzle} />;
             })}
