@@ -10,8 +10,9 @@ import {
 import { puzzleSchema } from "@/lib/validators/puzzle.schema";
 import { Slider } from "@/components/ui/slider";
 import React from "react";
-import { Controller, UseFormReturn } from "react-hook-form";
+import { UseFormReturn } from "react-hook-form";
 import { z } from "zod";
+import EditableWorld from "./EditableWorld";
 
 interface DimensionSliderProps {
   form: UseFormReturn<z.infer<typeof puzzleSchema>>;
@@ -63,7 +64,9 @@ interface WorldsEditorProps {
 const WorldsEditor: React.FC<WorldsEditorProps> = ({ form }) => {
   return (
     <section className="w-full flex flex-col gap-2 justify-center items-center p-2">
-      <h3 className="text-center text-lg">All World Properties</h3>
+      <h3 className="text-center text-lg font-semibold">
+        All World Properties
+      </h3>
       <div className="flex gap-4 justify-center items-center">
         <DimensionSlider
           form={form}
@@ -78,6 +81,7 @@ const WorldsEditor: React.FC<WorldsEditorProps> = ({ form }) => {
           description="vertically"
         />
       </div>
+      <EditableWorld form={form} name={"Starting World"} />
     </section>
   );
 };
