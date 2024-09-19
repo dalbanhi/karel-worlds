@@ -17,11 +17,6 @@ const LeftSidebar = async () => {
         ></Image>
         <h1 className="text-h1Md text-myWhite-100 ">GitNote</h1>
       </Link>
-      {/* <PostAndSearch allUserTags={allUserTags} />
-      <hr className="mb-4 border-myWhite-500"></hr>
-      <PostsQuickView />
-      <hr className="mb-4 border-myWhite-500"></hr>
-      <QuickLinks /> */}
     </aside>
   );
 };
