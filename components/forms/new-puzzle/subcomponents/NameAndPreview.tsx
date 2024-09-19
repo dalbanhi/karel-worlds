@@ -11,9 +11,12 @@ import {
   FormMessage,
   FormControl,
 } from "@/components/ui/form";
+import { puzzleSchema } from "@/lib/validators/puzzle.schema";
+import { UseFormReturn } from "react-hook-form";
+import { z } from "zod";
 
 interface MainNewPuzzleProps {
-  form: any;
+  form: UseFormReturn<z.infer<typeof puzzleSchema>>;
 }
 
 const NameAndPreview: React.FC<MainNewPuzzleProps> = ({ form }) => {
@@ -21,15 +24,15 @@ const NameAndPreview: React.FC<MainNewPuzzleProps> = ({ form }) => {
     <div className="bg-primary flex justify-center items-center p-2 gap-2">
       <FormField
         control={form.control}
-        name="puzzleName"
+        name="name"
         render={({ field }) => (
           <FormItem className="flex justify-between items-center w-1/2">
-            <FormLabel className="line-clamp-1 w-1/3">Puzzle Name: </FormLabel>
+            <FormLabel className="w-1/3">Puzzle Name: </FormLabel>
             <FormControl>
               <Input placeholder="Enter the name of the puzzle..." {...field} />
             </FormControl>
-            {form.formState.errors.puzzleName && (
-              <FormMessage>{`Error: ${form.formState.errors.puzzleName.message}`}</FormMessage>
+            {form.formState.errors.name && (
+              <FormMessage>{`Error: ${form.formState.errors.name.message}`}</FormMessage>
             )}
           </FormItem>
         )}

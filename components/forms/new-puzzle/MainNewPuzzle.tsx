@@ -1,28 +1,33 @@
 "use client";
-import React from "react";
+import React, { useEffect } from "react";
 
-import {
-  FormField,
-  FormItem,
-  FormLabel,
-  FormDescription,
-  FormMessage,
-  FormControl,
-} from "@/components/ui/form";
 import NameAndPreview from "./subcomponents/NameAndPreview";
 import TagsSelector from "./subcomponents/TagsSelector";
+import WorldsEditor from "./subcomponents/WorldsEditor";
+import { UseFormReturn } from "react-hook-form";
+import { puzzleSchema } from "@/lib/validators/puzzle.schema";
+import { z } from "zod";
 
 interface MainNewPuzzleProps {
-  form: any;
+  form: UseFormReturn<z.infer<typeof puzzleSchema>>;
 }
 
 const MainNewPuzzle: React.FC<MainNewPuzzleProps> = ({ form }) => {
+  const { watch } = form;
+
+  // Watch specific form fields or the entire form
+  const watchedValues = watch(); // Watches the entire form
+
+  useEffect(() => {
+    console.log("Form state changed:", watchedValues);
+  }, [watchedValues]); // Log form state whenever it changes
   return (
     <div>
       <NameAndPreview form={form} />
       <div className="bg-card flex justify-center items-center p-2 gap-2">
         <TagsSelector form={form} tagsString="" />
       </div>
+      <WorldsEditor form={form} />
     </div>
   );
 };

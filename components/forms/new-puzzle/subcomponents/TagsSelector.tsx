@@ -1,5 +1,10 @@
 import React from "react";
-import { Control, FieldValues, Controller } from "react-hook-form";
+import {
+  Control,
+  FieldValues,
+  Controller,
+  UseFormReturn,
+} from "react-hook-form";
 
 import dynamic from "next/dynamic";
 import {
@@ -11,13 +16,15 @@ import {
   FormControl,
 } from "@/components/ui/form";
 import { Input } from "postcss";
+import { puzzleSchema } from "@/lib/validators/puzzle.schema";
+import { z } from "zod";
 
 const CreatableSelect = dynamic(() => import("react-select/creatable"), {
   ssr: false,
 });
 
 interface TagsSelectorProps {
-  form: any;
+  form: UseFormReturn<z.infer<typeof puzzleSchema>>;
   tagsString: string;
 }
 

@@ -7,15 +7,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { puzzleSchema } from "@/lib/validators/puzzle.schema";
 
-import {
-  Form,
-  //   FormField,
-  //   FormItem,
-  //   FormLabel,
-  //   FormDescription,
-  //   FormMessage,
-  //   FormControl,
-} from "@/components/ui/form";
+import { Form } from "@/components/ui/form";
 import MainNewPuzzle from "../MainNewPuzzle";
 
 export default function NewPuzzleLayout({
@@ -30,7 +22,11 @@ export default function NewPuzzleLayout({
 
   const form = useForm<z.infer<typeof puzzleSchema>>({
     resolver: zodResolver(puzzleSchema),
-    defaultValues: {},
+    defaultValues: {
+      worldWidth: 10,
+      worldHeight: 10,
+      name: "",
+    },
   });
 
   return (
