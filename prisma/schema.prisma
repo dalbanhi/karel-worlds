@@ -44,7 +44,7 @@ model Puzzle {
   karelImage    String
   beeperImage   String
   wallImage     String
-  backgroundImage String?
+  backgroundImage String
   startWorldInfo  Json
   goalWorldInfo   Json
   creator       User           @relation("PuzzlesCreated", fields: [creatorId], references: [id], onDelete: Cascade)

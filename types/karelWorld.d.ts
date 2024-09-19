@@ -26,5 +26,5 @@ export interface puzzleImagesType {
   karel: string;
   beeper: string;
   wall: string;
-  empty: string;
+  background: string;
 }

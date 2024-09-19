@@ -9,40 +9,137 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+
+import { getUserImage } from "@/lib/actions/users";
+import { puzzleImagesType } from "@/types/karelWorld";
+
+import {
+  HeartIcon,
+  PlayIcon,
+  StarFilledIcon,
+  StarIcon,
+  ShuffleIcon,
+} from "@radix-ui/react-icons";
+import { ButtonGroup } from "@/components/ui/ButtonGroup";
+import { Button } from "@/components/ui/button";
+
+const StarRating: React.FC<{ rating: number }> = ({ rating }) => {
+  return (
+    <div className="flex gap">
+      {[1, 2, 3, 4, 5].map((star) => {
+        return star <= rating ? (
+          <StarFilledIcon key={star} className="w-4 h-4 text-starYellow" />
+        ) : (
+          <StarIcon key={star} className="w-4 h-4 text-border" />
+        );
+      })}
+    </div>
+  );
+};
+
+interface ImagesOverlayProps {
+  images: puzzleImagesType;
+}
+
+const ImagesOverlay: React.FC<ImagesOverlayProps> = ({ images }) => {
+  const karelImage =
+    images.karel !== "" ? images.karel : "/images/pixi-js/classic-karel.png";
+
+  const beeperImg =
+    images.beeper !== "" ? images.beeper : "/images/pixi-js/classic-beeper.png";
+
+  return (
+    <div className="relative w-full h-20 overflow-hidden border-2 rounded-sm">
+      <div
+        className={`absolute inset-0 bg-cover bg-center ${
+          images.background ? "" : "bg-card"
+        }`}
+        style={
+          images.background
+            ? { backgroundImage: `url(${images.background})` }
+            : {}
+        }
+      />
+      <div className="absolute inset-0 flex gap-2 items-center justify-center">
+        <Image
+          src={karelImage}
+          alt={"Karel Image for this puzzle"}
+          width={40}
+          height={40}
+        />
+        <Image
+          src={beeperImg}
+          alt={"Beeper Image for this puzzle"}
+          width={40}
+          height={40}
+        />
+      </div>
+    </div>
+  );
+};
 
 interface PuzzleCardProps {
   puzzleInfo: Puzzle;
 }
 
-const PuzzleCard: React.FC<PuzzleCardProps> = ({ puzzleInfo }) => {
-  const karelImage =
-    puzzleInfo.karelImage !== ""
-      ? puzzleInfo.karelImage
-      : "/images/pixi-js/classic-karel.png";
-
-  const beeperImg =
-    puzzleInfo.beeperImage !== ""
-      ? puzzleInfo.beeperImage
-      : "/images/pixi-js/classic-beeper.png";
+const PuzzleCard: React.FC<PuzzleCardProps> = async ({ puzzleInfo }) => {
+  //   const userImage = await getUserImage(puzzleInfo.creatorId);
+  const userImage =
+    "https://img.clerk.com/eyJ0eXBlIjoicHJveHkiLCJzcmMiOiJodHRwczovL2ltYWdlcy5jbGVyay5kZXYvb2F1dGhfZ29vZ2xlL2ltZ18ybEx5MlRoZW9NZnVYd0NZU1poR0E3aTR6UmEifQ";
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>{puzzleInfo.name}</CardTitle>
-        <CardDescription>
-          Tags:{" "}
-          {puzzleInfo.tags.map((tag, index) => {
-            const content =
-              index === puzzleInfo.tags.length - 1 ? tag : `${tag}, `;
-            return <span key={tag}>{content}</span>;
-          })}
-        </CardDescription>
-        <Image src={karelImage} alt="Karel" width={20} height={20} />
+    <Card className="max-w-80">
+      <CardHeader className=" gap-2 justify-center items-center">
+        <div className="flex flex-col gap">
+          <CardTitle>{puzzleInfo.name}</CardTitle>
+          <CardDescription>
+            Tags:{" "}
+            {puzzleInfo.tags.map((tag, index) => {
+              const content =
+                index === puzzleInfo.tags.length - 1 ? tag : `${tag}, `;
+              return <span key={tag}>{content}</span>;
+            })}
+          </CardDescription>
+        </div>
+        <Avatar>
+          <AvatarImage src={userImage} />
+          {/* add avatar fallback */}
+        </Avatar>
       </CardHeader>
-      <CardContent>
-        <p>const first = useContext(second)</p>
+      <CardContent className="flex flex-col justify-center items-center gap-2">
+        <ImagesOverlay
+          images={{
+            background: puzzleInfo.backgroundImage ?? "",
+            karel: puzzleInfo.karelImage,
+            beeper: puzzleInfo.beeperImage,
+            wall: puzzleInfo.wallImage,
+          }}
+        />
+        <div className="flex flex-col justify-start w-full gap">
+          <p className="text-sm">
+            <span className="font-semibold">World Dimensions:</span>{" "}
+            {puzzleInfo.worldWidth}x{puzzleInfo.worldHeight}
+          </p>
+          <div className="text-sm flex justify-start items-center gap-2 ">
+            <span className="font-semibold">Rating:</span>{" "}
+            <StarRating rating={4} />
+          </div>
+        </div>
       </CardContent>
-      <CardFooter>footer</CardFooter>
+      <CardFooter className="w-full">
+        <ButtonGroup className="w-full">
+          <Button className="grow">
+            <PlayIcon />
+          </Button>
+          <Button className="grow">
+            <HeartIcon />
+          </Button>
+          <Button className="grow">
+            <ShuffleIcon />
+          </Button>
+        </ButtonGroup>
+      </CardFooter>
     </Card>
   );
 };

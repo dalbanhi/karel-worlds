@@ -44,7 +44,7 @@ const examplePuzzle: Puzzle = {
     beepers: [],
     walls: [],
   },
-  creatorId: "1234",
+  creatorId: "user_2lLy2QBFPFE2Ewry7L7hl2yqDyR",
 };
 
 const MyDashboard = async () => {

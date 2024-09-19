@@ -8,15 +8,15 @@ export const getCurrentUser = async () => {
     return null;
   }
 
-  const dbUser = await db.user.findUnique({
-    where: {
-      clerkUserId: user.id,
-    },
-  });
+  // const dbUser = await db.user.findUnique({
+  //   where: {
+  //     clerkUserId: user.id,
+  //   },
+  // });
 
-  if (dbUser) {
-    return dbUser;
-  }
+  // if (dbUser) {
+  //   return dbUser;
+  // }
 
   return null;
 };

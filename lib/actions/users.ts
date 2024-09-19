@@ -36,6 +36,16 @@ async function _createUser(data: any) {
   }
 }
 
+export async function getUserImage(userId: string) {
+  // This function gets the user's image
+  const user = await db.user.findUnique({
+    where: {
+      id: userId,
+    },
+  });
+  return user?.imageUrl;
+}
+
 async function getPuzzles(userId: string, options?: any) {
   //get puzzles created by the user
   const puzzles = await db.puzzle.findMany({

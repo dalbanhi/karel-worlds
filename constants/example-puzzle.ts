@@ -48,7 +48,7 @@ export const examplePuzzleWorldImages: puzzleImagesType = {
   karel: "",
   beeper: "",
   wall: "",
-  empty: "",
+  background: "",
 };
 
 export const examplePuzzleWorldDimensions: windowSizeType = {

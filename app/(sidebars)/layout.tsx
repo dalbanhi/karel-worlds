@@ -11,8 +11,8 @@ export default function SidebarLayout({
   params: { route: string };
 }>) {
   return (
-    <div className="flex">
-      <div className="flex min-h-screen w-full max-sm:flex-col max-sm:items-center md:justify-between xl:w-4/5">
+    <div className="flex w-full justify-center">
+      <div className="flex min-h-screen grow max-sm:flex-col max-sm:items-center md:justify-between xl:w-4/5">
         <LeftSidebar />
         {children}
         <RightSidebar />
