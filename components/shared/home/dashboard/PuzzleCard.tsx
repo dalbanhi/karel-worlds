@@ -103,7 +103,7 @@ const PuzzleCard: React.FC<PuzzleCardProps> = async ({ puzzleInfo }) => {
           </CardDescription>
         </div>
         <Avatar>
-          <AvatarImage src={userImage} />
+          <AvatarImage src={userImage} alt="The user's image" />
           {/* add avatar fallback */}
         </Avatar>
       </CardHeader>
@@ -125,17 +125,24 @@ const PuzzleCard: React.FC<PuzzleCardProps> = async ({ puzzleInfo }) => {
             <span className="font-semibold">Rating:</span>{" "}
             <StarRating rating={4} />
           </div>
+          <div className="text-sm flex justify-start items-center gap-2 ">
+            <span className="font-semibold">Difficulty:</span>{" "}
+            <StarRating rating={4} />
+          </div>
+          <div className="text-sm flex justify-start items-center gap-2 ">
+            <span className="font-semibold">Likes:</span> {52}
+          </div>
         </div>
       </CardContent>
       <CardFooter className="w-full">
         <ButtonGroup className="w-full">
-          <Button className="grow">
+          <Button aria-label="Solve the Puzzle" className="grow">
             <PlayIcon />
           </Button>
-          <Button className="grow">
+          <Button aria-label="Like or Unlike the Puzzle" className="grow">
             <HeartIcon />
           </Button>
-          <Button className="grow">
+          <Button aria-label="Remix this puzzle" className="grow">
             <ShuffleIcon />
           </Button>
         </ButtonGroup>

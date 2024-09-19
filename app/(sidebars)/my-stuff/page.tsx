@@ -75,7 +75,7 @@ const MyDashboard = async () => {
         <TabsContent value="my-liked-puzzles">
           Change your password here.
         </TabsContent>
-        <TabsContent value="my-liked-puzzles">classes here.</TabsContent>
+        <TabsContent value="my-classes">classes here.</TabsContent>
       </Tabs>
     </section>
   );
