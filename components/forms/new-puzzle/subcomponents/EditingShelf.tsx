@@ -4,7 +4,21 @@ import { Slider } from "@/components/ui/slider";
 import React from "react";
 import { UseFormReturn } from "react-hook-form";
 import { z } from "zod";
-import { FormLabel } from "@/components/ui/form";
+import {
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 interface EditingShelfProps {
   form: UseFormReturn<z.infer<typeof puzzleSchema>>;
@@ -20,7 +34,7 @@ const EditingShelf: React.FC<EditingShelfProps> = ({
   setWorldInfo,
 }) => {
   return (
-    <div className="flex gap-2 w-full">
+    <div className="flex w-full items-center gap-3">
       <div className="flex gap-2 flex-col grow">
         <FormLabel className="flex justify-items-end gap-2 w-full">
           <span>{"Karel X Position"}</span>
@@ -79,6 +93,40 @@ const EditingShelf: React.FC<EditingShelfProps> = ({
           }
         />
       </div>
+      <FormItem className="flex flex-col justify-center items-center ">
+        <FormLabel className="w-full text-center">Karel Direction </FormLabel>
+        <FormControl>
+          <Select
+            value={worldInfo?.karel.direction}
+            onValueChange={(val) => {
+              setWorldInfo({
+                karel: {
+                  ...worldInfo?.karel,
+                  x: worldInfo?.karel.x || 1,
+                  y: worldInfo?.karel.y || 1, // Ensure y is always defined
+                  type: worldInfo?.karel.type || "karel", // Ensure type is always defined
+                  direction: val,
+                  backpack: worldInfo?.karel.backpack ?? 0,
+                  infiniteBackpack: worldInfo?.karel.infiniteBackpack ?? false,
+                  subtype: worldInfo?.karel.subtype || "karel", // Ensure subtype is always defined
+                  count: worldInfo?.karel.count ?? 1,
+                },
+                gridElements: worldInfo?.gridElements || [],
+              });
+            }}
+          >
+            <SelectTrigger className="w-full">
+              <SelectValue placeholder="Direction" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="east">East</SelectItem>
+              <SelectItem value="north">North</SelectItem>
+              <SelectItem value="west">West</SelectItem>
+              <SelectItem value="south">South</SelectItem>
+            </SelectContent>
+          </Select>
+        </FormControl>
+      </FormItem>
     </div>
   );
 };

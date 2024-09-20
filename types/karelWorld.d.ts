@@ -12,11 +12,6 @@ export interface SimpleKarelElementType extends SimpleGridElementType {
   infiniteBackpack: boolean;
 }
 
-import {
-  GridElement,
-  KarelElement,
-} from "@/utils/custom/KarelElement/KarelElement";
-
 export interface worldInfoType {
   karel: SimpleKarelElementType;
   gridElements: SimpleGridElementType[];
