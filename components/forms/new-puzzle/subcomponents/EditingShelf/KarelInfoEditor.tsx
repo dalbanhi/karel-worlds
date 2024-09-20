@@ -1,37 +1,28 @@
-import { puzzleSchema } from "@/lib/validators/puzzle.schema";
-import { worldInfoType } from "@/types/karelWorld";
-import { Slider } from "@/components/ui/slider";
-import React from "react";
-import { UseFormReturn } from "react-hook-form";
-import { z } from "zod";
-import {
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-
+import { FormLabel, FormItem, FormControl } from "@/components/ui/form";
+import { minWorldSize, maxWorldSize } from "@/constants/example-puzzle";
 import {
   Select,
-  SelectContent,
-  SelectItem,
   SelectTrigger,
   SelectValue,
+  SelectContent,
+  SelectItem,
 } from "@/components/ui/select";
+import { Slider } from "@/components/ui/slider";
+import React from "react";
+import { worldInfoType } from "@/types/karelWorld";
 
-interface EditingShelfProps {
-  form: UseFormReturn<z.infer<typeof puzzleSchema>>;
-  name: string;
+interface KarelInfoEditorProps {
   worldInfo: worldInfoType | undefined;
   setWorldInfo: React.Dispatch<React.SetStateAction<worldInfoType>>;
+  worldWidth: number;
+  worldHeight: number;
 }
 
-const EditingShelf: React.FC<EditingShelfProps> = ({
-  form,
-  name,
+const KarelInfoEditor: React.FC<KarelInfoEditorProps> = ({
   worldInfo,
   setWorldInfo,
+  worldWidth,
+  worldHeight,
 }) => {
   return (
     <div className="flex w-full items-center gap-3">
@@ -41,17 +32,17 @@ const EditingShelf: React.FC<EditingShelfProps> = ({
           <span>{worldInfo?.karel.x}</span>
         </FormLabel>
         <Slider
-          min={1}
-          max={25}
+          min={minWorldSize}
+          max={worldWidth - 1}
           step={1}
           defaultValue={[1]}
-          value={[worldInfo?.karel.x || 1]}
+          value={[worldInfo?.karel.x || 0]}
           onValueChange={(value) =>
             setWorldInfo({
               karel: {
                 ...worldInfo?.karel,
                 x: value[0],
-                y: worldInfo?.karel.y || 1, // Ensure y is always defined
+                y: worldInfo?.karel.y || 0, // Ensure y is always defined
                 type: worldInfo?.karel.type || "karel", // Ensure type is always defined
                 direction: worldInfo?.karel.direction || "east",
                 backpack: worldInfo?.karel.backpack ?? 0,
@@ -70,16 +61,16 @@ const EditingShelf: React.FC<EditingShelfProps> = ({
           <span>{worldInfo?.karel.y}</span>
         </FormLabel>
         <Slider
-          min={1}
-          max={25}
+          min={minWorldSize}
+          max={worldHeight - 1}
           step={1}
           defaultValue={[1]}
-          value={[worldInfo?.karel.y || 1]}
+          value={[worldInfo?.karel.y || 0]}
           onValueChange={(value) =>
             setWorldInfo({
               karel: {
                 ...worldInfo?.karel,
-                x: worldInfo?.karel.x || 1,
+                x: worldInfo?.karel.x || 0,
                 y: value[0], // Ensure y is always defined
                 type: worldInfo?.karel.type || "karel", // Ensure type is always defined
                 direction: worldInfo?.karel.direction || "east",
@@ -102,8 +93,8 @@ const EditingShelf: React.FC<EditingShelfProps> = ({
               setWorldInfo({
                 karel: {
                   ...worldInfo?.karel,
-                  x: worldInfo?.karel.x || 1,
-                  y: worldInfo?.karel.y || 1, // Ensure y is always defined
+                  x: worldInfo?.karel.x || 0,
+                  y: worldInfo?.karel.y || 0, // Ensure y is always defined
                   type: worldInfo?.karel.type || "karel", // Ensure type is always defined
                   direction: val,
                   backpack: worldInfo?.karel.backpack ?? 0,
@@ -131,4 +122,4 @@ const EditingShelf: React.FC<EditingShelfProps> = ({
   );
 };
 
-export default EditingShelf;
+export default KarelInfoEditor;

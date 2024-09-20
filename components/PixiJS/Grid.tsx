@@ -5,7 +5,7 @@ import { Fragment } from "react";
 import { useEffect, useState, useCallback, useRef } from "react";
 
 import { Graphics } from "@pixi/react";
-import { maxWorldWidthHeight } from "@/constants/example-puzzle";
+import { maxWorldSize } from "@/constants/example-puzzle";
 //sub components
 import Circle from "@/components/PixiJS/Circle";
 import Karel from "@/components/PixiJS/Karel";
@@ -58,7 +58,7 @@ const Grid: React.FC<GridProps> = ({
   const yPXStep = currPxHeight / cols;
 
   const radius =
-    rows >= maxWorldWidthHeight / 2 || cols >= maxWorldWidthHeight / 2
+    rows >= maxWorldSize / 2 || cols >= maxWorldSize / 2
       ? smCircleRadius
       : mdCircleRadius;
 

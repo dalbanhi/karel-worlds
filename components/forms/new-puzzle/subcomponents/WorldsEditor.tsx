@@ -32,7 +32,7 @@ const DimensionSlider: React.FC<DimensionSliderProps> = ({
       control={form.control}
       name={fieldName}
       render={({ field: { value, onChange } }) => (
-        <FormItem>
+        <FormItem className="flex flex-col gap-2">
           <FormLabel className="flex justify-items-end gap-2 w-full">
             <span>{label}</span>
             <span>{value}</span>

@@ -2,7 +2,7 @@ import { puzzleSchema } from "@/lib/validators/puzzle.schema";
 import React, { useState } from "react";
 import { UseFormReturn } from "react-hook-form";
 import { z } from "zod";
-import EditingShelf from "./EditingShelf";
+import EditingShelf from "@/components/forms/new-puzzle/subcomponents/EditingShelf/EditingShelf";
 import { worldInfoType } from "@/types/karelWorld";
 
 interface EditableWorldProps {

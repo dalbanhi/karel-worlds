@@ -56,4 +56,6 @@ export const examplePuzzleWorldDimensions: windowSizeType = {
   height: 2,
 };
 
-export const maxWorldWidthHeight = 25;
+export const maxWorldSize = 25;
+
+export const minWorldSize = 1;
