@@ -7,7 +7,7 @@ import {
   SelectContent,
   SelectItem,
 } from "@/components/ui/select";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
@@ -28,12 +28,30 @@ const GridElementsEditor: React.FC<GridElementsEditorProps> = ({
     { name: "row", max: worldHeight - 1 },
     { name: "column", max: worldWidth - 1 },
   ];
-  const [editingMode, setEditingMode] = useState<"add" | "remove">("add");
-  const [editingElement, setEditingElement] = useState<"beeper" | "wall">();
+
   const [elementEditingCoords, setElementEditingCoords] = useState<{
     row: number;
     column: number;
-  }>();
+  }>({ row: 0, column: 0 });
+
+  useEffect(() => {
+    if (worldWidth < elementEditingCoords?.column) {
+      setElementEditingCoords((prevCoords) => ({
+        ...prevCoords,
+        column: worldWidth - 1,
+      }));
+    }
+    if (worldHeight < elementEditingCoords?.row) {
+      setElementEditingCoords((prevCoords) => ({
+        ...prevCoords,
+        row: worldHeight - 1,
+      }));
+    }
+  }, [worldWidth, worldHeight]);
+
+  const [editingMode, setEditingMode] = useState<"add" | "remove">("add");
+  const [editingElement, setEditingElement] = useState<"beeper" | "wall">();
+
   return (
     <div className="flex justify-start gap-2 mt-4 ">
       <FormItem className="flex justify-center items-center gap-2 ">

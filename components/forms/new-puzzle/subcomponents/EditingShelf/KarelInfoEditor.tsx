@@ -8,7 +8,7 @@ import {
   SelectItem,
 } from "@/components/ui/select";
 import { Slider } from "@/components/ui/slider";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { worldInfoType } from "@/types/karelWorld";
 
 interface KarelInfoEditorProps {
@@ -24,6 +24,58 @@ const KarelInfoEditor: React.FC<KarelInfoEditorProps> = ({
   worldWidth,
   worldHeight,
 }) => {
+  const [widthDisabled, setWidthDisabled] = useState(false);
+  const [heightDisabled, setHeightDisabled] = useState(false);
+  useEffect(() => {
+    if (worldWidth < (worldInfo?.karel?.x ?? 0)) {
+      setWorldInfo((prevWorldInfo) => ({
+        ...prevWorldInfo,
+        karel: {
+          ...prevWorldInfo.karel,
+          x: worldWidth - 1,
+        },
+        gridElements: worldInfo?.gridElements || [],
+      }));
+    }
+
+    if (worldHeight < (worldInfo?.karel?.y ?? 0)) {
+      setWorldInfo((prevWorldInfo) => ({
+        ...prevWorldInfo,
+        karel: {
+          ...prevWorldInfo.karel,
+          y: worldHeight - 1,
+        },
+        gridElements: worldInfo?.gridElements || [],
+      }));
+    }
+
+    if (worldWidth === minWorldSize) {
+      setWorldInfo((prevWorldInfo) => ({
+        ...prevWorldInfo,
+        karel: {
+          ...prevWorldInfo.karel,
+          x: 0,
+        },
+        gridElements: worldInfo?.gridElements || [],
+      }));
+      setWidthDisabled(true);
+    } else {
+      setWidthDisabled(false);
+    }
+    if (worldHeight === minWorldSize) {
+      setWorldInfo((prevWorldInfo) => ({
+        ...prevWorldInfo,
+        karel: {
+          ...prevWorldInfo.karel,
+          y: 0,
+        },
+        gridElements: worldInfo?.gridElements || [],
+      }));
+      setHeightDisabled(true);
+    } else {
+      setHeightDisabled(false);
+    }
+  }, [worldWidth, worldHeight]);
   return (
     <div className="flex w-full items-center gap-3">
       <div className="flex gap-2 flex-col grow">
@@ -35,6 +87,7 @@ const KarelInfoEditor: React.FC<KarelInfoEditorProps> = ({
           min={minWorldSize}
           max={worldWidth - 1}
           step={1}
+          disabled={widthDisabled}
           defaultValue={[1]}
           value={[worldInfo?.karel.x || 0]}
           onValueChange={(value) =>
@@ -65,6 +118,7 @@ const KarelInfoEditor: React.FC<KarelInfoEditorProps> = ({
           max={worldHeight - 1}
           step={1}
           defaultValue={[1]}
+          disabled={heightDisabled}
           value={[worldInfo?.karel.y || 0]}
           onValueChange={(value) =>
             setWorldInfo({
