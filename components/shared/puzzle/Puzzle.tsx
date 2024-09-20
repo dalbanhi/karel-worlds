@@ -52,7 +52,11 @@ const PuzzleContent: React.FC<PuzzleProps> = ({
   puzzleImages,
 }) => {
   const { toast } = useToast();
-  const canvasSize = useCanvasSize();
+  const canvasSize = useCanvasSize(
+    worldDimensions.width,
+    worldDimensions.height,
+    true
+  );
   const [userJavaScriptCode, setUserJavaScriptCode] = useState("");
   const [workspaceState, setWorkspaceState] = useState({});
   const [shouldCheckSolution, setShouldCheckSolution] = useState(false);

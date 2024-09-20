@@ -1,6 +1,6 @@
 "use client";
 import { puzzleSchema } from "@/lib/validators/puzzle.schema";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { use, useEffect, useMemo, useState } from "react";
 import { UseFormReturn } from "react-hook-form";
 import { z } from "zod";
 import EditingShelf from "@/components/forms/new-puzzle/subcomponents/EditingShelf/EditingShelf";
@@ -12,6 +12,7 @@ import {
   GridElement,
   KarelElement,
 } from "@/utils/custom/KarelElement/KarelElement";
+import { windowSizeType } from "@/types";
 
 interface EditableWorldProps {
   form: UseFormReturn<z.infer<typeof puzzleSchema>>;
@@ -44,9 +45,10 @@ const EditableWorld: React.FC<EditableWorldProps> = ({ form, name }) => {
     },
     gridElements: [],
   });
-  const canvasSize = useCanvasSize();
   const worldWidth = form.watch("worldWidth");
   const worldHeight = form.watch("worldHeight");
+  const canvasSize = useCanvasSize(worldWidth, worldHeight, false);
+
   const karelImage = form.watch("karelImage");
   const beeperImage = form.watch("beeperImage");
   const backgroundImage = form.watch("backgroundImage");
@@ -141,6 +143,16 @@ const EditableWorld: React.FC<EditableWorldProps> = ({ form, name }) => {
     // setBeepers(newBeepers);
   }, [worldWidth, worldHeight, worldInfo.karel, worldInfo.gridElements]);
 
+  const currPxWidth =
+    worldWidth >= worldHeight
+      ? canvasSize.width
+      : Math.floor(canvasSize.width * (worldWidth / worldHeight));
+
+  const currPxHeight =
+    worldWidth >= worldHeight
+      ? Math.floor(canvasSize.height * (worldHeight / worldWidth))
+      : canvasSize.height;
+
   return (
     <section className="flex flex-col justify-center gap-2 w-full">
       <h5 className="font-semibold text-center">{name}</h5>
@@ -152,14 +164,14 @@ const EditableWorld: React.FC<EditableWorldProps> = ({ form, name }) => {
       />
       <div className="flex justify-center">
         <Stage
-          width={canvasSize.width * 2}
-          height={canvasSize.height * 2}
-          options={{ background: 0xffffff }}
+          width={currPxWidth} //calculate the correct width and height
+          height={currPxHeight}
+          options={{ background: 0xededf3 }} // get the hex for card color ededf3
         >
           <Container x={0} y={0} sortableChildren={true} eventMode="static">
             <Grid
-              pxWidth={canvasSize.width * 2}
-              pxHeight={canvasSize.height * 2}
+              pxWidth={canvasSize.width}
+              pxHeight={canvasSize.height}
               rows={worldWidth}
               cols={worldHeight}
               internalGrid={internalGrid}
