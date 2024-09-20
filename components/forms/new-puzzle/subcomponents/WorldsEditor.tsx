@@ -81,7 +81,8 @@ const WorldsEditor: React.FC<WorldsEditorProps> = ({ form }) => {
           description="vertically"
         />
       </div>
-      <EditableWorld form={form} name={"Starting World"} />
+      <EditableWorld form={form} name={"Start World"} />
+      <EditableWorld form={form} name={"Goal World"} />
     </section>
   );
 };
