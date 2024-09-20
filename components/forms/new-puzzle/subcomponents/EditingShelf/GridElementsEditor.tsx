@@ -53,7 +53,7 @@ const GridElementsEditor: React.FC<GridElementsEditorProps> = ({
   const [editingElement, setEditingElement] = useState<"beeper" | "wall">();
 
   return (
-    <div className="flex justify-start gap-2 mt-4 ">
+    <div className="flex justify-center gap-2 mt-4 ">
       <FormItem className="flex justify-center items-center gap-2 ">
         <FormLabel className="w-full text-center">Editing Mode </FormLabel>
         <FormControl className="flex items-center">

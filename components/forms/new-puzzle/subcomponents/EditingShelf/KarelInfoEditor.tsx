@@ -84,13 +84,14 @@ const KarelInfoEditor: React.FC<KarelInfoEditorProps> = ({
           <span>{worldInfo?.karel.x}</span>
         </FormLabel>
         <Slider
-          min={minWorldSize}
+          min={minWorldSize - 1}
           max={worldWidth - 1}
           step={1}
           disabled={widthDisabled}
           defaultValue={[1]}
           value={[worldInfo?.karel.x || 0]}
-          onValueChange={(value) =>
+          onValueChange={(value) => {
+            console.log("I am chaning the x value", value[0]);
             setWorldInfo({
               karel: {
                 ...worldInfo?.karel,
@@ -104,8 +105,8 @@ const KarelInfoEditor: React.FC<KarelInfoEditorProps> = ({
                 count: worldInfo?.karel.count ?? 1,
               },
               gridElements: worldInfo?.gridElements || [],
-            })
-          }
+            });
+          }}
         />
       </div>
       <div className="flex gap-2 flex-col grow">
@@ -114,13 +115,14 @@ const KarelInfoEditor: React.FC<KarelInfoEditorProps> = ({
           <span>{worldInfo?.karel.y}</span>
         </FormLabel>
         <Slider
-          min={minWorldSize}
+          min={minWorldSize - 1}
           max={worldHeight - 1}
           step={1}
           defaultValue={[1]}
           disabled={heightDisabled}
           value={[worldInfo?.karel.y || 0]}
-          onValueChange={(value) =>
+          onValueChange={(value) => {
+            console.log("I am chaning the y value", value[0]);
             setWorldInfo({
               karel: {
                 ...worldInfo?.karel,
@@ -134,8 +136,8 @@ const KarelInfoEditor: React.FC<KarelInfoEditorProps> = ({
                 count: worldInfo?.karel.count ?? 1,
               },
               gridElements: worldInfo?.gridElements || [],
-            })
-          }
+            });
+          }}
         />
       </div>
       <FormItem className="flex flex-col justify-center items-center ">

@@ -41,7 +41,7 @@ const Grid: React.FC<GridProps> = ({
   const circleRef = useRef<PIXIGraphics>(null);
 
   const [mounted, setMounted] = useState(false);
-  const smCircleRadius = 3;
+  const smCircleRadius = 1;
   const mdCircleRadius = 4;
 
   useEffect(() => {
