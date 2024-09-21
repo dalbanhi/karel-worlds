@@ -44,7 +44,7 @@
     "karel": "",
     "beeper": "",
     "wall": "",
-    "empty": ""
+    "background": ""
   },
   "examplePuzzleWorldDimensions": {
     "width": 2,

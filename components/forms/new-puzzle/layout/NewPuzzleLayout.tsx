@@ -26,6 +26,8 @@ export default function NewPuzzleLayout({
       worldWidth: 10,
       worldHeight: 10,
       name: "",
+      karelImage: "",
+      beeperImage: "",
     },
   });
 
@@ -34,7 +36,7 @@ export default function NewPuzzleLayout({
       <form onSubmit={form.handleSubmit(onSubmit)}>
         <div className="flex w-full justify-center">
           <div className="flex min-h-screen grow max-sm:flex-col max-sm:items-center md:justify-between xl:w-4/5">
-            <LeftSidebarFormComponent />
+            <LeftSidebarFormComponent form={form} />
             <div className="flex flex-col w-full">
               {children}
               <MainNewPuzzle form={form} />
@@ -44,7 +46,7 @@ export default function NewPuzzleLayout({
                 </button>
               </div>
             </div>
-            <RightSidebarFormComponent />
+            <RightSidebarFormComponent form={form} />
           </div>
         </div>
       </form>

@@ -7,10 +7,26 @@ export const puzzleSchema = z.object({
   worldWidth: z.number().int().min(1), // Positive integer for 'worldWidth'
   worldHeight: z.number().int().min(1), // Positive integer for 'worldHeight'
   hints: z.array(z.string()), // Array of strings for the 'hints' field
-  karelImage: z.string().url(), // URL validation for 'karelImage'
-  beeperImage: z.string().url(), // URL validation for 'beeperImage'
-  wallImage: z.string().url(), // URL validation for 'wallImage'
-  backgroundImage: z.string().url().nullable(), // Optional backgroundImage (nullable)
+  karelImage: z
+    .string()
+    .refine((val) => val === "" || z.string().url().safeParse(val).success, {
+      message: "Must be a valid URL or an empty string",
+    }), // URL or empty string validation for 'karelImage'
+  beeperImage: z
+    .string()
+    .refine((val) => val === "" || z.string().url().safeParse(val).success, {
+      message: "Must be a valid URL or an empty string",
+    }), // URL or empty string validation for 'beeperImage'
+  wallImage: z
+    .string()
+    .refine((val) => val === "" || z.string().url().safeParse(val).success, {
+      message: "Must be a valid URL or an empty string",
+    }), // URL or empty string validation for 'wallImage'
+  backgroundImage: z
+    .string()
+    .refine((val) => val === "" || z.string().url().safeParse(val).success, {
+      message: "Must be a valid URL or an empty string",
+    }), // URL or empty string validation for 'backgroundImage'(nullable)
   startWorldInfo: z.any(), // Since startWorldInfo and goalWorldInfo are Json fields, using 'z.any()'
   goalWorldInfo: z.any(),
   creatorId: z.string().uuid(), // UUID for 'creatorId'

@@ -122,6 +122,7 @@ const GridElementsEditor: React.FC<GridElementsEditorProps> = ({
           );
         })}
         <Button
+          type="button"
           onClick={() => {
             console.log("editingElement", editingElement);
             console.log("editingMode", editingMode);
