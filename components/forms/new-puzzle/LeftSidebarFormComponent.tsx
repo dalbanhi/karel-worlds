@@ -60,7 +60,7 @@ const LeftSidebarFormComponent: React.FC<LeftSidebarFormComponentProps> = ({
                     control={form.control}
                     name={thing.value}
                     render={({ field: { onChange, value } }) => (
-                      <FormItem className="flex flex-col justify-center items-center w-full">
+                      <FormItem className="flex flex-col justify-center items-center w-full gap-2">
                         <FormLabel className="w-1/3">
                           Current {thing.name} Image:{" "}
                         </FormLabel>
@@ -71,6 +71,19 @@ const LeftSidebarFormComponent: React.FC<LeftSidebarFormComponentProps> = ({
                             nameOfElementCustomizing={thing.name}
                           />
                         </FormControl>
+                        <Button
+                          type="button"
+                          onClick={() => onChange("")}
+                          variant={"default"}
+                          className="capitalize"
+                        >
+                          Reset {thing.name} Image
+                        </Button>
+                        {form.formState.errors[thing.value] && (
+                          <FormMessage>
+                            {`Error: ${form.formState.errors[thing.value]?.message}`}
+                          </FormMessage>
+                        )}
                       </FormItem>
                     )}
                   />
@@ -80,20 +93,6 @@ const LeftSidebarFormComponent: React.FC<LeftSidebarFormComponentProps> = ({
           </Dialog>
         );
       })}
-      {/* <Dialog>
-        <DialogTrigger>
-          <Button> Change Karel </Button>
-        </DialogTrigger>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Are you absolutely sure?</DialogTitle>
-            <DialogDescription>
-              This action cannot be undone. This will permanently delete your
-              account and remove your data from our servers.
-            </DialogDescription>
-          </DialogHeader>
-        </DialogContent>
-      </Dialog> */}
     </aside>
   );
 };
