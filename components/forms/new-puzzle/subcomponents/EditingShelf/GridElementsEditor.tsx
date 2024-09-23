@@ -10,6 +10,7 @@ import {
 import React, { useEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { useToast } from "@/hooks/use-toast";
 
 interface GridElementsEditorProps {
   worldInfo: worldInfoType | undefined;
@@ -24,15 +25,115 @@ const GridElementsEditor: React.FC<GridElementsEditorProps> = ({
   worldWidth,
   worldHeight,
 }) => {
+  const { toast } = useToast();
+  interface coordsType {
+    row: number;
+    column: number;
+  }
   const numberInputs = [
     { name: "row", max: worldHeight - 1 },
     { name: "column", max: worldWidth - 1 },
   ];
 
-  const [elementEditingCoords, setElementEditingCoords] = useState<{
-    row: number;
-    column: number;
-  }>({ row: 0, column: 0 });
+  const [elementEditingCoords, setElementEditingCoords] = useState<coordsType>({
+    row: 0,
+    column: 0,
+  });
+
+  const handleEditWall = (mode: "add" | "remove", coords: coordsType) => {};
+  const handleEditBeeper = (mode: "add" | "remove", coords: coordsType) => {
+    //check the grid element if a beeper at the coords already exists
+    const beeperExists = worldInfo?.gridElements.find(
+      (element) =>
+        element.type === "beeper" &&
+        element.x === coords.row &&
+        element.y === coords.column
+    );
+
+    if (mode === "add") {
+      if (beeperExists) {
+        setWorldInfo((prevWorldInfo) => {
+          const newGridElements = prevWorldInfo.gridElements.map((element) => {
+            if (
+              element.type === "beeper" &&
+              element.x === coords.row &&
+              element.y === coords.column
+            ) {
+              return {
+                ...element,
+                count: element.count + 1,
+              };
+            }
+            return element;
+          });
+          return {
+            ...prevWorldInfo,
+            gridElements: newGridElements,
+          };
+        });
+      } else {
+        setWorldInfo((prevWorldInfo) => {
+          return {
+            ...prevWorldInfo,
+            gridElements: [
+              ...prevWorldInfo.gridElements,
+              {
+                x: coords.row,
+                y: coords.column,
+                type: "beeper",
+                count: 1,
+                subtype: "beeper",
+              },
+            ],
+          };
+        });
+      }
+    } else if (mode === "remove") {
+      if (beeperExists) {
+        setWorldInfo((prevWorldInfo) => {
+          const newGridElements = prevWorldInfo.gridElements.map((element) => {
+            if (
+              element.type === "beeper" &&
+              element.x === coords.row &&
+              element.y === coords.column
+            ) {
+              return {
+                ...element,
+                count: element.count - 1,
+              };
+            }
+            return element;
+          });
+          return {
+            ...prevWorldInfo,
+            gridElements: newGridElements.filter(
+              (element) => element.count > 0
+            ),
+          };
+        });
+      } else {
+        console.log("No beeper to remove");
+        toast({
+          variant: "destructive",
+          title: "Error",
+          description: "No beeper to remove",
+        });
+      }
+    }
+  };
+
+  const handleEditElement = (
+    element: "beeper" | "wall",
+    mode: "add" | "remove",
+    coords: coordsType
+  ) => {
+    switch (element) {
+      case "beeper":
+        handleEditBeeper(mode, coords);
+      case "wall":
+        handleEditWall(mode, coords);
+    }
+  };
 
   useEffect(() => {
     if (worldWidth < elementEditingCoords?.column) {
@@ -50,7 +151,9 @@ const GridElementsEditor: React.FC<GridElementsEditorProps> = ({
   }, [worldWidth, worldHeight]);
 
   const [editingMode, setEditingMode] = useState<"add" | "remove">("add");
-  const [editingElement, setEditingElement] = useState<"beeper" | "wall">();
+  const [editingElement, setEditingElement] = useState<"beeper" | "wall">(
+    "beeper"
+  );
 
   return (
     <div className="flex justify-center gap-2 mt-4 ">
@@ -127,6 +230,11 @@ const GridElementsEditor: React.FC<GridElementsEditorProps> = ({
             console.log("editingElement", editingElement);
             console.log("editingMode", editingMode);
             console.log("elementEditingCoords", elementEditingCoords);
+            handleEditElement(
+              editingElement,
+              editingMode,
+              elementEditingCoords
+            );
           }}
           variant="default"
           className="capitalize"

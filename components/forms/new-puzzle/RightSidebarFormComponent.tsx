@@ -20,7 +20,7 @@ const RightSidebarFormComponent: React.FC<RightSidebarFormComponentProps> = ({
   form,
 }) => {
   return (
-    <aside className="min-h-screen border-l-2 border-primary bg-card flex-col gap-2 p-4 grow shrink w-3/12 max-md:hidden sm:flex">
+    <aside className="min-h-screen border-l-2 border-primary bg-card flex-col gap-2 p-4 grow shrink w-3/12 max-md:hidden md:flex">
       <h2 className="text-ring font-semibold text-base text-center">
         Optional Info
       </h2>

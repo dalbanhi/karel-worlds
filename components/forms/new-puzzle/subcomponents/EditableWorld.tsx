@@ -143,6 +143,10 @@ const EditableWorld: React.FC<EditableWorldProps> = ({ form, name }) => {
     // setBeepers(newBeepers);
   }, [worldWidth, worldHeight, worldInfo.karel, worldInfo.gridElements]);
 
+  useEffect(() => {
+    console.log("worldInfo", worldInfo);
+  }, [worldInfo]);
+
   const currPxWidth =
     worldWidth >= worldHeight
       ? canvasSize.width

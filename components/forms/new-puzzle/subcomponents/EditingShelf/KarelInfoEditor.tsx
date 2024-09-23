@@ -91,7 +91,6 @@ const KarelInfoEditor: React.FC<KarelInfoEditorProps> = ({
           defaultValue={[1]}
           value={[worldInfo?.karel.x || 0]}
           onValueChange={(value) => {
-            console.log("I am chaning the x value", value[0]);
             setWorldInfo({
               karel: {
                 ...worldInfo?.karel,
@@ -122,7 +121,6 @@ const KarelInfoEditor: React.FC<KarelInfoEditorProps> = ({
           disabled={heightDisabled}
           value={[worldInfo?.karel.y || 0]}
           onValueChange={(value) => {
-            console.log("I am chaning the y value", value[0]);
             setWorldInfo({
               karel: {
                 ...worldInfo?.karel,
