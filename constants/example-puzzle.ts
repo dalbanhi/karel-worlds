@@ -1,6 +1,8 @@
 import { windowSizeType } from "@/types";
 import { puzzleImagesType, worldInfoType } from "@/types/karelWorld";
 
+export const maxNumTags = 3;
+
 export const examplePuzzleWorldStart: worldInfoType = {
   karel: {
     x: 0,

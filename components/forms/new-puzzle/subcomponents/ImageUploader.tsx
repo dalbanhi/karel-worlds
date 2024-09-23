@@ -26,7 +26,7 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({
   }
 
   return (
-    <div className="flex items-center justify-start gap-2">
+    <span className="flex items-center justify-start gap-2">
       {image !== "" ? (
         <Image
           src={image}
@@ -50,7 +50,7 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({
           button({ ready }) {
             if (ready)
               return (
-                <div className="flex gap-1 p-2 ">
+                <span className="flex gap-1 p-2 ">
                   <Image
                     src="/icons/cloud-upload.svg"
                     alt="upload"
@@ -63,7 +63,7 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({
                       ? `Upload ${nameOfElementCustomizing} Image`
                       : `Change ${nameOfElementCustomizing} Image`}
                   </span>
-                </div>
+                </span>
               );
 
             return "Loading...";
@@ -97,7 +97,7 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({
           alert(`ERROR! ${error.message}`);
         }}
       />
-    </div>
+    </span>
   );
 };
 

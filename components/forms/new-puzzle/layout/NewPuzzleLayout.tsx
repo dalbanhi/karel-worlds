@@ -37,15 +37,7 @@ export default function NewPuzzleLayout({
         <div className="flex w-full justify-center">
           <div className="flex min-h-screen grow max-sm:flex-col max-sm:items-center md:justify-between xl:w-4/5">
             <LeftSidebarFormComponent form={form} />
-            <div className="flex flex-col w-full">
-              {children}
-              <MainNewPuzzle form={form} />
-              <div className="flex justify-center mt-4">
-                <button type="submit" className="btn btn-primary">
-                  Submit Puzzle
-                </button>
-              </div>
-            </div>
+            <MainNewPuzzle form={form} />
             <RightSidebarFormComponent form={form} />
           </div>
         </div>

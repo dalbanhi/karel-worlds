@@ -1,9 +1,15 @@
 import { z } from "zod";
 
+const tagSchema = z.object({
+  id: z.string().uuid(),
+  name: z.string().min(1).max(50),
+});
+
 export const puzzleSchema = z.object({
   id: z.string().uuid(), // UUID validation for the 'id' field
   name: z.string().min(1), // Non-empty string for the 'name' field
-  tags: z.array(z.string()), // Array of strings for the 'tags' field
+  description: z.string().max(150),
+  tags: z.array(tagSchema).max(3), // Array of strings for the 'tags' field
   worldWidth: z.number().int().min(1), // Positive integer for 'worldWidth'
   worldHeight: z.number().int().min(1), // Positive integer for 'worldHeight'
   hints: z.array(z.string()), // Array of strings for the 'hints' field

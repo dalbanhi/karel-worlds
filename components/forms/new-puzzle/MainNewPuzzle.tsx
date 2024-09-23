@@ -22,7 +22,7 @@ const MainNewPuzzle: React.FC<MainNewPuzzleProps> = ({ form }) => {
     console.log("Form state changed:", watchedValues);
   }, [watchedValues]); // Log form state whenever it changes
   return (
-    <div>
+    <div className="w-full grow">
       <NameAndPreview form={form} />
       <div className="bg-card flex justify-center items-center p-2 gap-2">
         <TagsSelector form={form} tagsString="" />
