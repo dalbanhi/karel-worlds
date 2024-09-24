@@ -30,8 +30,8 @@ const NameAndPreview: React.FC<NameAndPreviewProps> = ({
         control={form.control}
         name="name"
         render={({ field }) => (
-          <FormItem className="flex justify-between items-center w-1/2">
-            <FormLabel className="w-1/3">Puzzle Name: </FormLabel>
+          <FormItem className="flex justify-between items-center w-1/2 gap-2">
+            <FormLabel className="">Puzzle Name: </FormLabel>
             <FormControl>
               <Input placeholder="Enter the name of the puzzle..." {...field} />
             </FormControl>

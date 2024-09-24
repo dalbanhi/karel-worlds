@@ -44,25 +44,11 @@ const ShowHideArrow: React.FC<ShowHideArrowProps> = ({
     <Button onClick={() => setShowGoal(!showGoal)}>
       {showGoal ? (
         <React.Fragment>
-          <DoubleArrowLeftIcon
-            aria-label="Hide the Goal World"
-            className="block max-lg:hidden"
-          />
-          <DoubleArrowUpIcon
-            aria-label="Hide the Goal World"
-            className="hidden max-lg:block"
-          />
+          <DoubleArrowUpIcon aria-label="Hide the Goal World" className="" />
         </React.Fragment>
       ) : (
         <React.Fragment>
-          <DoubleArrowRightIcon
-            aria-label="Show the Goal World"
-            className="block max-lg:hidden"
-          />
-          <DoubleArrowDownIcon
-            aria-label="Show the Goal World"
-            className="hidden max-lg:block"
-          />
+          <DoubleArrowDownIcon aria-label="Show the Goal World" className="" />
         </React.Fragment>
       )}
     </Button>
@@ -186,7 +172,7 @@ const ViewableWorld: React.FC<ViewableWorldProps> = ({
       : canvasSize.height;
 
   return (
-    <section className="flex h-full items-center justify-center gap-2 p-2 max-lg:flex-col">
+    <section className="flex h-full items-center justify-center gap-2 p-2 flex-col">
       <div className="flex items-center justify-center">
         <ShowHideArrow showGoal={showGoal} setShowGoal={setShowGoal} />
       </div>

@@ -15,11 +15,7 @@ import Puzzle from "@/components/shared/puzzle/Puzzle";
 import { puzzleImagesType, worldInfoType } from "@/types/karelWorld";
 import { montserrat } from "@/app/fonts";
 import { Button } from "@/components/ui/button";
-import {
-  ArrowLeftIcon,
-  EyeClosedIcon,
-  Pencil1Icon,
-} from "@radix-ui/react-icons";
+import { ArrowLeftIcon } from "@radix-ui/react-icons";
 
 export type WorldInfoContextType = {
   worldInfo: worldInfoType;
@@ -113,7 +109,7 @@ export default function NewPuzzleLayout({
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
         <div className="flex w-full justify-center">
-          <div className="flex min-h-screen grow max-sm:flex-col max-sm:items-center md:justify-between xl:w-4/5">
+          <div className="flex h-full grow max-sm:flex-col max-sm:items-center md:justify-between xl:w-4/5">
             {!showPreview && (
               <React.Fragment>
                 <LeftSidebarFormComponent form={form} />
@@ -129,10 +125,13 @@ export default function NewPuzzleLayout({
                       setWorldInfo: setStartWorldInfo,
                     }}
                   >
-                    <MainNewPuzzle
-                      form={form}
-                      setShowPreview={setShowPreview}
-                    />
+                    <div className="flex flex-col w-full">
+                      {children}
+                      <MainNewPuzzle
+                        form={form}
+                        setShowPreview={setShowPreview}
+                      />
+                    </div>
                   </StartWorldInfoContext.Provider>
                 </GoalWorldInfoContext.Provider>
                 <RightSidebarFormComponent form={form} />

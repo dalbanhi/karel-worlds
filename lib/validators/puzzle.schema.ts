@@ -8,7 +8,7 @@ const tagSchema = z.object({
 export const puzzleSchema = z.object({
   id: z.string().uuid(), // UUID validation for the 'id' field
   name: z.string().min(1), // Non-empty string for the 'name' field
-  description: z.string().max(150),
+  description: z.string().max(150).optional(), // String with a max length of 150 for the 'description' field (optional)
   tags: z.array(tagSchema).max(3), // Array of strings for the 'tags' field
   worldWidth: z.number().int().min(1), // Positive integer for 'worldWidth'
   worldHeight: z.number().int().min(1), // Positive integer for 'worldHeight'

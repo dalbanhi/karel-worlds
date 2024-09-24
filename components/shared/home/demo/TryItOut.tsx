@@ -33,7 +33,7 @@ const TryItOut: React.FC<PuzzleProps> = ({
           Puzzle!
         </p>
       </div>
-      <div className="h-fit w-full bg-card">
+      <div className="h-fit w-full bg-card rounded-lg">
         <Puzzle
           worldDimensions={worldDimensions}
           puzzleImages={puzzleImages}

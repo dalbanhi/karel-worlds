@@ -199,7 +199,7 @@ const PuzzleContent: React.FC<PuzzleProps> = ({
           {puzzleName && (
             <h1 className="text-xl font-extrabold">{puzzleName}</h1>
           )}
-          <div className="flex w-full max-lg:flex-col">
+          <div className="flex w-full flex-col">
             <RunnableWorld
               name={puzzleName}
               canvasSize={canvasSize}
