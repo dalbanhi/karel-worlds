@@ -23,3 +23,8 @@ export interface puzzleImagesType {
   wall: string;
   background: string;
 }
+
+export interface customizableSpriteType {
+  name: "Karel" | "Beepers" | "Walls" | "Background";
+  value: "karelImage" | "beepersImage" | "wallImage" | "backgroundImage";
+}

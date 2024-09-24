@@ -25,7 +25,7 @@ const MainNewPuzzle: React.FC<MainNewPuzzleProps> = ({ form }) => {
   return (
     <div className="w-full grow">
       <NameAndPreview form={form} />
-      <div className="bg-card flex justify-center items-center p-2 gap-2">
+      <div className="bg-card flex flex-col justify-center items-center p-2 gap-2">
         <TagsSelector form={form} tagsString="" />
         <CustomizePanel form={form} />
       </div>

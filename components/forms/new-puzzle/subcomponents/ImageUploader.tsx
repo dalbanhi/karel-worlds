@@ -1,6 +1,6 @@
 import { UploadButton } from "@/utils/uploadthing/uploadthing";
 import Image from "next/image";
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 interface ImageUploaderProps {
   image: string;
@@ -13,36 +13,42 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({
   setImage,
   nameOfElementCustomizing,
 }) => {
-  let defaultImage = "";
-  switch (nameOfElementCustomizing) {
-    case "Karel":
-      defaultImage = "/images/pixi-js/classic-karel.png";
-      break;
-    case "Beepers":
-      defaultImage = "/images/pixi-js/classic-beeper.png";
-      break;
-    default:
-      defaultImage = "";
-  }
+  const [defaultImage, setDefaultImage] = useState("");
+
+  useEffect(() => {
+    //make sure that the default image is set correctly
+    switch (nameOfElementCustomizing) {
+      case "Karel":
+        setDefaultImage("/images/pixi-js/classic-karel.png");
+        break;
+      case "Beepers":
+        setDefaultImage("/images/pixi-js/classic-beeper.png");
+        break;
+      default:
+        setDefaultImage("/images/pixi-js/classic-beeper.png");
+    }
+  }, [nameOfElementCustomizing]);
 
   return (
     <span className="flex items-center justify-start gap-2">
-      {image !== "" ? (
+      {image !== "" && image !== undefined ? (
         <Image
           src={image}
           alt={`user uploaded image`}
           width={50}
           height={50}
           className="size-20 rounded-md"
-        ></Image>
+        />
       ) : (
-        <Image
-          src={defaultImage}
-          alt={"default image"}
-          width={50}
-          height={50}
-          className="size-20 rounded-md"
-        ></Image>
+        defaultImage !== "" && (
+          <Image
+            src={defaultImage}
+            alt={"default image"}
+            width={50}
+            height={50}
+            className="size-20 rounded-md"
+          />
+        )
       )}
       <UploadButton
         endpoint="imageUploader"
@@ -89,6 +95,7 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({
         }}
         onClientUploadComplete={(res) => {
           // Do something with the response
+          console.log(res);
           setImage(res[0].url);
         }}
         onUploadBegin={() => {}}

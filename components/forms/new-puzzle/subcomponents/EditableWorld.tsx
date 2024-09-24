@@ -50,7 +50,7 @@ const EditableWorld: React.FC<EditableWorldProps> = ({ form, name }) => {
   const canvasSize = useCanvasSize(worldWidth, worldHeight, false);
 
   const karelImage = form.watch("karelImage");
-  const beeperImage = form.watch("beeperImage");
+  const beeperImage = form.watch("beepersImage");
   const backgroundImage = form.watch("backgroundImage");
   const wallImage = form.watch("wallImage");
 

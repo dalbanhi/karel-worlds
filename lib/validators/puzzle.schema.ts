@@ -18,7 +18,7 @@ export const puzzleSchema = z.object({
     .refine((val) => val === "" || z.string().url().safeParse(val).success, {
       message: "Must be a valid URL or an empty string",
     }), // URL or empty string validation for 'karelImage'
-  beeperImage: z
+  beepersImage: z
     .string()
     .refine((val) => val === "" || z.string().url().safeParse(val).success, {
       message: "Must be a valid URL or an empty string",

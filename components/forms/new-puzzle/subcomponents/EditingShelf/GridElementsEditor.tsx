@@ -56,8 +56,8 @@ const GridElementsEditor: React.FC<GridElementsEditorProps> = ({
           const newGridElements = prevWorldInfo.gridElements.map((element) => {
             if (
               element.type === "beeper" &&
-              element.x === coords.row &&
-              element.y === coords.column
+              element.y === coords.row &&
+              element.x === coords.column
             ) {
               return {
                 ...element,
@@ -78,8 +78,8 @@ const GridElementsEditor: React.FC<GridElementsEditorProps> = ({
             gridElements: [
               ...prevWorldInfo.gridElements,
               {
-                x: coords.row,
-                y: coords.column,
+                x: coords.column,
+                y: coords.row,
                 type: "beeper",
                 count: 1,
                 subtype: "beeper",
@@ -94,8 +94,8 @@ const GridElementsEditor: React.FC<GridElementsEditorProps> = ({
           const newGridElements = prevWorldInfo.gridElements.map((element) => {
             if (
               element.type === "beeper" &&
-              element.x === coords.row &&
-              element.y === coords.column
+              element.x === coords.column &&
+              element.y === coords.row
             ) {
               return {
                 ...element,
@@ -112,7 +112,6 @@ const GridElementsEditor: React.FC<GridElementsEditorProps> = ({
           };
         });
       } else {
-        console.log("No beeper to remove");
         toast({
           variant: "destructive",
           title: "Error",
@@ -227,9 +226,6 @@ const GridElementsEditor: React.FC<GridElementsEditorProps> = ({
         <Button
           type="button"
           onClick={() => {
-            console.log("editingElement", editingElement);
-            console.log("editingMode", editingMode);
-            console.log("elementEditingCoords", elementEditingCoords);
             handleEditElement(
               editingElement,
               editingMode,

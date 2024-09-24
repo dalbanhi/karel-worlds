@@ -5,7 +5,7 @@ import dynamic from "next/dynamic";
 import { FormField, FormLabel } from "@/components/ui/form";
 import { puzzleSchema } from "@/lib/validators/puzzle.schema";
 import { z } from "zod";
-import { maxNumTags } from "@/constants/example-puzzle";
+import { maxNumTags } from "@/constants/puzzle";
 
 const CreatableSelect = dynamic(() => import("react-select/creatable"), {
   ssr: false,
