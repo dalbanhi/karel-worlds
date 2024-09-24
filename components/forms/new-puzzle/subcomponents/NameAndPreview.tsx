@@ -15,11 +15,15 @@ import { puzzleSchema } from "@/lib/validators/puzzle.schema";
 import { UseFormReturn } from "react-hook-form";
 import { z } from "zod";
 
-interface MainNewPuzzleProps {
+interface NameAndPreviewProps {
   form: UseFormReturn<z.infer<typeof puzzleSchema>>;
+  setShowPreview: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const NameAndPreview: React.FC<MainNewPuzzleProps> = ({ form }) => {
+const NameAndPreview: React.FC<NameAndPreviewProps> = ({
+  form,
+  setShowPreview,
+}) => {
   return (
     <div className="bg-primary flex justify-center items-center p-2 gap-2">
       <FormField
@@ -41,6 +45,9 @@ const NameAndPreview: React.FC<MainNewPuzzleProps> = ({ form }) => {
         className="flex gap-1 justify-center items-center"
         variant="secondary"
         type="button"
+        onClick={() => {
+          setShowPreview(true);
+        }}
       >
         Preview <EyeOpenIcon />
       </Button>

@@ -1,6 +1,6 @@
 "use client";
 import { puzzleSchema } from "@/lib/validators/puzzle.schema";
-import React, { use, useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { UseFormReturn } from "react-hook-form";
 import { z } from "zod";
 import EditingShelf from "@/components/forms/new-puzzle/subcomponents/EditingShelf/EditingShelf";
@@ -12,11 +12,12 @@ import {
   GridElement,
   KarelElement,
 } from "@/utils/custom/KarelElement/KarelElement";
-import { windowSizeType } from "@/types";
+import { WorldInfoContextType } from "../layout/NewPuzzleLayout";
 
 interface EditableWorldProps {
   form: UseFormReturn<z.infer<typeof puzzleSchema>>;
   name: string;
+  worldContext: WorldInfoContextType | null;
 }
 
 function makeNewGrid(rows: number, cols: number): GridElement[][][] {
@@ -31,32 +32,38 @@ function makeNewGrid(rows: number, cols: number): GridElement[][][] {
   return newGrid;
 }
 
-const EditableWorld: React.FC<EditableWorldProps> = ({ form, name }) => {
-  const [worldInfo, setWorldInfo] = useState<worldInfoType>({
-    karel: {
-      x: 0,
-      y: 0,
-      type: "karel",
-      direction: "east",
-      backpack: 0,
-      infiniteBackpack: false,
-      count: 1,
-      subtype: "karel",
-    },
-    gridElements: [],
-  });
+const EditableWorld: React.FC<EditableWorldProps> = ({
+  form,
+  name,
+  worldContext,
+}) => {
+  if (!worldContext) return null;
+  const { worldInfo, setWorldInfo } = worldContext;
+  //   const [worldInfo, setWorldInfo] = useState<worldInfoType>({
+  //     karel: {
+  //       x: 0,
+  //       y: 0,
+  //       type: "karel",
+  //       direction: "east",
+  //       backpack: 0,
+  //       infiniteBackpack: false,
+  //       count: 1,
+  //       subtype: "karel",
+  //     },
+  //     gridElements: [],
+  //   });
   const worldWidth = form.watch("worldWidth");
   const worldHeight = form.watch("worldHeight");
   const canvasSize = useCanvasSize(worldWidth, worldHeight, false);
 
   const karelImage = form.watch("karelImage");
-  const beeperImage = form.watch("beepersImage");
+  const beepersImage = form.watch("beepersImage");
   const backgroundImage = form.watch("backgroundImage");
   const wallImage = form.watch("wallImage");
 
   const [imagesObj, setImagesObj] = useState<puzzleImagesType>({
     karel: karelImage || "",
-    beeper: beeperImage || "",
+    beeper: beepersImage || "",
     background: backgroundImage || "",
     wall: wallImage || "",
   });
@@ -64,11 +71,11 @@ const EditableWorld: React.FC<EditableWorldProps> = ({ form, name }) => {
   useEffect(() => {
     setImagesObj({
       karel: karelImage || "",
-      beeper: beeperImage || "",
+      beeper: beepersImage || "",
       background: backgroundImage || "",
       wall: wallImage || "",
     });
-  }, [karelImage, beeperImage, backgroundImage, wallImage]);
+  }, [karelImage, beepersImage, backgroundImage, wallImage]);
 
   const initialKarel = new KarelElement(
     worldInfo.karel.x,

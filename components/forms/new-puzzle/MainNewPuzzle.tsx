@@ -11,9 +11,13 @@ import CustomizePanel from "./subcomponents/CustomizePanel";
 
 interface MainNewPuzzleProps {
   form: UseFormReturn<z.infer<typeof puzzleSchema>>;
+  setShowPreview: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const MainNewPuzzle: React.FC<MainNewPuzzleProps> = ({ form }) => {
+const MainNewPuzzle: React.FC<MainNewPuzzleProps> = ({
+  form,
+  setShowPreview,
+}) => {
   const { watch } = form;
 
   // Watch specific form fields or the entire form
@@ -24,7 +28,7 @@ const MainNewPuzzle: React.FC<MainNewPuzzleProps> = ({ form }) => {
   }, [watchedValues]); // Log form state whenever it changes
   return (
     <div className="w-full grow">
-      <NameAndPreview form={form} />
+      <NameAndPreview form={form} setShowPreview={setShowPreview} />
       <div className="bg-card flex flex-col justify-center items-center p-2 gap-2">
         <TagsSelector form={form} tagsString="" />
         <CustomizePanel form={form} />

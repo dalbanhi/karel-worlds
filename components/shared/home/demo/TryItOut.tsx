@@ -39,6 +39,7 @@ const TryItOut: React.FC<PuzzleProps> = ({
           puzzleImages={puzzleImages}
           startWorldInfo={startWorldInfo}
           goalWorldInfo={goalWorldInfo}
+          puzzleName="Example Puzzle"
         />
       </div>
     </div>

@@ -14,6 +14,11 @@ import { UseFormReturn } from "react-hook-form";
 import { z } from "zod";
 import EditableWorld from "./EditableWorld";
 
+import {
+  GoalWorldInfoContext,
+  StartWorldInfoContext,
+} from "../layout/NewPuzzleLayout";
+
 interface DimensionSliderProps {
   form: UseFormReturn<z.infer<typeof puzzleSchema>>;
   fieldName: "worldWidth" | "worldHeight";
@@ -62,6 +67,9 @@ interface WorldsEditorProps {
 }
 
 const WorldsEditor: React.FC<WorldsEditorProps> = ({ form }) => {
+  //destructure the worldInfo from the StartWorldInfoContext and properly name them
+  const startWorldInfo = React.useContext(StartWorldInfoContext);
+  const goalWorldInfo = React.useContext(GoalWorldInfoContext);
   return (
     <section className="w-full flex flex-col gap-2 justify-center items-center p-2">
       <h3 className="text-center text-lg font-semibold">
@@ -81,8 +89,16 @@ const WorldsEditor: React.FC<WorldsEditorProps> = ({ form }) => {
           description="vertically"
         />
       </div>
-      <EditableWorld form={form} name={"Start World"} />
-      <EditableWorld form={form} name={"Goal World"} />
+      <EditableWorld
+        form={form}
+        name={"Start World"}
+        worldContext={startWorldInfo}
+      />
+      <EditableWorld
+        form={form}
+        name={"Goal World"}
+        worldContext={goalWorldInfo}
+      />
     </section>
   );
 };

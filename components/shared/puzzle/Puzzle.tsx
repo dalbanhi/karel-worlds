@@ -25,6 +25,7 @@ interface PuzzleProps {
   startWorldInfo: worldInfoType;
   goalWorldInfo: worldInfoType;
   puzzleImages: puzzleImagesType;
+  puzzleName: string;
 }
 
 const Puzzle: React.FC<PuzzleProps> = ({
@@ -32,6 +33,7 @@ const Puzzle: React.FC<PuzzleProps> = ({
   startWorldInfo,
   goalWorldInfo,
   puzzleImages,
+  puzzleName,
 }) => {
   return (
     <RunningKarelProvider>
@@ -40,6 +42,7 @@ const Puzzle: React.FC<PuzzleProps> = ({
         startWorldInfo={startWorldInfo}
         goalWorldInfo={goalWorldInfo}
         puzzleImages={puzzleImages}
+        puzzleName={puzzleName}
       />
     </RunningKarelProvider>
   );
@@ -50,6 +53,7 @@ const PuzzleContent: React.FC<PuzzleProps> = ({
   startWorldInfo,
   goalWorldInfo,
   puzzleImages,
+  puzzleName,
 }) => {
   const { toast } = useToast();
   const canvasSize = useCanvasSize(
@@ -187,7 +191,7 @@ const PuzzleContent: React.FC<PuzzleProps> = ({
       checkPuzzleSolution();
     }
   }, [goalWorldInfo, runningWorldInfo, shouldCheckSolution, toast]);
-  const puzzleName = "Example Puzzle";
+  // const puzzleName = "Example Puzzle";
   return (
     <section className=" w-full flex-col items-center p-2">
       <section className="flex w-full justify-between gap-6">

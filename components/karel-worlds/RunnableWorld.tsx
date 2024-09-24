@@ -373,6 +373,20 @@ const RunnableWorld: React.FC<RunnableWorldProps> = ({
     }
   }, karelSpeed);
 
+  const currPxWidth =
+    worldDimensions.width >= worldDimensions.height
+      ? canvasSize.width
+      : Math.floor(
+          canvasSize.width * (worldDimensions.width / worldDimensions.height)
+        );
+
+  const currPxHeight =
+    worldDimensions.width >= worldDimensions.height
+      ? Math.floor(
+          canvasSize.height * (worldDimensions.height / worldDimensions.width)
+        )
+      : canvasSize.height;
+
   return (
     <section className="flex flex-col items-center justify-center p-2">
       <section className="mb-2 flex flex-col gap-2 p-4">
@@ -436,9 +450,9 @@ const RunnableWorld: React.FC<RunnableWorldProps> = ({
       </section>
 
       <Stage
-        width={canvasSize.width}
-        height={canvasSize.height}
-        options={{ background: 0xffffff }}
+        width={currPxWidth}
+        height={currPxHeight}
+        options={{ background: 0xff0000 }}
       >
         <Container x={0} y={0} sortableChildren={true}>
           <RunnableGrid

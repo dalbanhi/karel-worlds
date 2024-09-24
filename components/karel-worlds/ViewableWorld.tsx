@@ -171,6 +171,20 @@ const ViewableWorld: React.FC<ViewableWorldProps> = ({
     setInternalGrid(newGrid);
   }, [worldDimensions.width, worldDimensions.height, karel, beepers]);
 
+  const currPxWidth =
+    worldDimensions.width >= worldDimensions.height
+      ? canvasSize.width
+      : Math.floor(
+          canvasSize.width * (worldDimensions.width / worldDimensions.height)
+        );
+
+  const currPxHeight =
+    worldDimensions.width >= worldDimensions.height
+      ? Math.floor(
+          canvasSize.height * (worldDimensions.height / worldDimensions.width)
+        )
+      : canvasSize.height;
+
   return (
     <section className="flex h-full items-center justify-center gap-2 p-2 max-lg:flex-col">
       <div className="flex items-center justify-center">
@@ -179,8 +193,8 @@ const ViewableWorld: React.FC<ViewableWorldProps> = ({
       <div className="flex h-full flex-col justify-end">
         {showGoal && (
           <Stage
-            width={canvasSize.width}
-            height={canvasSize.height}
+            width={currPxWidth}
+            height={currPxHeight}
             options={{ background: 0xffffff }}
           >
             <Container x={0} y={0} sortableChildren={true}>
