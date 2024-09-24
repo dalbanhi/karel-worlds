@@ -95,7 +95,6 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({
         }}
         onClientUploadComplete={(res) => {
           // Do something with the response
-          console.log(res);
           setImage(res[0].url);
         }}
         onUploadBegin={() => {}}
