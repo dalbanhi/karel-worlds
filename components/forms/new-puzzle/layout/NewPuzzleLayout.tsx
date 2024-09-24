@@ -27,7 +27,7 @@ export default function NewPuzzleLayout({
       worldHeight: 10,
       name: "",
       karelImage: "",
-      beeperImage: "",
+      beepersImage: "",
     },
   });
 
