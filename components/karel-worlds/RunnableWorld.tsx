@@ -328,11 +328,10 @@ const RunnableWorld: React.FC<RunnableWorldProps> = ({
   const maxSliderValue = 500;
   const [sliderValue, setSliderValue] = useState<number>(50);
 
-  const sliderValueRef = useRef(50);
-  sliderValueRef.current = sliderValue;
+  // Directly calculate `karelSpeed` based on the `sliderValue`
   const karelSpeed = useMemo(
-    () => 500 - (sliderValueRef.current - 50),
-    [sliderValueRef]
+    () => maxSliderValue - (sliderValue - stepValue),
+    [sliderValue]
   );
 
   const handleValueChange = useCallback((value: number[]) => {
