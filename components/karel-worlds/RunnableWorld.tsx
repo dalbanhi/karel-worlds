@@ -391,6 +391,7 @@ const RunnableWorld: React.FC<RunnableWorldProps> = ({
       <section className="mb-2 flex flex-col gap-2 p-4">
         <div className="flex items-center justify-center gap-4">
           <Button
+            type="button"
             onClick={() => {
               resetGridWithNewCode();
               runLoop.current = true; //continue the loop
@@ -401,6 +402,7 @@ const RunnableWorld: React.FC<RunnableWorldProps> = ({
             <PlayIcon />
           </Button>
           <Button
+            type="button"
             onClick={() => {
               resetGridWithNewCode();
               runLoop.current = false; //reset the loop

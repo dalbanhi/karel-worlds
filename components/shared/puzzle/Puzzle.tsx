@@ -191,7 +191,7 @@ const PuzzleContent: React.FC<PuzzleProps> = ({
       checkPuzzleSolution();
     }
   }, [goalWorldInfo, runningWorldInfo, shouldCheckSolution, toast]);
-  // const puzzleName = "Example Puzzle";
+
   return (
     <section className=" w-full flex-col items-center p-2">
       <section className="flex w-full justify-between gap-6">

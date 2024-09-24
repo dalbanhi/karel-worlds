@@ -154,7 +154,7 @@ export default function NewPuzzleLayout({
                     PREVIEW
                   </h1>
                 </div>
-                <div className="w-full bg-card">
+                <div className="w-full">
                   <Puzzle
                     worldDimensions={{ width: worldWidth, height: worldHeight }}
                     puzzleImages={imagesObj}

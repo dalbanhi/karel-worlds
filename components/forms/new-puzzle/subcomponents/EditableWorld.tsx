@@ -147,12 +147,7 @@ const EditableWorld: React.FC<EditableWorldProps> = ({
 
     setInternalGrid(newGrid);
     setKarel(newKarel);
-    // setBeepers(newBeepers);
   }, [worldWidth, worldHeight, worldInfo.karel, worldInfo.gridElements]);
-
-  useEffect(() => {
-    console.log("worldInfo", worldInfo);
-  }, [worldInfo]);
 
   const currPxWidth =
     worldWidth >= worldHeight
