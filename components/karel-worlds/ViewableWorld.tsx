@@ -41,7 +41,7 @@ const ShowHideArrow: React.FC<ShowHideArrowProps> = ({
   setShowGoal,
 }) => {
   return (
-    <Button onClick={() => setShowGoal(!showGoal)}>
+    <Button type="button" onClick={() => setShowGoal(!showGoal)}>
       {showGoal ? (
         <React.Fragment>
           <DoubleArrowUpIcon aria-label="Hide the Goal World" className="" />

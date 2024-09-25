@@ -14,7 +14,8 @@ export const ourFileRouter = {
       const user = await getCurrentUser();
 
       // If you throw, the user will not be able to upload
-      if (!user) throw new UploadThingError("Unauthorized");
+      if (!user)
+        throw new UploadThingError("You must be logged in to upload an image");
 
       // Whatever is returned here is accessible in onUploadComplete as `metadata`
       return { userId: user.id };

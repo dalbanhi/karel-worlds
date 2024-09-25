@@ -1,6 +1,10 @@
 import { UploadButton } from "@/utils/uploadthing/uploadthing";
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
+import { useToast } from "@/hooks/use-toast";
+import { ToastAction } from "@radix-ui/react-toast";
+import { useClerk } from "@clerk/nextjs";
+import { buttonVariants } from "@/components/ui/button";
 
 interface ImageUploaderProps {
   image: string;
@@ -13,6 +17,8 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({
   setImage,
   nameOfElementCustomizing,
 }) => {
+  const { toast } = useToast();
+  const { redirectToSignIn } = useClerk();
   const [defaultImage, setDefaultImage] = useState("");
 
   useEffect(() => {
@@ -100,7 +106,22 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({
         onUploadBegin={() => {}}
         onUploadError={(error: Error) => {
           // Do something with the error.
-          alert(`ERROR! ${error.message}`);
+          toast({
+            variant: "warning",
+            title: "Error Uploading Image",
+            description: `${error.message}. Sign in and try again.`,
+            action: (
+              <ToastAction
+                className={`text-ring ${buttonVariants({ variant: "outline" })}`}
+                onClick={() => {
+                  redirectToSignIn({ signInForceRedirectUrl: "/new-puzzle" });
+                }}
+                altText="Sign In"
+              >
+                Sign In
+              </ToastAction>
+            ),
+          });
         }}
       />
     </span>

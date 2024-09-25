@@ -16,6 +16,10 @@ import { puzzleImagesType, worldInfoType } from "@/types/karelWorld";
 import { montserrat } from "@/app/fonts";
 import { Button } from "@/components/ui/button";
 import { ArrowLeftIcon } from "@radix-ui/react-icons";
+import { useToast } from "@/hooks/use-toast";
+import { useAuth } from "@clerk/clerk-react";
+import { useClerk } from "@clerk/nextjs";
+import { useSessionClearOnSignOut } from "@/hooks/useSessionClearOnSignOut";
 
 export type WorldInfoContextType = {
   worldInfo: worldInfoType;
@@ -30,56 +34,146 @@ export const StartWorldInfoContext = createContext<WorldInfoContextType | null>(
   null
 );
 
-export default function NewPuzzleLayout({
-  children,
-}: {
+interface NewPuzzleLayoutProps {
   children: React.ReactNode;
-}) {
-  const onSubmit = (data: any) => {
+  currentUserID: string | undefined;
+}
+
+const NewPuzzleLayout: React.FC<NewPuzzleLayoutProps> = ({
+  children,
+  currentUserID,
+}) => {
+  const { toast } = useToast();
+  const { isSignedIn, userId } = useAuth();
+  const { redirectToSignIn } = useClerk();
+
+  const checkForUserSignIn = () => {
+    if (!isSignedIn) {
+      sessionStorage.setItem(
+        "puzzleFormData",
+        JSON.stringify(form.getValues())
+      );
+      redirectToSignIn({ signInForceRedirectUrl: "/new-puzzle" });
+      return;
+    }
+  };
+
+  const onSubmitForm = (data: any) => {
     // Handle form submission
+    console.log("Form data submitted 2:");
     console.log(data);
   };
 
+  const storedPuzzleFormData =
+    typeof window !== "undefined"
+      ? sessionStorage.getItem("puzzleFormData")
+      : null;
+
+  const initialFormValues = storedPuzzleFormData
+    ? JSON.parse(storedPuzzleFormData)
+    : {
+        worldWidth: 10,
+        worldHeight: 10,
+        name: "",
+        karelImage: "",
+        beepersImage: "",
+        description: "",
+        backgroundImage: "",
+        wallImage: "",
+        tags: [],
+        hints: [],
+        creatorId: userId, // TODO: change to currentUserID
+      };
   const form = useForm<z.infer<typeof puzzleSchema>>({
     resolver: zodResolver(puzzleSchema),
     defaultValues: {
-      worldWidth: 10,
-      worldHeight: 10,
-      name: "",
-      karelImage: "",
-      beepersImage: "",
+      ...initialFormValues,
+      creatorId: userId, // TODO: change to currentUserID
     },
   });
+
+  const watchValues = form.watch();
+  useEffect(() => {
+    console.log(watchValues);
+    sessionStorage.setItem("puzzleFormData", JSON.stringify(watchValues));
+    console.log("puzzle data saved to local storage");
+  }, [watchValues]);
+
+  const errors = form.formState.errors;
+  useEffect(() => {
+    console.log("Errors:", errors);
+    let errorString = "";
+    let errorTitle = "";
+    if (errors.creatorId) {
+      errorTitle = "Not Signed In Error";
+      errorString =
+        "You must be signed in to save a puzzle! Continue signing in to save your puzzle (don't worry any changes made will be saved).";
+      toast({
+        variant: "warning",
+        title: errorTitle,
+        description: errorString,
+      });
+    }
+  }, [errors]);
 
   const [showPreview, setShowPreview] = useState(false);
 
-  const [startWorldInfo, setStartWorldInfo] = useState<worldInfoType>({
-    karel: {
-      x: 0,
-      y: 0,
-      type: "karel",
-      direction: "east",
-      backpack: 0,
-      infiniteBackpack: false,
-      count: 1,
-      subtype: "karel",
-    },
-    gridElements: [],
-  });
+  const startWorldSavedData =
+    typeof window !== "undefined"
+      ? sessionStorage.getItem("startWorldInfo")
+      : null;
 
-  const [goalWorldInfo, setGoalWorldInfo] = useState<worldInfoType>({
-    karel: {
-      x: 0,
-      y: 0,
-      type: "karel",
-      direction: "east",
-      backpack: 0,
-      infiniteBackpack: false,
-      count: 1,
-      subtype: "karel",
-    },
-    gridElements: [],
-  });
+  const initialStartWorld = startWorldSavedData
+    ? JSON.parse(startWorldSavedData)
+    : {
+        karel: {
+          x: 0,
+          y: 0,
+          type: "karel",
+          direction: "east",
+          backpack: 0,
+          infiniteBackpack: false,
+          count: 1,
+          subtype: "karel",
+        },
+        gridElements: [],
+      };
+
+  const [startWorldInfo, setStartWorldInfo] =
+    useState<worldInfoType>(initialStartWorld);
+
+  useEffect(() => {
+    sessionStorage.setItem("startWorldInfo", JSON.stringify(startWorldInfo));
+  }, [startWorldInfo]);
+
+  const goalWorldSavedData =
+    typeof window !== "undefined"
+      ? sessionStorage.getItem("goalWorldInfo")
+      : null;
+
+  const initialGoalWorld = goalWorldSavedData
+    ? JSON.parse(goalWorldSavedData)
+    : {
+        karel: {
+          x: 0,
+          y: 0,
+          type: "karel",
+          direction: "east",
+          backpack: 0,
+          infiniteBackpack: false,
+          count: 1,
+          subtype: "karel",
+        },
+        gridElements: [],
+      };
+
+  const [goalWorldInfo, setGoalWorldInfo] =
+    useState<worldInfoType>(initialGoalWorld);
+
+  useEffect(() => {
+    sessionStorage.setItem("goalWorldInfo", JSON.stringify(goalWorldInfo));
+  }, [goalWorldInfo]);
+
   const worldWidth = form.watch("worldWidth");
   const worldHeight = form.watch("worldHeight");
   const puzzleName = form.watch("name");
@@ -105,9 +199,10 @@ export default function NewPuzzleLayout({
     });
   }, [karelImage, beepersImage, backgroundImage, wallImage]);
 
+  useSessionClearOnSignOut();
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)}>
+      <form onSubmit={form.handleSubmit(onSubmitForm)}>
         <div className="flex w-full justify-center">
           <div className="flex h-full grow max-sm:flex-col max-sm:items-center md:justify-between xl:w-4/5">
             {!showPreview && (
@@ -154,13 +249,33 @@ export default function NewPuzzleLayout({
                     PREVIEW
                   </h1>
                 </div>
+                <div className="bg-info/50 p-2 flex justify-center items-center gap-2">
+                  {" "}
+                  <h3 className="text-ring">
+                    This puzzle is not shared -- so only you can see it. Click
+                    Share to let everyone see it!
+                  </h3>
+                  <Button
+                    type="submit"
+                    className="w-fit flex gap-2"
+                    variant={"gradient"}
+                    onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
+                      console.log("Form data submitted 1:");
+                      e.preventDefault();
+                      checkForUserSignIn();
+                      form.handleSubmit(onSubmitForm)();
+                    }}
+                  >
+                    Share
+                  </Button>
+                </div>
                 <div className="w-full">
                   <Puzzle
                     worldDimensions={{ width: worldWidth, height: worldHeight }}
                     puzzleImages={imagesObj}
                     startWorldInfo={startWorldInfo}
                     goalWorldInfo={goalWorldInfo}
-                    puzzleName={puzzleName}
+                    puzzleName={puzzleName || ""}
                   />
                 </div>
               </div>
@@ -170,4 +285,6 @@ export default function NewPuzzleLayout({
       </form>
     </Form>
   );
-}
+};
+
+export default NewPuzzleLayout;

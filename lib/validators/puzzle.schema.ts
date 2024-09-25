@@ -6,9 +6,16 @@ const tagSchema = z.object({
 });
 
 export const puzzleSchema = z.object({
-  id: z.string().uuid(), // UUID validation for the 'id' field
-  name: z.string().min(1), // Non-empty string for the 'name' field
-  description: z.string().max(150).optional(), // String with a max length of 150 for the 'description' field (optional)
+  //   id: z.string().uuid(), // UUID validation for the 'id' field
+  name: z
+    .string()
+    .min(1, { message: "Name must be at least 1 character long" })
+    .max(50, { message: "Name must be at most 50 characters long" })
+    .or(z.literal("")), // Allow empty string
+  description: z
+    .string()
+    .max(150, { message: "Description must be at most 150 characters long" })
+    .or(z.literal("")), // Allow empty string
   tags: z.array(tagSchema).max(3), // Array of strings for the 'tags' field
   worldWidth: z.number().int().min(1), // Positive integer for 'worldWidth'
   worldHeight: z.number().int().min(1), // Positive integer for 'worldHeight'
@@ -35,7 +42,7 @@ export const puzzleSchema = z.object({
     }), // URL or empty string validation for 'backgroundImage'(nullable)
   startWorldInfo: z.any(), // Since startWorldInfo and goalWorldInfo are Json fields, using 'z.any()'
   goalWorldInfo: z.any(),
-  creatorId: z.string().uuid(), // UUID for 'creatorId'
+  creatorId: z.string().uuid({ message: "Invalid UUID for creatorId" }), // UUID for 'creatorId' and custom message when it's empty
   likedBy: z.array(z.string().uuid()).optional(), // Array of UUIDs for likedBy (if it's used in the request)
   collections: z.array(z.string().uuid()).optional(), // Array of UUIDs for collections (optional)
   createdAt: z.date().default(() => new Date()), // Automatically generated date for 'createdAt'
