@@ -172,8 +172,8 @@ const ViewableWorld: React.FC<ViewableWorldProps> = ({
       : canvasSize.height;
 
   return (
-    <section className="flex h-full items-center justify-center gap-2 p-2 flex-col">
-      <div className="flex items-center justify-center">
+    <section className="flex flex-1 items-center justify-center gap-2 p-2 flex-col">
+      <div className="flex h-full items-center justify-center">
         <ShowHideArrow showGoal={showGoal} setShowGoal={setShowGoal} />
       </div>
       <div className="flex h-full flex-col justify-end">

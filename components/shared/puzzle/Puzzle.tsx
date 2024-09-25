@@ -194,12 +194,12 @@ const PuzzleContent: React.FC<PuzzleProps> = ({
 
   return (
     <section className=" w-full flex-col items-center p-2">
-      <section className="flex w-full justify-between gap-6">
+      <section className="flex max-sm:flex-col w-full justify-between gap-6">
         <div className="flex flex-col gap-2 p-4">
           {puzzleName && (
             <h1 className="text-xl font-extrabold">{puzzleName}</h1>
           )}
-          <div className="flex w-full flex-col">
+          <div className="flex w-full h-full flex-col">
             <RunnableWorld
               name={puzzleName}
               canvasSize={canvasSize}
@@ -221,7 +221,7 @@ const PuzzleContent: React.FC<PuzzleProps> = ({
             />
           </div>
         </div>
-        <div className="flex min-h-96 w-full flex-col gap-4 p-2">
+        <div className="flex min-h-96 w-full max-sm:h-96 flex-col gap-4 p-2">
           <div className="flex items-center justify-center gap-2">
             <Switch
               id="editor-mode"
