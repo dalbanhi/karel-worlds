@@ -14,12 +14,13 @@ import { useState, createContext } from "react";
 import Puzzle from "@/components/shared/puzzle/Puzzle";
 import { puzzleImagesType, worldInfoType } from "@/types/karelWorld";
 import { montserrat } from "@/app/fonts";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { ArrowLeftIcon } from "@radix-ui/react-icons";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@clerk/clerk-react";
 import { useClerk } from "@clerk/nextjs";
 import { useSessionClearOnSignOut } from "@/hooks/useSessionClearOnSignOut";
+import { ToastAction } from "@radix-ui/react-toast";
 
 export type WorldInfoContextType = {
   worldInfo: worldInfoType;
@@ -100,17 +101,28 @@ const NewPuzzleLayout: React.FC<NewPuzzleLayoutProps> = ({
 
   const errors = form.formState.errors;
   useEffect(() => {
-    console.log("Errors:", errors);
+    console.log("Errors:", errors); //TOD: double check UUID error for creatorID with actual user from the database
     let errorString = "";
     let errorTitle = "";
     if (errors.creatorId) {
       errorTitle = "Not Signed In Error";
       errorString =
-        "You must be signed in to save a puzzle! Continue signing in to save your puzzle (don't worry any changes made will be saved).";
+        "You must be signed in to save a puzzle! Continue signing in to save your puzzle (any changes made will be saved).";
       toast({
         variant: "warning",
         title: errorTitle,
         description: errorString,
+        action: (
+          <ToastAction
+            className={`text-ring ${buttonVariants({ variant: "outline" })}`}
+            onClick={() => {
+              redirectToSignIn({ signInForceRedirectUrl: "/new-puzzle" });
+            }}
+            altText="Sign In"
+          >
+            Sign In
+          </ToastAction>
+        ),
       });
     }
   }, [errors]);
