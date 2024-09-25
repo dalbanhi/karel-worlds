@@ -96,7 +96,6 @@ const NewPuzzleLayout: React.FC<NewPuzzleLayoutProps> = ({
   useEffect(() => {
     console.log(watchValues);
     sessionStorage.setItem("puzzleFormData", JSON.stringify(watchValues));
-    console.log("puzzle data saved to local storage");
   }, [watchValues]);
 
   const errors = form.formState.errors;
@@ -143,6 +142,8 @@ const NewPuzzleLayout: React.FC<NewPuzzleLayoutProps> = ({
     useState<worldInfoType>(initialStartWorld);
 
   useEffect(() => {
+    console.log("start world changed");
+    console.log("startWorldInfo", startWorldInfo);
     sessionStorage.setItem("startWorldInfo", JSON.stringify(startWorldInfo));
   }, [startWorldInfo]);
 

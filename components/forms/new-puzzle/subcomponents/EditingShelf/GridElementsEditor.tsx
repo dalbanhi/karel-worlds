@@ -46,8 +46,8 @@ const GridElementsEditor: React.FC<GridElementsEditorProps> = ({
     const beeperExists = worldInfo?.gridElements.find(
       (element) =>
         element.type === "beeper" &&
-        element.x === coords.row &&
-        element.y === coords.column
+        element.x === coords.column &&
+        element.y === coords.row
     );
 
     if (mode === "add") {

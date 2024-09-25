@@ -78,8 +78,22 @@ const RunnableWorld: React.FC<RunnableWorldProps> = ({
           try {
             await gridRef.current.moveForward();
             gridRef.current.updateRunningWorld();
-          } catch (e) {
-            throw e;
+          } catch (e: any) {
+            toast({
+              variant: "warning",
+              title: "Error",
+              description: e.message,
+              action: (
+                <ToastAction
+                  onClick={() => {
+                    resetGridWithNewCode();
+                  }}
+                  altText="Reset"
+                >
+                  Reset
+                </ToastAction>
+              ),
+            });
           }
         })
       );
@@ -101,8 +115,22 @@ const RunnableWorld: React.FC<RunnableWorldProps> = ({
           try {
             await gridRef.current.putBeeper();
             gridRef.current.updateRunningWorld();
-          } catch (e) {
-            throw e;
+          } catch (e: any) {
+            toast({
+              variant: "warning",
+              title: "Error",
+              description: e.message,
+              action: (
+                <ToastAction
+                  onClick={() => {
+                    resetGridWithNewCode();
+                  }}
+                  altText="Reset"
+                >
+                  Reset
+                </ToastAction>
+              ),
+            });
           }
         })
       );
@@ -113,8 +141,22 @@ const RunnableWorld: React.FC<RunnableWorldProps> = ({
           try {
             await gridRef.current.takeBeeper();
             gridRef.current.updateRunningWorld();
-          } catch (e) {
-            throw e;
+          } catch (e: any) {
+            toast({
+              variant: "warning",
+              title: "Error",
+              description: e.message,
+              action: (
+                <ToastAction
+                  onClick={() => {
+                    resetGridWithNewCode();
+                  }}
+                  altText="Reset"
+                >
+                  Reset
+                </ToastAction>
+              ),
+            });
           }
         })
       );
@@ -259,6 +301,8 @@ const RunnableWorld: React.FC<RunnableWorldProps> = ({
     let stepAgain = !isLine(stack);
     try {
       ok = interpreter.current.step();
+    } catch (e: any) {
+      console.log("Error stepping code", e);
     } finally {
       if (!ok) {
         runLoop.current = false;
@@ -320,8 +364,6 @@ const RunnableWorld: React.FC<RunnableWorldProps> = ({
   }
   isLine.oldStack_ = stack.slice();
 
-  // Update the ref to ensure stepCode is up-to-date
-  const [app, setApp] = useState<Application<ICanvas>>();
   //slider values for speed
   const minSliderValue = 50;
   const stepValue = 50;
@@ -346,9 +388,10 @@ const RunnableWorld: React.FC<RunnableWorldProps> = ({
       } catch (e: any) {
         //immediately stop the loop
         runLoop.current = false;
+        console.log("Error running code", e);
 
         toast({
-          variant: "destructive",
+          variant: "warning",
           title: "Error",
           description: e.message,
           action: (
