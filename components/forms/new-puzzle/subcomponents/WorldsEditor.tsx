@@ -67,9 +67,9 @@ interface WorldsEditorProps {
 }
 
 const WorldsEditor: React.FC<WorldsEditorProps> = ({ form }) => {
-  //destructure the worldInfo from the StartWorldInfoContext and properly name them
   const startWorldInfo = React.useContext(StartWorldInfoContext);
   const goalWorldInfo = React.useContext(GoalWorldInfoContext);
+  if (!startWorldInfo || !goalWorldInfo) return null;
   return (
     <section className="w-full flex flex-col gap-2 justify-center items-center p-2">
       <h3 className="text-center text-lg font-semibold">

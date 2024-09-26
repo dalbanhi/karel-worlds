@@ -1,14 +1,12 @@
 import React from "react";
 import Puzzle from "@/components/shared/puzzle/Puzzle";
 import { getPuzzle } from "@/lib/actions/puzzles";
-import { useParams } from "next/navigation";
 import { worldInfoType } from "@/types/karelWorld";
 
-const PuzzlePage = async () => {
+const PuzzlePage = async ({ params }: { params: { id: string } }) => {
   //get the id from the route params
-  const { id } = useParams();
 
-  const puzzle = await getPuzzle(id as string);
+  const puzzle = await getPuzzle(params.id);
   if (!puzzle) {
     return <div>loading...</div>;
   }

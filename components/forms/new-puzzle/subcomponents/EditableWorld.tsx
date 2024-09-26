@@ -17,7 +17,7 @@ import { WorldInfoContextType } from "../layout/NewPuzzleLayout";
 interface EditableWorldProps {
   form: UseFormReturn<z.infer<typeof puzzleSchema>>;
   name: string;
-  worldContext: WorldInfoContextType | null;
+  worldContext: WorldInfoContextType;
 }
 
 function makeNewGrid(rows: number, cols: number): GridElement[][][] {
@@ -37,8 +37,10 @@ const EditableWorld: React.FC<EditableWorldProps> = ({
   name,
   worldContext,
 }) => {
-  if (!worldContext) return null;
-  const { worldInfo, setWorldInfo } = worldContext;
+  const worldWidth = form.watch("worldWidth");
+  const worldHeight = form.watch("worldHeight");
+  const canvasSize = useCanvasSize(worldWidth, worldHeight, false);
+
   //   const [worldInfo, setWorldInfo] = useState<worldInfoType>({
   //     karel: {
   //       x: 0,
@@ -52,9 +54,6 @@ const EditableWorld: React.FC<EditableWorldProps> = ({
   //     },
   //     gridElements: [],
   //   });
-  const worldWidth = form.watch("worldWidth");
-  const worldHeight = form.watch("worldHeight");
-  const canvasSize = useCanvasSize(worldWidth, worldHeight, false);
 
   const karelImage = form.watch("karelImage");
   const beepersImage = form.watch("beepersImage");
@@ -77,6 +76,8 @@ const EditableWorld: React.FC<EditableWorldProps> = ({
     });
   }, [karelImage, beepersImage, backgroundImage, wallImage]);
 
+  // if (!worldContext) return null;
+  const { worldInfo, setWorldInfo } = worldContext;
   const initialKarel = new KarelElement(
     worldInfo.karel.x,
     worldInfo.karel.y,

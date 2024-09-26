@@ -125,7 +125,7 @@ const NewPuzzleLayout: React.FC<NewPuzzleLayoutProps> = ({
         ),
       });
     }
-  }, [errors]);
+  }, [errors, redirectToSignIn, toast]);
 
   const [showPreview, setShowPreview] = useState(false);
 
@@ -250,7 +250,7 @@ const NewPuzzleLayout: React.FC<NewPuzzleLayoutProps> = ({
                 <div className="flex justify-start items-center gap-2 p-4 bg-primary">
                   <Button
                     onClick={() => setShowPreview(false)}
-                    className="w-fi flex gap-2"
+                    className="w-fit flex gap-2"
                     variant={"outline"}
                     type="button"
                   >
