@@ -6,6 +6,9 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Metadata } from "next";
 import { Puzzle } from "@prisma/client";
 import PuzzleCard from "@/components/shared/home/dashboard/PuzzleCard";
+import { ButtonGroup } from "@/components/ui/ButtonGroup";
+import Link from "next/link";
+import { buttonVariants } from "@/components/ui/button";
 
 export const metadata: Metadata = {
   title: "My Stuff",
@@ -13,12 +16,18 @@ export const metadata: Metadata = {
     "A place to store your Karel Worlds puzzles and view your classes",
 };
 
-const examplePuzzle: Puzzle = {
+const exampleTag = {
+  name: "beginner",
+  color: "bg-green-500",
+};
+
+const examplePuzzle1: Puzzle = {
   id: "1234",
   createdAt: new Date(),
   updatedAt: new Date(),
   name: "My First Puzzle",
-  tags: ["beginner", "loops"],
+  description: "This is a puzzle",
+  // tags: ["beginner", "loops"],
   worldWidth: 2,
   worldHeight: 2,
   hints: ["Use the move() function to move Karel"],
@@ -47,36 +56,124 @@ const examplePuzzle: Puzzle = {
   creatorId: "user_2lLy2QBFPFE2Ewry7L7hl2yqDyR",
 };
 
-const MyDashboard = async () => {
+const examplePuzzle2: Puzzle = {
+  id: "1234",
+  createdAt: new Date(),
+  updatedAt: new Date(),
+  name: "My Second Puzzle",
+  description: "This is not a puzzle",
+  // tags: ["beginner", "loops"],
+  worldWidth: 4,
+  worldHeight: 4,
+  hints: ["Use the move() function to move Karel"],
+  karelImage: "",
+  beeperImage: "",
+  wallImage: "",
+  backgroundImage: "",
+  startWorldInfo: {
+    karel: {
+      x: 0,
+      y: 0,
+      direction: "east",
+    },
+    beepers: [],
+    walls: [],
+  },
+  goalWorldInfo: {
+    karel: {
+      x: 1,
+      y: 1,
+      direction: "east",
+    },
+    beepers: [],
+    walls: [],
+  },
+  creatorId: "user_2lLy2QBFPFE2Ewry7L7hl2yqDyR",
+};
+
+const MyDashboard = async ({
+  searchParams,
+}: {
+  searchParams: { [key: string]: string | string[] | undefined };
+}) => {
   const clerkUser = await currentUser();
   if (!clerkUser) {
     redirect("/");
   }
 
-  const fakePuzzles = [examplePuzzle, examplePuzzle, examplePuzzle];
+  const currentTab = Array.isArray(searchParams.view)
+    ? searchParams.view[0]
+    : (searchParams.view ?? "my-puzzles");
+  console.log("currentTab", currentTab);
+
+  const possibleTabs = ["my-puzzles", "liked-puzzles", "solved-puzzles"];
+  if (!possibleTabs.includes(currentTab)) {
+    redirect("/my-stuff?view=my-puzzles");
+  }
+
+  const fakePuzzles1 = [
+    examplePuzzle1,
+    examplePuzzle1,
+    examplePuzzle1,
+    examplePuzzle1,
+  ];
+
+  const fakePuzzles2 = [examplePuzzle1, examplePuzzle2, examplePuzzle1];
+
+  const puzzlesToShow =
+    currentTab === "my-puzzles" ? fakePuzzles1 : fakePuzzles2;
+
+  const tabsClassName =
+    "inline-flex items-center justify-center whitespace-nowrap border-b-2 rounded-sm rounded-b-none border-primary px-3 py-1.5 text-sm font-medium ring-offset-background transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-background data-[state=active]:text-ring data-[state=active]:border-x-2 data-[state=active]:border-primary data-[state=active]:border-t-2 data-[state=active]:border-b-0 data-[state=active]:rounded-t-sm data-[state=active]:rounded-b-none data-[state=active]:border-b-none";
+
   return (
     <section className="flex min-h-screen w-full md:w-1/2 flex-col justify-start">
       <h1 className="w-full bg-accent/50 p-2 text-center text-4xl font-semibold">
         {String(metadata.title ?? "Default Title")}
       </h1>
-      <Tabs defaultValue="my-puzzles" className="w-full">
-        <TabsList className="w-full">
-          <TabsTrigger value="my-puzzles">My Puzzles</TabsTrigger>
-          <TabsTrigger value="my-liked-puzzles">My Liked Puzzles</TabsTrigger>
-          <TabsTrigger value="my-classes">My Classes</TabsTrigger>
-        </TabsList>
-        <TabsContent value="my-puzzles">
-          <div className="flex flex-wrap gap-4 p-4 justify-center">
-            {fakePuzzles.map((puzzle) => {
-              return <PuzzleCard key={puzzle.id} puzzleInfo={puzzle} />;
-            })}
-          </div>
-        </TabsContent>
-        <TabsContent value="my-liked-puzzles">
-          Change your password here.
-        </TabsContent>
-        <TabsContent value="my-classes">classes here.</TabsContent>
-      </Tabs>
+      <div className="inline-flex h-10 items-center justify-center rounded-none bg-muted p-1 text-muted-foreground">
+        <ButtonGroup
+          className="p-2"
+          orientation="horizontal"
+          areCardButtons={false}
+        >
+          <Link
+            className={tabsClassName}
+            href="/my-stuff?view=my-puzzles"
+            data-state={currentTab === "my-puzzles" ? "active" : ""}
+          >
+            My Puzzles
+          </Link>
+          <Link
+            className={tabsClassName}
+            href="/my-stuff?view=liked-puzzles"
+            data-state={currentTab === "liked-puzzles" ? "active" : ""}
+          >
+            Liked Puzzles
+          </Link>
+          <Link
+            className={tabsClassName}
+            href="/my-stuff?view=solved-puzzles"
+            data-state={currentTab === "solved-puzzles" ? "active" : ""}
+          >
+            Solved Puzzles
+          </Link>
+          {/* <Link
+            className={tabsClassName}
+            href="/my-stuff?view=my-classes"
+            data-state={currentTab === "my-classes" ? "active" : ""}
+          >
+            My Classes
+          </Link> */}
+        </ButtonGroup>
+      </div>
+      <div className="mt-2 ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2">
+        <div className="p-4 flex gap-4 flex-wrap justify-center">
+          {puzzlesToShow.map((puzzle) => {
+            return <PuzzleCard key={puzzle.id} puzzleInfo={puzzle} />;
+          })}
+        </div>
+      </div>
     </section>
   );
 };

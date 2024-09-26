@@ -83,21 +83,23 @@ interface PuzzleCardProps {
   puzzleInfo: Puzzle;
 }
 
+const exampleTags = ["Loops", "Functions", "Conditionals"];
+
 const PuzzleCard: React.FC<PuzzleCardProps> = async ({ puzzleInfo }) => {
   //   const userImage = await getUserImage(puzzleInfo.creatorId);
   const userImage =
     "https://img.clerk.com/eyJ0eXBlIjoicHJveHkiLCJzcmMiOiJodHRwczovL2ltYWdlcy5jbGVyay5kZXYvb2F1dGhfZ29vZ2xlL2ltZ18ybEx5MlRoZW9NZnVYd0NZU1poR0E3aTR6UmEifQ";
 
   return (
-    <Card className="max-w-80">
+    <Card className="max-w-64">
       <CardHeader className=" gap-2 justify-center items-center">
         <div className="flex flex-col gap">
           <CardTitle>{puzzleInfo.name}</CardTitle>
           <CardDescription>
             Tags:{" "}
-            {puzzleInfo.tags.map((tag, index) => {
+            {exampleTags.map((tag, index) => {
               const content =
-                index === puzzleInfo.tags.length - 1 ? tag : `${tag}, `;
+                index === exampleTags.length - 1 ? tag : `${tag}, `;
               return <span key={tag}>{content}</span>;
             })}
           </CardDescription>
@@ -135,7 +137,7 @@ const PuzzleCard: React.FC<PuzzleCardProps> = async ({ puzzleInfo }) => {
         </div>
       </CardContent>
       <CardFooter className="w-full">
-        <ButtonGroup className="w-full">
+        <ButtonGroup className="w-full" areCardButtons={true}>
           <Button aria-label="Solve the Puzzle" className="grow">
             <PlayIcon />
           </Button>
