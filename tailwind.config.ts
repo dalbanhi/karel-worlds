@@ -22,6 +22,9 @@ const config = {
       screens: {
         md: "820px",
       },
+      zIndex: {
+        100: "100",
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
