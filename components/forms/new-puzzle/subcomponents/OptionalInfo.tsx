@@ -19,12 +19,12 @@ interface OptionalInfoProps {
 
 const OptionalInfo: React.FC<OptionalInfoProps> = ({ form }) => {
   return (
-    <div className="flex flex-col gap-4 grow">
+    <div className="flex grow flex-col gap-4">
       <FormField
         control={form.control}
         name="description"
         render={({ field }) => (
-          <FormItem className="flex flex-col justify-center items-center w-full gap-2">
+          <FormItem className="flex w-full flex-col items-center justify-center gap-2">
             <FormLabel className="w-full text-center">
               Puzzle Description:{" "}
             </FormLabel>

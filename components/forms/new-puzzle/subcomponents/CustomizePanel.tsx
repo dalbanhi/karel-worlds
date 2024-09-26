@@ -75,7 +75,7 @@ const CustomizePanel: React.FC<CustomizePanelProps> = ({ form }) => {
 
   const [customSpritesModalOpen, setCustomSpritesModalOpen] = useState(false);
   return (
-    <div className="md:hidden flex gap-2">
+    <div className="flex gap-2 md:hidden">
       <Dialog
         open={customSpritesModalOpen}
         onOpenChange={() => {
@@ -86,7 +86,7 @@ const CustomizePanel: React.FC<CustomizePanelProps> = ({ form }) => {
         }}
       >
         <DialogTrigger
-          className={`shrink min-w-0 flex gap-1 ${buttonVariants({ variant: "default" })}`}
+          className={`flex min-w-0 shrink gap-1 ${buttonVariants({ variant: "default" })}`}
         >
           Customize Sprites
         </DialogTrigger>
@@ -95,7 +95,7 @@ const CustomizePanel: React.FC<CustomizePanelProps> = ({ form }) => {
             <div className="flex flex-col gap-2">
               {customSpritesModalState !== "step1" ? (
                 <Button
-                  className="flex gap-2 w-1/6"
+                  className="flex w-1/6 gap-2"
                   variant={"outline"}
                   onClick={() => {
                     setCustomSpritesModalState("step1");
@@ -104,7 +104,7 @@ const CustomizePanel: React.FC<CustomizePanelProps> = ({ form }) => {
                   <ArrowLeftIcon />
                 </Button>
               ) : null}
-              <DialogTitle className="capitalize w-full">
+              <DialogTitle className="w-full capitalize">
                 {customSpritesModalState === "step1"
                   ? "Choose which sprite to customize"
                   : `Customize ${customSpritesModalState} Sprite`}
@@ -125,7 +125,7 @@ const CustomizePanel: React.FC<CustomizePanelProps> = ({ form }) => {
       </Dialog>
       <Dialog>
         <DialogTrigger
-          className={`shrink min-w-0 flex gap-1 ${buttonVariants({ variant: "default" })}`}
+          className={`flex min-w-0 shrink gap-1 ${buttonVariants({ variant: "default" })}`}
         >
           Add Optional Info
         </DialogTrigger>

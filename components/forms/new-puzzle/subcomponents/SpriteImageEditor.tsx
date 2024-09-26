@@ -32,7 +32,7 @@ const SpriteImageEditor: React.FC<SpriteImageEditorProps> = ({
         name={sprite.value}
         render={({ field: { onChange, value } }) => {
           return (
-            <FormItem className="flex flex-col justify-center items-center w-full gap-2">
+            <FormItem className="flex w-full flex-col items-center justify-center gap-2">
               <FormLabel
                 className="w-1/3"
                 id={`form-label-${sprite.name}-image`}

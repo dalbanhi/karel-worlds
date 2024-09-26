@@ -233,7 +233,7 @@ const NewPuzzleLayout: React.FC<NewPuzzleLayoutProps> = ({
                       setWorldInfo: setStartWorldInfo,
                     }}
                   >
-                    <div className="flex flex-col w-full">
+                    <div className="flex w-full flex-col">
                       {children}
                       <MainNewPuzzle
                         form={form}
@@ -247,22 +247,22 @@ const NewPuzzleLayout: React.FC<NewPuzzleLayoutProps> = ({
             )}
             {showPreview && (
               <div className="h-fit w-full">
-                <div className="flex justify-start items-center gap-2 p-4 bg-primary">
+                <div className="flex items-center justify-start gap-2 bg-primary p-4">
                   <Button
                     onClick={() => setShowPreview(false)}
-                    className="w-fit flex gap-2"
+                    className="flex w-fit gap-2"
                     variant={"outline"}
                     type="button"
                   >
                     <ArrowLeftIcon /> Back to Edit
                   </Button>
                   <h1
-                    className={`text-center w-full text-lg font-bold md:text-2xl ${montserrat.className}`}
+                    className={`w-full text-center text-lg font-bold md:text-2xl ${montserrat.className}`}
                   >
                     PREVIEW
                   </h1>
                 </div>
-                <div className="bg-info/50 p-2 flex justify-center items-center gap-2">
+                <div className="flex items-center justify-center gap-2 bg-info/50 p-2">
                   {" "}
                   <h3 className="text-ring">
                     This puzzle is not shared -- so only you can see it. Click
@@ -270,7 +270,7 @@ const NewPuzzleLayout: React.FC<NewPuzzleLayoutProps> = ({
                   </h3>
                   <Button
                     type="submit"
-                    className="w-fit flex gap-2"
+                    className="flex w-fit gap-2"
                     variant={"gradient"}
                     onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
                       console.log("Form data submitted 1:");

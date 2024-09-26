@@ -161,8 +161,8 @@ const EditableWorld: React.FC<EditableWorldProps> = ({
       : canvasSize.height;
 
   return (
-    <section className="flex flex-col justify-center gap-2 w-full mt-4">
-      <h5 className="font-semibold text-center">{name}</h5>
+    <section className="mt-4 flex w-full flex-col justify-center gap-2">
+      <h5 className="text-center font-semibold">{name}</h5>
       <EditingShelf
         form={form}
         name={name}

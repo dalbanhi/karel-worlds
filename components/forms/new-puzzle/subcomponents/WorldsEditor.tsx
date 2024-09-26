@@ -38,7 +38,7 @@ const DimensionSlider: React.FC<DimensionSliderProps> = ({
       name={fieldName}
       render={({ field: { value, onChange } }) => (
         <FormItem className="flex flex-col gap-2">
-          <FormLabel className="flex justify-items-end gap-2 w-full">
+          <FormLabel className="flex w-full justify-items-end gap-2">
             <span>{label}</span>
             <span>{value}</span>
           </FormLabel>
@@ -71,11 +71,11 @@ const WorldsEditor: React.FC<WorldsEditorProps> = ({ form }) => {
   const goalWorldInfo = React.useContext(GoalWorldInfoContext);
   if (!startWorldInfo || !goalWorldInfo) return null;
   return (
-    <section className="w-full flex flex-col gap-2 justify-center items-center p-2">
+    <section className="flex w-full flex-col items-center justify-center gap-2 p-2">
       <h3 className="text-center text-lg font-semibold">
         All World Properties
       </h3>
-      <div className="flex gap-4 justify-center items-center">
+      <div className="flex items-center justify-center gap-4">
         <DimensionSlider
           form={form}
           fieldName="worldWidth"

@@ -69,6 +69,11 @@ const RunnableWorld: React.FC<RunnableWorldProps> = ({
   const shouldCheckPuzzle = useRef<boolean>(false);
   const stepCodeRef = useRef<() => void>(() => {});
 
+  const resetGridWithNewCode = () => {
+    gridRef.current.resetGrid();
+    interpreter.current = new Interpreter(rawCode, initApi);
+  };
+
   const initApi = useCallback(
     (interpreter: typeof Interpreter, globalObject: any) => {
       interpreter.setProperty(
@@ -279,17 +284,12 @@ const RunnableWorld: React.FC<RunnableWorldProps> = ({
         })
       );
     },
-    []
+    [resetGridWithNewCode, toast]
   );
   // interpreter.current = new Interpreter(rawCode, initApi);
   const interpreter = useMemo(() => {
     return new Interpreter(rawCode, initApi);
   }, [rawCode, initApi]);
-
-  const resetGridWithNewCode = () => {
-    gridRef.current.resetGrid();
-    interpreter.current = new Interpreter(rawCode, initApi);
-  };
 
   // js-interpreter to run code
   let stack: any = [];

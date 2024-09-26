@@ -26,21 +26,21 @@ const LeftSidebarFormComponent: React.FC<LeftSidebarFormComponentProps> = ({
   form,
 }) => {
   return (
-    <aside className="min-h-screen border-r-2 border-primary bg-card flex-col gap-2 p-4 grow shrink w-3/12 max-md:hidden md:flex">
-      <h2 className="text-ring font-semibold text-base text-center">
+    <aside className="min-h-screen w-3/12 shrink grow flex-col gap-2 border-r-2 border-primary bg-card p-4 max-md:hidden md:flex">
+      <h2 className="text-center text-base font-semibold text-ring">
         Customize Your Sprites
       </h2>
-      <div className="flex flex-col gap-2 shrink">
+      <div className="flex shrink flex-col gap-2">
         {customizableSprites.map((sprite) => {
           return (
             <Dialog key={`${sprite.name} Dialog`}>
               <DialogTrigger
-                className={`shrink min-w-0 flex gap-1 ${buttonVariants({ variant: "default" })}`}
+                className={`flex min-w-0 shrink gap-1 ${buttonVariants({ variant: "default" })}`}
               >
                 {sprite.name} <Pencil1Icon />
               </DialogTrigger>
               <DialogContent
-                className="bg-card shrink"
+                className="shrink bg-card"
                 aria-describedby={undefined}
               >
                 <DialogHeader>

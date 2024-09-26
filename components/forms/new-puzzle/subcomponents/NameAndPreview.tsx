@@ -25,12 +25,12 @@ const NameAndPreview: React.FC<NameAndPreviewProps> = ({
   setShowPreview,
 }) => {
   return (
-    <div className="bg-primary flex justify-center items-center p-2 gap-2">
+    <div className="flex items-center justify-center gap-2 bg-primary p-2">
       <FormField
         control={form.control}
         name="name"
         render={({ field }) => (
-          <FormItem className="flex justify-between items-center w-1/2 gap-2">
+          <FormItem className="flex w-1/2 items-center justify-between gap-2">
             <FormLabel className="">Puzzle Name: </FormLabel>
             <FormControl>
               <Input placeholder="Enter the name of the puzzle..." {...field} />
@@ -42,7 +42,7 @@ const NameAndPreview: React.FC<NameAndPreviewProps> = ({
         )}
       />
       <Button
-        className="flex gap-1 justify-center items-center"
+        className="flex items-center justify-center gap-1"
         variant="secondary"
         type="button"
         onClick={() => {

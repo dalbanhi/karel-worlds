@@ -147,7 +147,12 @@ const GridElementsEditor: React.FC<GridElementsEditorProps> = ({
         row: worldHeight - 1,
       }));
     }
-  }, [worldWidth, worldHeight]);
+  }, [
+    worldWidth,
+    worldHeight,
+    elementEditingCoords?.column,
+    elementEditingCoords?.row,
+  ]);
 
   const [editingMode, setEditingMode] = useState<"add" | "remove">("add");
   const [editingElement, setEditingElement] = useState<"beeper" | "wall">(
@@ -155,8 +160,8 @@ const GridElementsEditor: React.FC<GridElementsEditorProps> = ({
   );
 
   return (
-    <div className="flex justify-center gap-2 mt-4 ">
-      <FormItem className="flex justify-center items-center gap-2 ">
+    <div className="mt-4 flex justify-center gap-2 ">
+      <FormItem className="flex items-center justify-center gap-2 ">
         <FormLabel className="w-full text-center">Editing Mode </FormLabel>
         <FormControl className="flex items-center">
           <Select
@@ -165,7 +170,7 @@ const GridElementsEditor: React.FC<GridElementsEditorProps> = ({
               setEditingMode(val);
             }}
           >
-            <SelectTrigger className="w-full min-w-30">
+            <SelectTrigger className="w-full min-w-32">
               <SelectValue placeholder="--" />
             </SelectTrigger>
             <SelectContent>
@@ -175,8 +180,8 @@ const GridElementsEditor: React.FC<GridElementsEditorProps> = ({
           </Select>
         </FormControl>
       </FormItem>
-      <div className="flex justify-center items-center gap-2">
-        <FormItem className="flex justify-center items-center gap-2 ">
+      <div className="flex items-center justify-center gap-2">
+        <FormItem className="flex items-center justify-center gap-2 ">
           <FormLabel className="w-full text-center capitalize">
             {editingMode}{" "}
           </FormLabel>
