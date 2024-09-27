@@ -12,7 +12,7 @@ import { Slider } from "@/components/ui/slider";
 import Image from "next/image";
 
 import Interpreter from "js-interpreter";
-import { useToast } from "@/hooks/use-toast";
+import { toast, useToast } from "@/hooks/use-toast";
 import { ToastAction } from "@/components/ui/toast";
 import { Application, ICanvas } from "pixi.js";
 
@@ -69,11 +69,6 @@ const RunnableWorld: React.FC<RunnableWorldProps> = ({
   const shouldCheckPuzzle = useRef<boolean>(false);
   const stepCodeRef = useRef<() => void>(() => {});
 
-  const resetGridWithNewCode = () => {
-    gridRef.current.resetGrid();
-    interpreter.current = new Interpreter(rawCode, initApi);
-  };
-
   const initApi = useCallback(
     (interpreter: typeof Interpreter, globalObject: any) => {
       interpreter.setProperty(
@@ -85,19 +80,9 @@ const RunnableWorld: React.FC<RunnableWorldProps> = ({
             gridRef.current.updateRunningWorld();
           } catch (e: any) {
             toast({
-              variant: "warning",
+              variant: "destructive",
               title: "Error",
               description: e.message,
-              action: (
-                <ToastAction
-                  onClick={() => {
-                    resetGridWithNewCode();
-                  }}
-                  altText="Reset"
-                >
-                  Reset
-                </ToastAction>
-              ),
             });
           }
         })
@@ -122,19 +107,9 @@ const RunnableWorld: React.FC<RunnableWorldProps> = ({
             gridRef.current.updateRunningWorld();
           } catch (e: any) {
             toast({
-              variant: "warning",
+              variant: "destructive",
               title: "Error",
               description: e.message,
-              action: (
-                <ToastAction
-                  onClick={() => {
-                    resetGridWithNewCode();
-                  }}
-                  altText="Reset"
-                >
-                  Reset
-                </ToastAction>
-              ),
             });
           }
         })
@@ -148,19 +123,9 @@ const RunnableWorld: React.FC<RunnableWorldProps> = ({
             gridRef.current.updateRunningWorld();
           } catch (e: any) {
             toast({
-              variant: "warning",
+              variant: "destructive",
               title: "Error",
               description: e.message,
-              action: (
-                <ToastAction
-                  onClick={() => {
-                    resetGridWithNewCode();
-                  }}
-                  altText="Reset"
-                >
-                  Reset
-                </ToastAction>
-              ),
             });
           }
         })
@@ -284,42 +249,22 @@ const RunnableWorld: React.FC<RunnableWorldProps> = ({
         })
       );
     },
-    [resetGridWithNewCode, toast]
+    []
   );
   // interpreter.current = new Interpreter(rawCode, initApi);
   const interpreter = useMemo(() => {
     return new Interpreter(rawCode, initApi);
   }, [rawCode, initApi]);
 
+  const resetGridWithNewCode = () => {
+    gridRef.current.resetGrid();
+    interpreter.current = new Interpreter(rawCode, initApi);
+  };
+
   // js-interpreter to run code
-  let stack: any = [];
+
   // let ok: boolean;
-  const stepCode = useCallback(() => {
-    let ok = interpreter.step();
-    //TODO: Add code highlighting?
-    stack = interpreter.current.getStateStack();
-    let stepAgain = !isLine(stack);
-    try {
-      ok = interpreter.current.step();
-    } catch (e: any) {
-      console.log("Error stepping code", e);
-    } finally {
-      if (!ok) {
-        runLoop.current = false;
-        stepAgain = false;
-        shouldCheckPuzzle.current = true;
-        //batched update of the running world info
-        gridRef.current.updateRunningWorld();
-      }
-    }
-    if (stepAgain) {
-      stepCodeRef.current();
-    }
-  }, [interpreter]);
-
-  stepCodeRef.current = stepCode;
-
-  function isLine(stack: any[]) {
+  const isLine = useCallback((stack: any[]) => {
     let state = stack[stack.length - 1];
     let node = state.node;
     let type = node.type;
@@ -342,14 +287,16 @@ const RunnableWorld: React.FC<RunnableWorldProps> = ({
       return false;
     }
 
-    if (isLine.oldStack_[isLine.oldStack_.length - 1] === state) {
+    if (
+      (isLine as any).oldStack_[(isLine as any).oldStack_.length - 1] === state
+    ) {
       // Never repeat the same statement multiple times.
       // Typically a statement is stepped into and out of.
       return false;
     }
 
     if (
-      isLine.oldStack_.indexOf(state) !== -1 &&
+      (isLine as any).oldStack_.indexOf(state) !== -1 &&
       type !== "ForStatement" &&
       type !== "WhileStatement" &&
       type !== "DoWhileStatement"
@@ -359,21 +306,48 @@ const RunnableWorld: React.FC<RunnableWorldProps> = ({
       return false;
     }
 
-    isLine.oldStack_ = stack.slice();
+    (isLine as any).oldStack_ = stack.slice();
     return true;
-  }
-  isLine.oldStack_ = stack.slice();
+  }, []);
+  (isLine as any).oldStack_ = [];
 
+  const stepCode = useCallback(() => {
+    let stack: any = [];
+    let ok = interpreter.step();
+    //TODO: Add code highlighting?
+    stack = interpreter.current.getStateStack();
+    let stepAgain = !isLine(stack);
+    try {
+      ok = interpreter.current.step();
+    } finally {
+      if (!ok) {
+        runLoop.current = false;
+        stepAgain = false;
+        shouldCheckPuzzle.current = true;
+        //batched update of the running world info
+        gridRef.current.updateRunningWorld();
+      }
+    }
+    if (stepAgain) {
+      stepCodeRef.current();
+    }
+  }, [interpreter, isLine]);
+
+  stepCodeRef.current = stepCode;
+
+  // Update the ref to ensure stepCode is up-to-date
+  const [app, setApp] = useState<Application<ICanvas>>();
   //slider values for speed
   const minSliderValue = 50;
   const stepValue = 50;
   const maxSliderValue = 500;
   const [sliderValue, setSliderValue] = useState<number>(50);
 
-  // Directly calculate `karelSpeed` based on the `sliderValue`
+  const sliderValueRef = useRef(50);
+  sliderValueRef.current = sliderValue;
   const karelSpeed = useMemo(
-    () => maxSliderValue - (sliderValue - stepValue),
-    [sliderValue]
+    () => 500 - (sliderValueRef.current - 50),
+    [sliderValueRef]
   );
 
   const handleValueChange = useCallback((value: number[]) => {
@@ -388,10 +362,9 @@ const RunnableWorld: React.FC<RunnableWorldProps> = ({
       } catch (e: any) {
         //immediately stop the loop
         runLoop.current = false;
-        console.log("Error running code", e);
 
         toast({
-          variant: "warning",
+          variant: "destructive",
           title: "Error",
           description: e.message,
           action: (
@@ -415,26 +388,11 @@ const RunnableWorld: React.FC<RunnableWorldProps> = ({
     }
   }, karelSpeed);
 
-  const currPxWidth =
-    worldDimensions.width >= worldDimensions.height
-      ? canvasSize.width
-      : Math.floor(
-          canvasSize.width * (worldDimensions.width / worldDimensions.height)
-        );
-
-  const currPxHeight =
-    worldDimensions.width >= worldDimensions.height
-      ? Math.floor(
-          canvasSize.height * (worldDimensions.height / worldDimensions.width)
-        )
-      : canvasSize.height;
-
   return (
     <section className="flex flex-col items-center justify-center p-2">
       <section className="mb-2 flex flex-col gap-2 p-4">
         <div className="flex items-center justify-center gap-4">
           <Button
-            type="button"
             onClick={() => {
               resetGridWithNewCode();
               runLoop.current = true; //continue the loop
@@ -445,7 +403,6 @@ const RunnableWorld: React.FC<RunnableWorldProps> = ({
             <PlayIcon />
           </Button>
           <Button
-            type="button"
             onClick={() => {
               resetGridWithNewCode();
               runLoop.current = false; //reset the loop
@@ -494,9 +451,9 @@ const RunnableWorld: React.FC<RunnableWorldProps> = ({
       </section>
 
       <Stage
-        width={currPxWidth}
-        height={currPxHeight}
-        options={{ background: 0xff0000 }}
+        width={canvasSize.width}
+        height={canvasSize.height}
+        options={{ background: 0xffffff }}
       >
         <Container x={0} y={0} sortableChildren={true}>
           <RunnableGrid
