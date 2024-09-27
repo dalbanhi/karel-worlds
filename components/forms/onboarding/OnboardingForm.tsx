@@ -143,9 +143,9 @@ const OnboardingForm: React.FC<OnboardingFormProps> = ({ baseUserInfo }) => {
             </FormItem>
           )}
         />
-        <FormItem>
+        <FormItem className="flex flex-col gap-2">
           <FormLabel>Role</FormLabel>
-          <div className="flex flex-wrap gap-4">
+          <div className="flex flex-wrap justify-center gap-4">
             <Button
               className="flex size-36 flex-col text-primary"
               variant="outline"
@@ -179,7 +179,7 @@ const OnboardingForm: React.FC<OnboardingFormProps> = ({ baseUserInfo }) => {
               <span>Student</span>
             </Button>
           </div>
-          <FormDescription className="text-xs">
+          <FormDescription className="text-center text-xs">
             Choose the role that best describes you.
           </FormDescription>
         </FormItem>
