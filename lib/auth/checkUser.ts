@@ -4,19 +4,19 @@ import { db } from "@/lib/db";
 
 export const getCurrentUser = async () => {
   const user = await currentUser();
-  if (!user) {
-    return null;
-  }
+  // if (!user) {
+  //   return null;
+  // }
 
-  const dbUser = await db.user.findUnique({
-    where: {
-      clerkUserId: user.id,
-    },
-  });
+  // const dbUser = await db.user.findUnique({
+  //   where: {
+  //     clerkUserId: user.id,
+  //   },
+  // });
 
-  if (dbUser) {
-    return dbUser;
-  }
+  // if (dbUser) {
+  //   return dbUser;
+  // }
 
   return null;
 };
