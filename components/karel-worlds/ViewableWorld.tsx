@@ -62,6 +62,8 @@ interface ViewableWorldProps {
   worldInfo: worldInfoType;
   hints?: string[];
   images: puzzleImagesType;
+  showGoalWorld: boolean;
+  setShowGoalWorld: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const ViewableWorld: React.FC<ViewableWorldProps> = ({
@@ -71,8 +73,10 @@ const ViewableWorld: React.FC<ViewableWorldProps> = ({
   worldInfo,
   hints,
   images,
+  showGoalWorld,
+  setShowGoalWorld,
 }) => {
-  const [showGoal, setShowGoal] = useState(true);
+  // const [showGoal, setShowGoal] = useState(true);
   const initialKarel = useMemo(
     () =>
       new KarelElement(
@@ -172,12 +176,15 @@ const ViewableWorld: React.FC<ViewableWorldProps> = ({
       : canvasSize.height;
 
   return (
-    <section className="flex flex-1 items-center justify-center gap-2 p-2 flex-col">
+    <section className="flex flex-1 flex-col items-center justify-center gap-2 p-2">
       <div className="flex h-full items-center justify-center">
-        <ShowHideArrow showGoal={showGoal} setShowGoal={setShowGoal} />
+        <ShowHideArrow
+          showGoal={showGoalWorld}
+          setShowGoal={setShowGoalWorld}
+        />
       </div>
       <div className="flex h-full flex-col justify-end">
-        {showGoal && (
+        {showGoalWorld && (
           <Stage
             width={currPxWidth}
             height={currPxHeight}

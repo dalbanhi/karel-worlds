@@ -10,9 +10,11 @@ const NewPuzzleLayout = dynamic(
 );
 
 export default async function NewPuzzlePage() {
-  const myCurrentUser = await getCurrentUser();
+  const myCurrentUser: { id: string | null } | null = await getCurrentUser();
   return (
-    <NewPuzzleLayout currentUserID={myCurrentUser?.id}>
+    <NewPuzzleLayout currentUserID={""}>
+      {" "}
+      {/* TODO: add this instead currentUserID={myCurrentUser?.id} */}
       <div className="flex w-full justify-center bg-accent">
         <h1
           className={`bg-accent/50 p-2 text-center text-5xl font-bold md:text-2xl ${montserrat.className}`}

@@ -386,11 +386,26 @@ const RunnableWorld: React.FC<RunnableWorldProps> = ({
     }
   }, karelSpeed);
 
+  const currPxWidth =
+    worldDimensions.width >= worldDimensions.height
+      ? canvasSize.width
+      : Math.floor(
+          canvasSize.width * (worldDimensions.width / worldDimensions.height)
+        );
+
+  const currPxHeight =
+    worldDimensions.width >= worldDimensions.height
+      ? Math.floor(
+          canvasSize.height * (worldDimensions.height / worldDimensions.width)
+        )
+      : canvasSize.height;
+
   return (
     <section className="flex flex-col items-center justify-center p-2">
       <section className="mb-2 flex flex-col gap-2 p-4">
         <div className="flex items-center justify-center gap-4">
           <Button
+            type="button"
             onClick={() => {
               resetGridWithNewCode();
               runLoop.current = true; //continue the loop
@@ -401,6 +416,7 @@ const RunnableWorld: React.FC<RunnableWorldProps> = ({
             <PlayIcon />
           </Button>
           <Button
+            type="button"
             onClick={() => {
               resetGridWithNewCode();
               runLoop.current = false; //reset the loop
@@ -449,8 +465,8 @@ const RunnableWorld: React.FC<RunnableWorldProps> = ({
       </section>
 
       <Stage
-        width={canvasSize.width}
-        height={canvasSize.height}
+        width={currPxWidth}
+        height={currPxHeight}
         options={{ background: 0xffffff }}
       >
         <Container x={0} y={0} sortableChildren={true}>
