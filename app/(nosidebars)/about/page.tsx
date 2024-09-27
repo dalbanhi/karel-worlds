@@ -1,8 +1,15 @@
 import AboutHero from "@/components/shared/about/AboutHero";
+import { Metadata } from "next";
 
 import Link from "next/link";
 
 import React from "react";
+
+export const metadata: Metadata = {
+  title: "About ",
+  description:
+    "KarelWorlds is a fun, interactive platform for computer science beginners to practice key skills. Students can create and share custom puzzles with friends. I built and designed it from scratch, integrating a custom Blockly environment with a world-building editor.",
+};
 
 const AboutPage = () => {
   return (
