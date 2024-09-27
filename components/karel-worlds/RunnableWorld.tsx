@@ -262,8 +262,6 @@ const RunnableWorld: React.FC<RunnableWorldProps> = ({
   };
 
   // js-interpreter to run code
-
-  // let ok: boolean;
   const isLine = useCallback((stack: any[]) => {
     let state = stack[stack.length - 1];
     let node = state.node;
@@ -338,16 +336,16 @@ const RunnableWorld: React.FC<RunnableWorldProps> = ({
   // Update the ref to ensure stepCode is up-to-date
   const [app, setApp] = useState<Application<ICanvas>>();
   //slider values for speed
+  //slider values for speed
   const minSliderValue = 50;
   const stepValue = 50;
   const maxSliderValue = 500;
   const [sliderValue, setSliderValue] = useState<number>(50);
 
-  const sliderValueRef = useRef(50);
-  sliderValueRef.current = sliderValue;
+  // Directly calculate `karelSpeed` based on the `sliderValue`
   const karelSpeed = useMemo(
-    () => 500 - (sliderValueRef.current - 50),
-    [sliderValueRef]
+    () => maxSliderValue - (sliderValue - stepValue),
+    [sliderValue]
   );
 
   const handleValueChange = useCallback((value: number[]) => {
