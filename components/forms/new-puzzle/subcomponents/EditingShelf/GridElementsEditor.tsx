@@ -126,6 +126,23 @@ const GridElementsEditor: React.FC<GridElementsEditorProps> = ({
     mode: "add" | "remove",
     coords: coordsType
   ) => {
+    if (coords.row < 0 || coords.column < 0) {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "Coordinates cannot be negative",
+      });
+      return;
+    }
+    if (coords.row >= worldHeight || coords.column >= worldWidth) {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "Coordinates cannot be greater than the world size",
+      });
+      return;
+    }
+
     switch (element) {
       case "beeper":
         handleEditBeeper(mode, coords);
@@ -135,13 +152,13 @@ const GridElementsEditor: React.FC<GridElementsEditorProps> = ({
   };
 
   useEffect(() => {
-    if (worldWidth < elementEditingCoords?.column) {
+    if (worldWidth - 1 < elementEditingCoords?.column) {
       setElementEditingCoords((prevCoords) => ({
         ...prevCoords,
         column: worldWidth - 1,
       }));
     }
-    if (worldHeight < elementEditingCoords?.row) {
+    if (worldHeight - 1 < elementEditingCoords?.row) {
       setElementEditingCoords((prevCoords) => ({
         ...prevCoords,
         row: worldHeight - 1,
