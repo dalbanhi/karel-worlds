@@ -8,7 +8,10 @@ const Footer = () => {
         <Link className="link_underline" href="/contact">
           Questions or Bugs?
         </Link>
-        <Link className="link_underline " href="/contribute">
+        <Link
+          className="link_underline "
+          href="https://github.com/dalbanhi/karel-worlds/tree/v2-staging"
+        >
           Contribute!
         </Link>
         <Link className="link_underline " href="/terms-of-service">
