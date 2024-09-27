@@ -160,17 +160,17 @@ const GridElementsEditor: React.FC<GridElementsEditorProps> = ({
   );
 
   return (
-    <div className="mt-4 flex justify-center gap-2 ">
+    <div className="mt-4 flex flex-wrap justify-center gap-2">
       <FormItem className="flex items-center justify-center gap-2 ">
         <FormLabel className="w-full text-center">Editing Mode </FormLabel>
-        <FormControl className="flex items-center">
+        <FormControl className="flex w-fit items-center">
           <Select
             value={editingMode}
             onValueChange={(val: "add" | "remove") => {
               setEditingMode(val);
             }}
           >
-            <SelectTrigger className="w-full min-w-32">
+            <SelectTrigger className="w-fit min-w-28 text-center">
               <SelectValue placeholder="--" />
             </SelectTrigger>
             <SelectContent>
@@ -180,7 +180,7 @@ const GridElementsEditor: React.FC<GridElementsEditorProps> = ({
           </Select>
         </FormControl>
       </FormItem>
-      <div className="flex items-center justify-center gap-2">
+      <div className="flex flex-wrap items-center justify-center gap-2">
         <FormItem className="flex items-center justify-center gap-2 ">
           <FormLabel className="w-full text-center capitalize">
             {editingMode}{" "}
@@ -202,32 +202,34 @@ const GridElementsEditor: React.FC<GridElementsEditorProps> = ({
             </Select>
           </FormControl>
         </FormItem>
-        {numberInputs.map((input) => {
-          return (
-            <FormItem className="flex items-center gap-2" key={input.name}>
-              <FormLabel htmlFor={input.name} className="capitalize">
-                {input.name}
-              </FormLabel>
-              <Input
-                min={0}
-                max={input.max}
-                className="min-w-16"
-                type="number"
-                name={input.name}
-                value={elementEditingCoords?.[input.name as "row" | "column"]}
-                onChange={(e) => {
-                  setElementEditingCoords(
-                    (prevCoords) =>
-                      ({
-                        ...prevCoords,
-                        [input.name]: parseInt(e.target.value),
-                      }) as { row: number; column: number }
-                  );
-                }}
-              />
-            </FormItem>
-          );
-        })}
+        <div className="flex flex-wrap gap-2">
+          {numberInputs.map((input) => {
+            return (
+              <FormItem className="flex items-center gap-2" key={input.name}>
+                <FormLabel htmlFor={input.name} className="capitalize">
+                  {input.name}
+                </FormLabel>
+                <Input
+                  min={0}
+                  max={input.max}
+                  className="min-w-16"
+                  type="number"
+                  name={input.name}
+                  value={elementEditingCoords?.[input.name as "row" | "column"]}
+                  onChange={(e) => {
+                    setElementEditingCoords(
+                      (prevCoords) =>
+                        ({
+                          ...prevCoords,
+                          [input.name]: parseInt(e.target.value),
+                        }) as { row: number; column: number }
+                    );
+                  }}
+                />
+              </FormItem>
+            );
+          })}
+        </div>
         <Button
           type="button"
           onClick={() => {

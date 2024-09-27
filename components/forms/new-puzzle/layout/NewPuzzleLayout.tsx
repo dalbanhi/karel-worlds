@@ -46,17 +46,38 @@ const NewPuzzleLayout: React.FC<NewPuzzleLayoutProps> = ({
 }) => {
   const { toast } = useToast();
   const { isSignedIn, userId } = useAuth();
+  const tempUserID = "7c48f53a-b32b-4021-a097-e87e50d89286";
   const { redirectToSignIn } = useClerk();
 
-  const checkForUserSignIn = () => {
+  const isUserSignedIn = () => {
     if (!isSignedIn) {
       sessionStorage.setItem(
         "puzzleFormData",
         JSON.stringify(form.getValues())
       );
-      redirectToSignIn({ signInForceRedirectUrl: "/new-puzzle" });
-      return;
+
+      const errorTitle = "Not Signed In Error";
+      const errorString =
+        "You must be signed in to save a puzzle! Continue signing in to save your puzzle (any changes made will be saved).";
+      toast({
+        variant: "warning",
+        title: errorTitle,
+        description: errorString,
+        action: (
+          <ToastAction
+            className={`text-ring ${buttonVariants({ variant: "outline" })}`}
+            onClick={() => {
+              redirectToSignIn({ signInForceRedirectUrl: "/new-puzzle" });
+            }}
+            altText="Sign In"
+          >
+            Sign In
+          </ToastAction>
+        ),
+      });
+      return false;
     }
+    return true;
   };
 
   const onSubmitForm = (data: any) => {
@@ -83,13 +104,13 @@ const NewPuzzleLayout: React.FC<NewPuzzleLayoutProps> = ({
         wallImage: "",
         tags: [],
         hints: [],
-        creatorId: userId, // TODO: change to currentUserID
+        creatorId: tempUserID, // TODO: change to currentUserID
       };
   const form = useForm<z.infer<typeof puzzleSchema>>({
     resolver: zodResolver(puzzleSchema),
     defaultValues: {
       ...initialFormValues,
-      creatorId: userId, // TODO: change to currentUserID
+      creatorId: tempUserID, // TODO: change to currentUserID
     },
   });
 
@@ -101,30 +122,7 @@ const NewPuzzleLayout: React.FC<NewPuzzleLayoutProps> = ({
 
   const errors = form.formState.errors;
   useEffect(() => {
-    console.log("Errors:", errors); //TOD: double check UUID error for creatorID with actual user from the database
-    let errorString = "";
-    let errorTitle = "";
-    if (errors.creatorId) {
-      errorTitle = "Not Signed In Error";
-      errorString =
-        "You must be signed in to save a puzzle! Continue signing in to save your puzzle (any changes made will be saved).";
-      toast({
-        variant: "warning",
-        title: errorTitle,
-        description: errorString,
-        action: (
-          <ToastAction
-            className={`text-ring ${buttonVariants({ variant: "outline" })}`}
-            onClick={() => {
-              redirectToSignIn({ signInForceRedirectUrl: "/new-puzzle" });
-            }}
-            altText="Sign In"
-          >
-            Sign In
-          </ToastAction>
-        ),
-      });
-    }
+    console.log("Errors:", errors);
   }, [errors, redirectToSignIn, toast]);
 
   const [showPreview, setShowPreview] = useState(false);
@@ -213,6 +211,7 @@ const NewPuzzleLayout: React.FC<NewPuzzleLayoutProps> = ({
   }, [karelImage, beepersImage, backgroundImage, wallImage]);
 
   useSessionClearOnSignOut();
+
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmitForm)}>
@@ -275,8 +274,9 @@ const NewPuzzleLayout: React.FC<NewPuzzleLayoutProps> = ({
                     onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
                       console.log("Form data submitted 1:");
                       e.preventDefault();
-                      checkForUserSignIn();
-                      form.handleSubmit(onSubmitForm)();
+                      if (isUserSignedIn()) {
+                        form.handleSubmit(onSubmitForm)();
+                      }
                     }}
                   >
                     Share
