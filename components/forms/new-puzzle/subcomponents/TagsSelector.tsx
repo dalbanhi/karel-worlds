@@ -52,7 +52,7 @@ const TagsSelector: React.FC<TagsSelectorProps> = ({ form, tagsString }) => {
           //   }
           // });
           return (
-            <div className="w-full flex justify-center items-center gap-2">
+            <div className="flex w-full items-center justify-center gap-2">
               <FormLabel className="text-ring">Tags</FormLabel>
               <CreatableSelect
                 isMulti
@@ -104,7 +104,7 @@ const TagsSelector: React.FC<TagsSelectorProps> = ({ form, tagsString }) => {
                 }}
               />
               {numSelectedOptions >= maxNumTags && (
-                <p className="text-ring text-xs">
+                <p className="text-xs text-ring">
                   {`You can only select up to ${maxNumTags}  tags.`}
                 </p>
               )}

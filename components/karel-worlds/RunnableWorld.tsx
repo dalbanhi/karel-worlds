@@ -249,7 +249,7 @@ const RunnableWorld: React.FC<RunnableWorldProps> = ({
         })
       );
     },
-    []
+    [toast]
   );
   // interpreter.current = new Interpreter(rawCode, initApi);
   const interpreter = useMemo(() => {

@@ -75,11 +75,18 @@ const KarelInfoEditor: React.FC<KarelInfoEditorProps> = ({
     } else {
       setHeightDisabled(false);
     }
-  }, [worldWidth, worldHeight]);
+  }, [
+    worldWidth,
+    worldHeight,
+    worldInfo?.karel?.x,
+    worldInfo?.karel?.y,
+    worldInfo?.gridElements,
+    setWorldInfo,
+  ]);
   return (
     <div className="flex w-full items-center gap-3">
-      <div className="flex gap-2 flex-col grow">
-        <FormLabel className="flex justify-items-end gap-2 w-full">
+      <div className="flex grow flex-col gap-2">
+        <FormLabel className="flex w-full justify-items-end gap-2">
           <span>{"Karel X Position"}</span>
           <span>{worldInfo?.karel.x}</span>
         </FormLabel>
@@ -108,8 +115,8 @@ const KarelInfoEditor: React.FC<KarelInfoEditorProps> = ({
           }}
         />
       </div>
-      <div className="flex gap-2 flex-col grow">
-        <FormLabel className="flex justify-items-end gap-2 w-full">
+      <div className="flex grow flex-col gap-2">
+        <FormLabel className="flex w-full justify-items-end gap-2">
           <span>{"Karel Y Position"}</span>
           <span>{worldInfo?.karel.y}</span>
         </FormLabel>
@@ -138,7 +145,7 @@ const KarelInfoEditor: React.FC<KarelInfoEditorProps> = ({
           }}
         />
       </div>
-      <FormItem className="flex flex-col justify-center items-center ">
+      <FormItem className="flex flex-col items-center justify-center ">
         <FormLabel className="w-full text-center">Karel Direction </FormLabel>
         <FormControl>
           <Select
