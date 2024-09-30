@@ -1,7 +1,6 @@
 "use client";
 import React from "react";
 import { montserrat } from "@/app/fonts";
-// import { GetStaticProps } from "next";
 import Puzzle from "@/components/shared/puzzle/Puzzle";
 import { puzzleImagesType, worldInfoType } from "@/types/karelWorld";
 import { windowSizeType } from "@/types";
@@ -33,35 +32,16 @@ const TryItOut: React.FC<PuzzleProps> = ({
           Puzzle!
         </p>
       </div>
-      <div className="h-fit w-full bg-card">
+      <div className="h-fit w-full rounded-lg bg-card">
         <Puzzle
           worldDimensions={worldDimensions}
           puzzleImages={puzzleImages}
           startWorldInfo={startWorldInfo}
           goalWorldInfo={goalWorldInfo}
+          puzzleName="Example Puzzle"
         />
       </div>
     </div>
   );
 };
-
-// export const getStaticProps: GetStaticProps = async () => {
-//   // Import the constants at build time
-//   const {
-//     examplePuzzleWorldDimensions,
-//     examplePuzzleWorldImages,
-//     examplePuzzleWorldStart,
-//     examplePuzzleWorldEnd,
-//   } = await import("@/constants/example-puzzle");
-
-//   return {
-//     props: {
-//       worldDimensions: examplePuzzleWorldDimensions,
-//       puzzleImages: examplePuzzleWorldImages,
-//       startWorldInfo: examplePuzzleWorldStart,
-//       goalWorldInfo: examplePuzzleWorldEnd,
-//     },
-//   };
-// };
-
 export default TryItOut;

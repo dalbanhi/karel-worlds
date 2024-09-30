@@ -27,6 +27,7 @@ model User {
   updatedAt         DateTime     @updatedAt
   puzzlesCreated    Puzzle[]     @relation("PuzzlesCreated")
   puzzlesLiked      Puzzle[]     @relation("PuzzlesLiked")
+  puzzlesSolved     Puzzle[]     @relation("PuzzlesSolved")
   collections       Collection[] @relation("CollectionsCreated")
   classroomsManaged Classroom[]  @relation("ClassroomsManaged")
   classrooms        Classroom[]  @relation("ClassroomsAttended")
@@ -37,24 +38,33 @@ model User {
 model Puzzle {
   id            String         @id @default(uuid())
   name          String
-  tags          String[]
+  description   String
   worldWidth    Int
   worldHeight   Int
   hints         String[]
   karelImage    String
   beeperImage   String
   wallImage     String
-  backgroundImage String?
+  backgroundImage String
   startWorldInfo  Json
   goalWorldInfo   Json
   creator       User           @relation("PuzzlesCreated", fields: [creatorId], references: [id], onDelete: Cascade)
   creatorId     String
   likedBy       User[]         @relation("PuzzlesLiked")
+  solvedBy      User[]         @relation("PuzzlesSolved")
   collections   Collection[]   @relation("CollectionsBelongingTo")
+  tags      Tags[] @relation("PuzzleTags")
   createdAt     DateTime       @default(now())
   updatedAt     DateTime       @updatedAt
   @@index([creatorId], name: "creatorId")
   @@map("puzzles")
+}
+
+model Tags{
+  id String @id @default(uuid())
+  name String
+  puzzles Puzzle[] @relation("PuzzleTags")
+  @@map("tags")
 }
 
 model Collection {

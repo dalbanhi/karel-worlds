@@ -72,6 +72,7 @@ const MobileNav = () => {
                 "flex gap-1 " + buttonVariants({ variant: "gradient" })
               }
               href="/new-puzzle"
+              onClick={() => setOpen(false)}
               passHref
             >
               <PlusIcon />

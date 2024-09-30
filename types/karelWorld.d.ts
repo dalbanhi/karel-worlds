@@ -12,11 +12,6 @@ export interface SimpleKarelElementType extends SimpleGridElementType {
   infiniteBackpack: boolean;
 }
 
-import {
-  GridElement,
-  KarelElement,
-} from "@/utils/custom/KarelElement/KarelElement";
-
 export interface worldInfoType {
   karel: SimpleKarelElementType;
   gridElements: SimpleGridElementType[];
@@ -26,5 +21,10 @@ export interface puzzleImagesType {
   karel: string;
   beeper: string;
   wall: string;
-  empty: string;
+  background: string;
+}
+
+export interface customizableSpriteType {
+  name: "Karel" | "Beepers" | "Walls" | "Background";
+  value: "karelImage" | "beepersImage" | "wallImage" | "backgroundImage";
 }

@@ -1,4 +1,5 @@
 import type { Config } from "tailwindcss";
+import { withUt } from "uploadthing/tw";
 
 const config = {
   darkMode: ["class"],
@@ -18,6 +19,12 @@ const config = {
       },
     },
     extend: {
+      screens: {
+        md: "820px",
+      },
+      zIndex: {
+        100: "100",
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
@@ -43,6 +50,9 @@ const config = {
         success: {
           DEFAULT: "hsl(var(--success))",
           foreground: "hsl(var(--success-foreground))",
+        },
+        info: {
+          DEFAULT: "hsl(var(--info))",
         },
         muted: {
           DEFAULT: "hsl(var(--muted))",
@@ -86,4 +96,4 @@ const config = {
   plugins: [require("@tailwindcss/typography"), require("tailwindcss-animate")],
 } satisfies Config;
 
-export default config;
+export default withUt(config);
