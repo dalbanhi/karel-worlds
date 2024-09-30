@@ -10,6 +10,7 @@
     "postinstall": "prisma generate"
   },
   "dependencies": {
+    "@emailjs/browser": "^4.4.1",
     "@pixi/events": "^7.4.2",
     "@prisma/client": "^5.19.0",
     "@radix-ui/react-dialog": "^1.1.1",
@@ -22,6 +23,7 @@
     "@radix-ui/react-toast": "^1.2.1",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
+    "emailjs": "^4.0.3",
     "eslint-config-Prettier": "npm:eslint-config-prettier@^9.1.0",
     "eslint-plugin-tailwindcss": "^3.17.4",
     "js-interpreter": "^5.1.2",
@@ -48,6 +50,7 @@
     "@clerk/nextjs": "^5.3.7",
     "@hookform/resolvers": "^3.9.0",
     "@pixi/react": "^7.1.2",
+    "@tailwindcss/typography": "^0.5.15",
     "@types/lodash.debounce": "^4.0.9",
     "@types/node": "^20",
     "@types/react": "^18.3.5",
