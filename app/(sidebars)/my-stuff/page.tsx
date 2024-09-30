@@ -127,7 +127,7 @@ const MyDashboard = async ({
     "inline-flex items-center justify-center whitespace-nowrap border-b-2 rounded-sm rounded-b-none border-primary px-3 py-1.5 text-sm font-medium ring-offset-background transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-background data-[state=active]:text-ring data-[state=active]:border-x-2 data-[state=active]:border-primary data-[state=active]:border-t-2 data-[state=active]:border-b-0 data-[state=active]:rounded-t-sm data-[state=active]:rounded-b-none data-[state=active]:border-b-none";
 
   return (
-    <section className="flex min-h-screen w-full md:w-1/2 flex-col justify-start">
+    <section className="flex min-h-screen w-full flex-col justify-start md:w-1/2">
       <h1 className="w-full bg-accent/50 p-2 text-center text-4xl font-semibold">
         {String(metadata.title ?? "Default Title")}
       </h1>
@@ -168,7 +168,7 @@ const MyDashboard = async ({
         </ButtonGroup>
       </div>
       <div className="mt-2 ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2">
-        <div className="p-4 flex gap-4 flex-wrap justify-center">
+        <div className="flex flex-wrap justify-center gap-4 p-4">
           {puzzlesToShow.map((puzzle) => {
             return <PuzzleCard key={puzzle.id} puzzleInfo={puzzle} />;
           })}

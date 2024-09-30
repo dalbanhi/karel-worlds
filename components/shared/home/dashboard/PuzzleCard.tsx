@@ -26,12 +26,12 @@ import { Button } from "@/components/ui/button";
 
 const StarRating: React.FC<{ rating: number }> = ({ rating }) => {
   return (
-    <div className="flex gap">
+    <div className="flex gap-1">
       {[1, 2, 3, 4, 5].map((star) => {
         return star <= rating ? (
-          <StarFilledIcon key={star} className="w-4 h-4 text-starYellow" />
+          <StarFilledIcon key={star} className="size-4 text-starYellow" />
         ) : (
-          <StarIcon key={star} className="w-4 h-4 text-border" />
+          <StarIcon key={star} className="size-4 text-border" />
         );
       })}
     </div>
@@ -50,7 +50,7 @@ const ImagesOverlay: React.FC<ImagesOverlayProps> = ({ images }) => {
     images.beeper !== "" ? images.beeper : "/images/pixi-js/classic-beeper.png";
 
   return (
-    <div className="relative w-full h-20 overflow-hidden border-2 rounded-sm">
+    <div className="relative h-20 w-full overflow-hidden rounded-sm border-2">
       <div
         className={`absolute inset-0 bg-cover bg-center ${
           images.background ? "" : "bg-card"
@@ -61,7 +61,7 @@ const ImagesOverlay: React.FC<ImagesOverlayProps> = ({ images }) => {
             : {}
         }
       />
-      <div className="absolute inset-0 flex gap-2 items-center justify-center">
+      <div className="absolute inset-0 flex items-center justify-center gap-2">
         <Image
           src={karelImage}
           alt={"Karel Image for this puzzle"}
@@ -92,8 +92,8 @@ const PuzzleCard: React.FC<PuzzleCardProps> = async ({ puzzleInfo }) => {
 
   return (
     <Card className="max-w-64">
-      <CardHeader className=" gap-2 justify-center items-center">
-        <div className="flex flex-col gap">
+      <CardHeader className=" items-center justify-center gap-2">
+        <div className="flex flex-col gap-1">
           <CardTitle>{puzzleInfo.name}</CardTitle>
           <CardDescription>
             Tags:{" "}
@@ -109,7 +109,7 @@ const PuzzleCard: React.FC<PuzzleCardProps> = async ({ puzzleInfo }) => {
           {/* add avatar fallback */}
         </Avatar>
       </CardHeader>
-      <CardContent className="flex flex-col justify-center items-center gap-2">
+      <CardContent className="flex flex-col items-center justify-center gap-2">
         <ImagesOverlay
           images={{
             background: puzzleInfo.backgroundImage ?? "",
@@ -118,20 +118,20 @@ const PuzzleCard: React.FC<PuzzleCardProps> = async ({ puzzleInfo }) => {
             wall: puzzleInfo.wallImage,
           }}
         />
-        <div className="flex flex-col justify-start w-full gap">
+        <div className="flex w-full flex-col justify-start gap-1">
           <p className="text-sm">
             <span className="font-semibold">World Dimensions:</span>{" "}
             {puzzleInfo.worldWidth}x{puzzleInfo.worldHeight}
           </p>
-          <div className="text-sm flex justify-start items-center gap-2 ">
+          <div className="flex items-center justify-start gap-2 text-sm ">
             <span className="font-semibold">Rating:</span>{" "}
             <StarRating rating={4} />
           </div>
-          <div className="text-sm flex justify-start items-center gap-2 ">
+          <div className="flex items-center justify-start gap-2 text-sm ">
             <span className="font-semibold">Difficulty:</span>{" "}
             <StarRating rating={4} />
           </div>
-          <div className="text-sm flex justify-start items-center gap-2 ">
+          <div className="flex items-center justify-start gap-2 text-sm ">
             <span className="font-semibold">Likes:</span> {52}
           </div>
         </div>
