@@ -41,28 +41,14 @@ const ShowHideArrow: React.FC<ShowHideArrowProps> = ({
   setShowGoal,
 }) => {
   return (
-    <Button onClick={() => setShowGoal(!showGoal)}>
+    <Button type="button" onClick={() => setShowGoal(!showGoal)}>
       {showGoal ? (
         <React.Fragment>
-          <DoubleArrowLeftIcon
-            aria-label="Hide the Goal World"
-            className="block max-lg:hidden"
-          />
-          <DoubleArrowUpIcon
-            aria-label="Hide the Goal World"
-            className="hidden max-lg:block"
-          />
+          <DoubleArrowUpIcon aria-label="Hide the Goal World" className="" />
         </React.Fragment>
       ) : (
         <React.Fragment>
-          <DoubleArrowRightIcon
-            aria-label="Show the Goal World"
-            className="block max-lg:hidden"
-          />
-          <DoubleArrowDownIcon
-            aria-label="Show the Goal World"
-            className="hidden max-lg:block"
-          />
+          <DoubleArrowDownIcon aria-label="Show the Goal World" className="" />
         </React.Fragment>
       )}
     </Button>
@@ -76,6 +62,8 @@ interface ViewableWorldProps {
   worldInfo: worldInfoType;
   hints?: string[];
   images: puzzleImagesType;
+  showGoalWorld: boolean;
+  setShowGoalWorld: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const ViewableWorld: React.FC<ViewableWorldProps> = ({
@@ -85,8 +73,10 @@ const ViewableWorld: React.FC<ViewableWorldProps> = ({
   worldInfo,
   hints,
   images,
+  showGoalWorld,
+  setShowGoalWorld,
 }) => {
-  const [showGoal, setShowGoal] = useState(true);
+  // const [showGoal, setShowGoal] = useState(true);
   const initialKarel = useMemo(
     () =>
       new KarelElement(
@@ -171,16 +161,33 @@ const ViewableWorld: React.FC<ViewableWorldProps> = ({
     setInternalGrid(newGrid);
   }, [worldDimensions.width, worldDimensions.height, karel, beepers]);
 
+  const currPxWidth =
+    worldDimensions.width >= worldDimensions.height
+      ? canvasSize.width
+      : Math.floor(
+          canvasSize.width * (worldDimensions.width / worldDimensions.height)
+        );
+
+  const currPxHeight =
+    worldDimensions.width >= worldDimensions.height
+      ? Math.floor(
+          canvasSize.height * (worldDimensions.height / worldDimensions.width)
+        )
+      : canvasSize.height;
+
   return (
-    <section className="flex h-full items-center justify-center gap-2 p-2 max-lg:flex-col">
-      <div className="flex items-center justify-center">
-        <ShowHideArrow showGoal={showGoal} setShowGoal={setShowGoal} />
+    <section className="flex flex-1 flex-col items-center justify-center gap-2 p-2">
+      <div className="flex h-full items-center justify-center">
+        <ShowHideArrow
+          showGoal={showGoalWorld}
+          setShowGoal={setShowGoalWorld}
+        />
       </div>
       <div className="flex h-full flex-col justify-end">
-        {showGoal && (
+        {showGoalWorld && (
           <Stage
-            width={canvasSize.width}
-            height={canvasSize.height}
+            width={currPxWidth}
+            height={currPxHeight}
             options={{ background: 0xffffff }}
           >
             <Container x={0} y={0} sortableChildren={true}>

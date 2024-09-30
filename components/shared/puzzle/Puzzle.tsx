@@ -25,6 +25,7 @@ interface PuzzleProps {
   startWorldInfo: worldInfoType;
   goalWorldInfo: worldInfoType;
   puzzleImages: puzzleImagesType;
+  puzzleName: string;
 }
 
 const Puzzle: React.FC<PuzzleProps> = ({
@@ -32,6 +33,7 @@ const Puzzle: React.FC<PuzzleProps> = ({
   startWorldInfo,
   goalWorldInfo,
   puzzleImages,
+  puzzleName,
 }) => {
   return (
     <RunningKarelProvider>
@@ -40,6 +42,7 @@ const Puzzle: React.FC<PuzzleProps> = ({
         startWorldInfo={startWorldInfo}
         goalWorldInfo={goalWorldInfo}
         puzzleImages={puzzleImages}
+        puzzleName={puzzleName}
       />
     </RunningKarelProvider>
   );
@@ -50,15 +53,22 @@ const PuzzleContent: React.FC<PuzzleProps> = ({
   startWorldInfo,
   goalWorldInfo,
   puzzleImages,
+  puzzleName,
 }) => {
   const { toast } = useToast();
-  const canvasSize = useCanvasSize();
+  const canvasSize = useCanvasSize(
+    worldDimensions.width,
+    worldDimensions.height,
+    true
+  );
   const [userJavaScriptCode, setUserJavaScriptCode] = useState("");
   const [workspaceState, setWorkspaceState] = useState({});
   const [shouldCheckSolution, setShouldCheckSolution] = useState(false);
   const [runningWorldInfo, setRunningWorldInfo] =
     useState<worldInfoType>(startWorldInfo);
   const [editorMode, setEditorMode] = useState("block");
+
+  const [showGoalWorld, setShowGoalWorld] = useState(true);
 
   const onAceChange = (value: string) => {
     // setUserJavaScriptCode(value);
@@ -183,15 +193,15 @@ const PuzzleContent: React.FC<PuzzleProps> = ({
       checkPuzzleSolution();
     }
   }, [goalWorldInfo, runningWorldInfo, shouldCheckSolution, toast]);
-  const puzzleName = "Example Puzzle";
+
   return (
     <section className=" w-full flex-col items-center p-2">
-      <section className="flex w-full justify-between gap-6">
-        <div className="flex flex-col gap-2 p-4">
+      <section className="flex w-full justify-between gap-6 max-sm:flex-col">
+        <div className="flex h-full flex-col gap-2 p-4">
           {puzzleName && (
             <h1 className="text-xl font-extrabold">{puzzleName}</h1>
           )}
-          <div className="flex w-full max-lg:flex-col">
+          <div className="flex size-full flex-col">
             <RunnableWorld
               name={puzzleName}
               canvasSize={canvasSize}
@@ -210,10 +220,12 @@ const PuzzleContent: React.FC<PuzzleProps> = ({
               // hints={puzzle.puzzleInfo?.hints}
               worldInfo={goalWorldInfo}
               images={puzzleImages}
+              showGoalWorld={showGoalWorld}
+              setShowGoalWorld={setShowGoalWorld}
             />
           </div>
         </div>
-        <div className="flex min-h-96 w-full flex-col gap-4 p-2">
+        <div className="flex min-h-96 w-full flex-col gap-4 p-2 max-sm:h-96">
           <div className="flex items-center justify-center gap-2">
             <Switch
               id="editor-mode"

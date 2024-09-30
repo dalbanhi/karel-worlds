@@ -84,7 +84,7 @@ const DesktopNav = () => {
 
 const NavBar = () => {
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-border bg-primary-foreground">
+    <header className="sticky top-0 z-100 w-full border-b border-border bg-primary-foreground">
       <div className="container mx-auto flex h-16 min-w-max items-center justify-start px-4 ">
         <Link
           href="/"

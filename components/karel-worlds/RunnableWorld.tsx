@@ -15,7 +15,6 @@ import Interpreter from "js-interpreter";
 import { toast, useToast } from "@/hooks/use-toast";
 import { ToastAction } from "@/components/ui/toast";
 import { Application, ICanvas } from "pixi.js";
-import { init } from "next/dist/compiled/webpack/webpack";
 
 //from: https://overreacted.io/making-setinterval-declarative-with-react-hooks/
 function useInterval(callback: () => void, delay: number | null) {
@@ -79,8 +78,12 @@ const RunnableWorld: React.FC<RunnableWorldProps> = ({
           try {
             await gridRef.current.moveForward();
             gridRef.current.updateRunningWorld();
-          } catch (e) {
-            throw e;
+          } catch (e: any) {
+            toast({
+              variant: "destructive",
+              title: "Error",
+              description: e.message,
+            });
           }
         })
       );
@@ -102,8 +105,12 @@ const RunnableWorld: React.FC<RunnableWorldProps> = ({
           try {
             await gridRef.current.putBeeper();
             gridRef.current.updateRunningWorld();
-          } catch (e) {
-            throw e;
+          } catch (e: any) {
+            toast({
+              variant: "destructive",
+              title: "Error",
+              description: e.message,
+            });
           }
         })
       );
@@ -114,8 +121,12 @@ const RunnableWorld: React.FC<RunnableWorldProps> = ({
           try {
             await gridRef.current.takeBeeper();
             gridRef.current.updateRunningWorld();
-          } catch (e) {
-            throw e;
+          } catch (e: any) {
+            toast({
+              variant: "destructive",
+              title: "Error",
+              description: e.message,
+            });
           }
         })
       );
@@ -238,7 +249,7 @@ const RunnableWorld: React.FC<RunnableWorldProps> = ({
         })
       );
     },
-    []
+    [toast]
   );
   // interpreter.current = new Interpreter(rawCode, initApi);
   const interpreter = useMemo(() => {
@@ -251,32 +262,7 @@ const RunnableWorld: React.FC<RunnableWorldProps> = ({
   };
 
   // js-interpreter to run code
-  let stack: any = [];
-  // let ok: boolean;
-  const stepCode = useCallback(() => {
-    let ok = interpreter.step();
-    //TODO: Add code highlighting?
-    stack = interpreter.current.getStateStack();
-    let stepAgain = !isLine(stack);
-    try {
-      ok = interpreter.current.step();
-    } finally {
-      if (!ok) {
-        runLoop.current = false;
-        stepAgain = false;
-        shouldCheckPuzzle.current = true;
-        //batched update of the running world info
-        gridRef.current.updateRunningWorld();
-      }
-    }
-    if (stepAgain) {
-      stepCodeRef.current();
-    }
-  }, [interpreter]);
-
-  stepCodeRef.current = stepCode;
-
-  function isLine(stack: any[]) {
+  const isLine = useCallback((stack: any[]) => {
     let state = stack[stack.length - 1];
     let node = state.node;
     let type = node.type;
@@ -299,14 +285,16 @@ const RunnableWorld: React.FC<RunnableWorldProps> = ({
       return false;
     }
 
-    if (isLine.oldStack_[isLine.oldStack_.length - 1] === state) {
+    if (
+      (isLine as any).oldStack_[(isLine as any).oldStack_.length - 1] === state
+    ) {
       // Never repeat the same statement multiple times.
       // Typically a statement is stepped into and out of.
       return false;
     }
 
     if (
-      isLine.oldStack_.indexOf(state) !== -1 &&
+      (isLine as any).oldStack_.indexOf(state) !== -1 &&
       type !== "ForStatement" &&
       type !== "WhileStatement" &&
       type !== "DoWhileStatement"
@@ -316,24 +304,48 @@ const RunnableWorld: React.FC<RunnableWorldProps> = ({
       return false;
     }
 
-    isLine.oldStack_ = stack.slice();
+    (isLine as any).oldStack_ = stack.slice();
     return true;
-  }
-  isLine.oldStack_ = stack.slice();
+  }, []);
+  (isLine as any).oldStack_ = [];
+
+  const stepCode = useCallback(() => {
+    let stack: any = [];
+    let ok = interpreter.step();
+    //TODO: Add code highlighting?
+    stack = interpreter.current.getStateStack();
+    let stepAgain = !isLine(stack);
+    try {
+      ok = interpreter.current.step();
+    } finally {
+      if (!ok) {
+        runLoop.current = false;
+        stepAgain = false;
+        shouldCheckPuzzle.current = true;
+        //batched update of the running world info
+        gridRef.current.updateRunningWorld();
+      }
+    }
+    if (stepAgain) {
+      stepCodeRef.current();
+    }
+  }, [interpreter, isLine]);
+
+  stepCodeRef.current = stepCode;
 
   // Update the ref to ensure stepCode is up-to-date
   const [app, setApp] = useState<Application<ICanvas>>();
+  //slider values for speed
   //slider values for speed
   const minSliderValue = 50;
   const stepValue = 50;
   const maxSliderValue = 500;
   const [sliderValue, setSliderValue] = useState<number>(50);
 
-  const sliderValueRef = useRef(50);
-  sliderValueRef.current = sliderValue;
+  // Directly calculate `karelSpeed` based on the `sliderValue`
   const karelSpeed = useMemo(
-    () => 500 - (sliderValueRef.current - 50),
-    [sliderValueRef]
+    () => maxSliderValue - (sliderValue - stepValue),
+    [sliderValue]
   );
 
   const handleValueChange = useCallback((value: number[]) => {
@@ -374,11 +386,26 @@ const RunnableWorld: React.FC<RunnableWorldProps> = ({
     }
   }, karelSpeed);
 
+  const currPxWidth =
+    worldDimensions.width >= worldDimensions.height
+      ? canvasSize.width
+      : Math.floor(
+          canvasSize.width * (worldDimensions.width / worldDimensions.height)
+        );
+
+  const currPxHeight =
+    worldDimensions.width >= worldDimensions.height
+      ? Math.floor(
+          canvasSize.height * (worldDimensions.height / worldDimensions.width)
+        )
+      : canvasSize.height;
+
   return (
     <section className="flex flex-col items-center justify-center p-2">
       <section className="mb-2 flex flex-col gap-2 p-4">
         <div className="flex items-center justify-center gap-4">
           <Button
+            type="button"
             onClick={() => {
               resetGridWithNewCode();
               runLoop.current = true; //continue the loop
@@ -389,6 +416,7 @@ const RunnableWorld: React.FC<RunnableWorldProps> = ({
             <PlayIcon />
           </Button>
           <Button
+            type="button"
             onClick={() => {
               resetGridWithNewCode();
               runLoop.current = false; //reset the loop
@@ -437,8 +465,8 @@ const RunnableWorld: React.FC<RunnableWorldProps> = ({
       </section>
 
       <Stage
-        width={canvasSize.width}
-        height={canvasSize.height}
+        width={currPxWidth}
+        height={currPxHeight}
         options={{ background: 0xffffff }}
       >
         <Container x={0} y={0} sortableChildren={true}>

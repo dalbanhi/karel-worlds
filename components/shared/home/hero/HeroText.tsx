@@ -19,7 +19,7 @@ const HeroText = () => {
       </p>
       <Link
         className={"max-w-fit " + buttonVariants({ variant: "gradient" })}
-        href="/new-puzzle"
+        href="/sign-in"
       >
         <span>Get Started</span>
       </Link>
