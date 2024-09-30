@@ -191,7 +191,6 @@ const PuzzleContent: React.FC<PuzzleProps> = ({
           {puzzleName && (
             <h1 className="text-xl font-extrabold">{puzzleName}</h1>
           )}
-          {/* <p>{`Use the double arrows below to show/hide the goal.`}</p> */}
           <div className="flex w-full max-lg:flex-col">
             <RunnableWorld
               name={puzzleName}

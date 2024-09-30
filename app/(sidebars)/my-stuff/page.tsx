@@ -1,5 +1,7 @@
 import { currentUser } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
+import { montserrat } from "@/app/fonts";
+
 import React from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
@@ -128,10 +130,10 @@ const MyDashboard = async ({
 
   return (
     <section className="flex min-h-screen w-full flex-col justify-start md:w-1/2">
-      <h1 className="w-full bg-accent/50 p-2 text-center text-4xl font-semibold">
+      <h1 className="bg-accent/50 w-full p-2 text-center text-4xl font-semibold">
         {String(metadata.title ?? "Default Title")}
       </h1>
-      <div className="inline-flex h-10 items-center justify-center rounded-none bg-muted p-1 text-muted-foreground">
+      <div className="bg-muted text-muted-foreground inline-flex h-10 items-center justify-center rounded-none p-1">
         <ButtonGroup
           className="p-2"
           orientation="horizontal"
@@ -167,7 +169,7 @@ const MyDashboard = async ({
           </Link> */}
         </ButtonGroup>
       </div>
-      <div className="mt-2 ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2">
+      <div className="ring-offset-background focus-visible:ring-ring mt-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2">
         <div className="flex flex-wrap justify-center gap-4 p-4">
           {puzzlesToShow.map((puzzle) => {
             return <PuzzleCard key={puzzle.id} puzzleInfo={puzzle} />;

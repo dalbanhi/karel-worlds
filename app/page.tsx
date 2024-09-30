@@ -20,8 +20,10 @@ export default async function Home() {
 
   return (
     <section className="flex flex-col items-center justify-between">
-      <HeroDesktop />
-      <HeroMobile />
+      <div className="p-4">
+        <HeroDesktop />
+        <HeroMobile />
+      </div>
       <TryItOutHeader
         worldDimensions={examplePuzzle.examplePuzzleWorldDimensions}
         puzzleImages={examplePuzzle.examplePuzzleWorldImages}

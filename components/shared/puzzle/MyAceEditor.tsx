@@ -4,6 +4,11 @@ import React, { useEffect, useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import AceEditor from "react-ace-builds";
 
+<<<<<<< HEAD
+=======
+// import "react-ace-builds/webpack-resolver-min";
+
+>>>>>>> v2-staging
 interface MyAceEditorProps {
   onAceChange: (value: string) => void;
   userJavaScriptCode: string;
