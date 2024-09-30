@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import {
   Form,
   FormField,
@@ -17,10 +17,51 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import emailjs, { EmailJSResponseStatus } from "@emailjs/browser";
+import { useToast } from "@/hooks/use-toast";
 
 const ContactForm = () => {
-  const onSubmit = (data: z.infer<typeof contactSchema>) => {
+  const { toast } = useToast();
+  const [isDisabled, setIsDisabled] = useState(false);
+  const onSubmit = async (data: z.infer<typeof contactSchema>) => {
     console.log(data);
+    const { name, email, subject, message } = data;
+    try {
+      setIsDisabled(true);
+      const templateParams = {
+        name,
+        email,
+        subject,
+        message,
+      };
+      await emailjs.send(
+        process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID ?? "",
+        process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID ?? "",
+        templateParams,
+        {
+          publicKey: process.env.NEXT_PUBLIC_EMAILJS_USER_ID ?? "",
+        }
+      );
+      toast({
+        variant: "success",
+        title: "Message Sent",
+        description: "Your message has been sent successfully!",
+      });
+    } catch (error) {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description:
+          "Uh oh! Something went wrong with our mail server. Please try again later or contact us directly at dalbanhi at gmail.com",
+      });
+      if (error instanceof EmailJSResponseStatus) {
+        console.log("EmailJS Error: ", error);
+        return;
+      }
+    } finally {
+      setIsDisabled(false);
+      form.reset();
+    }
   };
 
   const form = useForm<z.infer<typeof contactSchema>>({
@@ -111,7 +152,9 @@ const ContactForm = () => {
             </FormItem>
           )}
         />
-        <Button type="submit">Submit</Button>
+        <Button disabled={isDisabled} type="submit">
+          Submit
+        </Button>
       </form>
     </Form>
   );
