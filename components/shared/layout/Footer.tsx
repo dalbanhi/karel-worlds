@@ -14,9 +14,9 @@ const Footer = () => {
         >
           Contribute!
         </Link>
-        <Link className="link_underline " href="/terms-of-service">
+        {/* <Link className="link_underline " href="/terms-of-service">
           Terms of Service
-        </Link>
+        </Link> */}
       </div>
     </footer>
   );
