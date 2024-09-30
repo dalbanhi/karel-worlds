@@ -18,10 +18,10 @@ const OnboardingPage = async () => {
     email: clerkUser.emailAddresses[0].emailAddress,
   };
 
-  const myCurrentUser = await getCurrentUser();
-  if (myCurrentUser?.onboardingComplete) {
-    redirect("/my-stuff");
-  }
+  // const myCurrentUser = await getCurrentUser();
+  // if (myCurrentUser?.onboardingComplete) {
+  //   redirect("/my-stuff");
+  // }
 
   return (
     <div className="flex w-96 flex-col justify-start rounded-md border p-10 shadow-2xl">

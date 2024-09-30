@@ -3,22 +3,12 @@ import type { Viewport } from "next";
 import LeftSidebar from "@/components/shared/layout/LeftSidebar";
 import RightSidebar from "@/components/shared/layout/RightSidebar";
 
-export const metadata: Metadata = {
-  title: "Karel Worlds",
-};
-
-export const viewport: Viewport = {
-  width: "device-width",
-  initialScale: 1,
-  minimumScale: 1,
-  maximumScale: 5,
-  viewportFit: "cover",
-};
-
-export default function RootLayout({
+export default function SidebarLayout({
   children,
+  params,
 }: Readonly<{
   children: React.ReactNode;
+  params: { route: string };
 }>) {
   return (
     <div className="flex w-full justify-center">
