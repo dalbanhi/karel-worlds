@@ -2,6 +2,7 @@ import React from "react";
 import SimpleHero from "@/components/shared/SimpleHero";
 import contactHeroImage from "@/public/images/hero/contact/contact.png";
 import { Metadata } from "next";
+import ContactForm from "@/components/forms/contact/ContactForm";
 
 export const metadata: Metadata = {
   title: "Contact Us",
@@ -20,7 +21,7 @@ const ContactPage = () => {
           line using the form below!
         </p>
       </article>
-      {/* <ContactForm /> */}
+      <ContactForm />
     </div>
   );
 };
