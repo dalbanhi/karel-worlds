@@ -79,7 +79,7 @@ const ContactForm = () => {
         onSubmit={form.handleSubmit(onSubmit)}
         className="flex flex-col gap-2 p-4"
       >
-        <div className="flex gap-2 w-full justify-center">
+        <div className="flex w-full justify-center gap-2">
           <FormField
             control={form.control}
             name="name"

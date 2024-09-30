@@ -29,9 +29,9 @@ const StarRating: React.FC<{ rating: number }> = ({ rating }) => {
     <div className="flex gap-1">
       {[1, 2, 3, 4, 5].map((star) => {
         return star <= rating ? (
-          <StarFilledIcon key={star} className="text-starYellow size-4" />
+          <StarFilledIcon key={star} className="size-4 text-starYellow " />
         ) : (
-          <StarIcon key={star} className="text-border size-4" />
+          <StarIcon key={star} className=" size-4 text-border" />
         );
       })}
     </div>

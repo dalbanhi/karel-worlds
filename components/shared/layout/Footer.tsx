@@ -3,7 +3,7 @@ import React from "react";
 
 const Footer = () => {
   return (
-    <footer className="bg-accent-semi w-full">
+    <footer className="w-full bg-accent-semi">
       <div className="flex w-full items-center justify-center gap-10 p-2">
         <Link className="link_underline" href="/contact">
           Questions or Bugs?
