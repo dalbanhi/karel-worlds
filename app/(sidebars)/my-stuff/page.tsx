@@ -1,10 +1,8 @@
 /* eslint-disable tailwindcss/no-custom-classname */
 import { currentUser } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
-import { montserrat } from "@/app/fonts";
 
 import React from "react";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 import { Metadata } from "next";
 import { Puzzle } from "@prisma/client";
