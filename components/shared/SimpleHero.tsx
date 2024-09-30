@@ -1,16 +1,21 @@
 import React from "react";
-import Image from "next/image";
-import heroImg from "@/public/images/hero/about/about.jpg";
+import Image, { StaticImageData } from "next/image";
 import { montserrat } from "@/app/fonts";
 
-const AboutHero = () => {
+interface SimpleHeroProps {
+  image: StaticImageData;
+  text: string;
+}
+
+const SimpleHero: React.FC<SimpleHeroProps> = ({ image, text }) => {
   return (
     <div className="relative h-96 w-full">
       {/* Background image */}
       <Image
-        src={heroImg}
-        alt="Hero Image"
+        src={image}
+        alt={`Hero Image for  ${text}`}
         fill
+        blurDataURL={image.blurDataURL}
         placeholder="blur"
         style={{ objectFit: "cover" }}
         quality={100}
@@ -22,11 +27,11 @@ const AboutHero = () => {
         <h1
           className={`bg-ring text-4xl font-bold text-accent ${montserrat.className}`}
         >
-          About Karel Worlds
+          {text}
         </h1>
       </div>
     </div>
   );
 };
 
-export default AboutHero;
+export default SimpleHero;

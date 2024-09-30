@@ -1,5 +1,6 @@
-import AboutHero from "@/components/shared/about/AboutHero";
+import SimpleHero from "@/components/shared/SimpleHero";
 import { Metadata } from "next";
+import aboutHeroImage from "@/public/images/hero/about/about.jpg";
 
 import Link from "next/link";
 
@@ -14,7 +15,7 @@ export const metadata: Metadata = {
 const AboutPage = () => {
   return (
     <div className="flex flex-col">
-      <AboutHero />
+      <SimpleHero image={aboutHeroImage} text="About Karel Worlds" />
       <article className="prose prose-slate mt-2">
         <h2 className="text-center text-xl">What is Karel Worlds?</h2>
         <p>
