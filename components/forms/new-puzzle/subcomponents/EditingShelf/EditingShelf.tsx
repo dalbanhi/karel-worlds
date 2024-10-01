@@ -1,25 +1,8 @@
 import { puzzleSchema } from "@/lib/validators/puzzle.schema";
 import { worldInfoType } from "@/types/karelWorld";
-import { Slider } from "@/components/ui/slider";
 import React from "react";
 import { UseFormReturn } from "react-hook-form";
 import { z } from "zod";
-import {
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { maxWorldSize, minWorldSize } from "@/constants/example-puzzle";
 import KarelInfoEditor from "./KarelInfoEditor";
 import GridElementsEditor from "./GridElementsEditor";
 

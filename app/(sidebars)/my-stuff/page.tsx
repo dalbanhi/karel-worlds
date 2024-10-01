@@ -1,10 +1,8 @@
 /* eslint-disable tailwindcss/no-custom-classname */
 import { currentUser } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
-import { montserrat } from "@/app/fonts";
 
 import React from "react";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 import { Metadata } from "next";
 import { Puzzle } from "@prisma/client";
@@ -12,6 +10,9 @@ import PuzzleCard from "@/components/shared/home/dashboard/PuzzleCard";
 import { ButtonGroup } from "@/components/ui/ButtonGroup";
 import Link from "next/link";
 import { buttonVariants } from "@/components/ui/button";
+import SidebarLayout from "../layout";
+import LeftSidebar from "@/components/shared/layout/LeftSidebar";
+import RightSidebar from "@/components/shared/layout/RightSidebar";
 
 export const metadata: Metadata = {
   title: "My Stuff",
@@ -107,7 +108,6 @@ const MyDashboard = async ({
   const currentTab = Array.isArray(searchParams.view)
     ? searchParams.view[0]
     : (searchParams.view ?? "my-puzzles");
-  console.log("currentTab", currentTab);
 
   const possibleTabs = ["my-puzzles", "liked-puzzles", "solved-puzzles"];
   if (!possibleTabs.includes(currentTab)) {
@@ -130,54 +130,61 @@ const MyDashboard = async ({
     "inline-flex items-center justify-center whitespace-nowrap border-b-2 rounded-sm rounded-b-none border-primary px-3 py-1.5 text-sm font-medium ring-offset-background transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-background data-[state=active]:text-ring data-[state=active]:border-x-2 data-[state=active]:border-primary data-[state=active]:border-t-2 data-[state=active]:border-b-0 data-[state=active]:rounded-t-sm data-[state=active]:rounded-b-none data-[state=active]:border-b-none";
 
   return (
-    <section className="flex min-h-screen w-full flex-col justify-start md:w-1/2">
-      <h1 className="w-full bg-accent/50 p-2 text-center text-4xl font-semibold">
-        {String(metadata.title ?? "Default Title")}
-      </h1>
-      <div className="inline-flex h-10 items-center justify-center rounded-none bg-muted p-1 text-muted-foreground">
-        <ButtonGroup
-          className="p-2"
-          orientation="horizontal"
-          areCardButtons={false}
-        >
-          <Link
-            className={tabsClassName}
-            href="/my-stuff?view=my-puzzles"
-            data-state={currentTab === "my-puzzles" ? "active" : ""}
+    <SidebarLayout>
+      <LeftSidebar
+        searchParams={searchParams}
+        baseRoute={"my-stuff"}
+      ></LeftSidebar>
+      <section className="flex min-h-screen w-full flex-col justify-start md:w-1/2">
+        <h1 className="w-full bg-accent/50 p-2 text-center text-4xl font-semibold">
+          {String(metadata.title ?? "Default Title")}
+        </h1>
+        <div className="inline-flex h-10 items-center justify-center rounded-none bg-muted p-1 text-muted-foreground">
+          <ButtonGroup
+            className="p-2"
+            orientation="horizontal"
+            areCardButtons={false}
           >
-            My Puzzles
-          </Link>
-          <Link
-            className={tabsClassName}
-            href="/my-stuff?view=liked-puzzles"
-            data-state={currentTab === "liked-puzzles" ? "active" : ""}
-          >
-            Liked Puzzles
-          </Link>
-          <Link
-            className={tabsClassName}
-            href="/my-stuff?view=solved-puzzles"
-            data-state={currentTab === "solved-puzzles" ? "active" : ""}
-          >
-            Solved Puzzles
-          </Link>
-          {/* <Link
-            className={tabsClassName}
-            href="/my-stuff?view=my-classes"
-            data-state={currentTab === "my-classes" ? "active" : ""}
-          >
-            My Classes
-          </Link> */}
-        </ButtonGroup>
-      </div>
-      <div className="mt-2 ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2">
-        <div className="flex flex-wrap justify-center gap-4 p-4">
-          {puzzlesToShow.map((puzzle) => {
-            return <PuzzleCard key={puzzle.id} puzzleInfo={puzzle} />;
-          })}
+            <Link
+              className={tabsClassName}
+              href="/my-stuff?view=my-puzzles"
+              data-state={currentTab === "my-puzzles" ? "active" : ""}
+            >
+              My Puzzles
+            </Link>
+            <Link
+              className={tabsClassName}
+              href="/my-stuff?view=liked-puzzles"
+              data-state={currentTab === "liked-puzzles" ? "active" : ""}
+            >
+              Liked Puzzles
+            </Link>
+            <Link
+              className={tabsClassName}
+              href="/my-stuff?view=solved-puzzles"
+              data-state={currentTab === "solved-puzzles" ? "active" : ""}
+            >
+              Solved Puzzles
+            </Link>
+            {/* <Link
+              className={tabsClassName}
+              href="/my-stuff?view=my-classes"
+              data-state={currentTab === "my-classes" ? "active" : ""}
+            >
+              My Classes
+            </Link> */}
+          </ButtonGroup>
         </div>
-      </div>
-    </section>
+        <div className="mt-2 ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2">
+          <div className="flex flex-wrap justify-center gap-4 p-4">
+            {puzzlesToShow.map((puzzle) => {
+              return <PuzzleCard key={puzzle.id} puzzleInfo={puzzle} />;
+            })}
+          </div>
+        </div>
+      </section>
+      <RightSidebar searchParams={searchParams}></RightSidebar>
+    </SidebarLayout>
   );
 };
 
