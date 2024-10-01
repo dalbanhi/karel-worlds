@@ -105,7 +105,6 @@ const MyDashboard = async ({
   const currentTab = Array.isArray(searchParams.view)
     ? searchParams.view[0]
     : (searchParams.view ?? "my-puzzles");
-  console.log("currentTab", currentTab);
 
   const possibleTabs = ["my-puzzles", "liked-puzzles", "solved-puzzles"];
   if (!possibleTabs.includes(currentTab)) {
