@@ -11,7 +11,6 @@ const RightSidebar: React.FC<RightSidebarProps> = async ({
   children,
   searchParams,
 }) => {
-  console.log("in right sidebar", searchParams);
   const allTags = ["tag1", "tag2", "tag3", "tag4", "tag5"];
   return (
     <aside className="min-h-screen w-3/12 flex-col gap-2 border-l-2 p-4 max-sm:hidden sm:flex">

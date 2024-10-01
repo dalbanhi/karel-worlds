@@ -11,7 +11,6 @@ interface TagsListProps {
 }
 
 const TagsList: React.FC<TagsListProps> = ({ tags, searchParams }) => {
-  console.log("in tags list searchParams", searchParams);
   const pathname = usePathname();
   if (pathname === "/") return null;
   if (!pathname.includes("explore")) return null;

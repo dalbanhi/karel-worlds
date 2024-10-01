@@ -8,7 +8,6 @@ interface PuzzleSorterProps {
 }
 
 const PuzzleSorter: React.FC<PuzzleSorterProps> = ({ searchParams }) => {
-  console.log("in puzzle sorter", searchParams);
   if (searchParams === undefined) {
     return null;
   }

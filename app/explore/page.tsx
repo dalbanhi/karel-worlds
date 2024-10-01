@@ -19,8 +19,6 @@ const ExplorePage: React.FC<ExplorePageProps> = async ({
 }: {
   searchParams: { [key: string]: string | string[] | undefined };
 }) => {
-  const selectedSort = searchParams.sort as string;
-  console.log(searchParams, " search params in the server explore page");
   return (
     <SidebarLayout searchParams={searchParams}>
       <section className="flex min-h-screen w-full flex-col justify-start md:w-1/2">
