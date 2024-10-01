@@ -87,9 +87,13 @@ const NewPuzzleLayout: React.FC<NewPuzzleLayoutProps> = ({
     // Handle form submission
     console.log("Form data submitted 2:");
     console.log(data);
-    const newPuzzle = await createPuzzle(data);
+    console.log("goalWorldInfo", goalWorldInfo);
+    console.log("startWorldInfo", startWorldInfo);
+    data.startWorldInfo = startWorldInfo;
+    data.goalWorldInfo = goalWorldInfo;
+    // const newPuzzle = await createPuzzle(data);
 
-    router.push(`/puzzle/${newPuzzle.id}`);
+    // router.push(`/puzzle/${newPuzzle.id}`);
   };
 
   const storedPuzzleFormData =

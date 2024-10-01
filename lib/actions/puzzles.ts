@@ -29,31 +29,38 @@ async function _getPuzzle(id: string) {
 
 export async function createPuzzle(puzzleData: any) {
   puzzleSchema.parse(puzzleData);
-
+  console.log("Creating puzzle with data:", puzzleData);
   // Generate a random name if none is provided
-  if (puzzleData.puzzleName === "") {
-    puzzleData.puzzleName = uniqueUsernameGenerator(config);
+  if (puzzleData.name === "") {
+    puzzleData.name = uniqueUsernameGenerator(config);
+    console.log("Generated puzzle name:", puzzleData.puzzleName);
   }
+
+  //for each tag, check if it exists in the database, if not, create it
+  //then add the tag to the puzzle
+  const tags = puzzleData.tags;
+  for (const tag of tags) {
+  }
+
   try {
     // const newPuzzle = await db.puzzle.create({
     //   data: {
-    //     name: puzzleData.puzzleName,
+    //     name: puzzleData.name,
     //     worldWidth: puzzleData.worldWidth,
     //     worldHeight: puzzleData.worldHeight,
-    //     beeperImage: puzzleData.imagesObj.beeperImage,
-    //     wallImage: puzzleData.imagesObj.beeperImage,
-    //     karelImage: puzzleData.imagesObj.karelImage,
-    //     backgroundImage: puzzleData.imagesObj.backgroundImage,
+    //     beeperImage: puzzleData.beepersImage,
+    //     wallImage: puzzleData.wallImage,
+    //     karelImage: puzzleData.karelImage,
+    //     backgroundImage: puzzleData.backgroundImage,
     //     startWorldInfo: puzzleData.startWorldInfo,
     //     goalWorldInfo: puzzleData.goalWorldInfo,
     //     description: puzzleData.description,
-    //     creator: puzzleData.creator,
+    //     creatorId: puzzleData.creator,
     //     rating: puzzleData.rating,
     //     difficulty: puzzleData.difficulty,
     //   },
     // });
     // return newPuzzle;
-    return "newPuzzle";
   } catch (error: any) {
     console.error(error);
     throw new Error(`Failed to create puzzle: ${error.message}`);
