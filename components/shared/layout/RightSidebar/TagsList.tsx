@@ -30,7 +30,7 @@ const TagsList: React.FC<TagsListProps> = ({ tags, searchParams }) => {
             return (
               <Link
                 data-state={searchParams.tag === tag ? "active" : ""}
-                className={` capitalize ${buttonVariants({ variant: "ghost" })}`}
+                className={` capitalize ${buttonVariants({ variant: "outline" })}`}
                 href={`${baseURLToGoTo}tag=${tag}`}
                 key={tag}
               >

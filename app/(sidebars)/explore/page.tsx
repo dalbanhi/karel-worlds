@@ -2,7 +2,9 @@ import { MagnifyingGlassIcon } from "@radix-ui/react-icons";
 import { Metadata } from "next";
 import { Input } from "@/components/ui/input";
 import React from "react";
-import SidebarLayout from "../(sidebars)/layout";
+import SidebarLayout from "../layout";
+import LeftSidebar from "@/components/shared/layout/LeftSidebar";
+import RightSidebar from "@/components/shared/layout/RightSidebar";
 
 interface ExplorePageProps {
   searchParams: { [key: string]: string | string[] | undefined };
@@ -20,7 +22,11 @@ const ExplorePage: React.FC<ExplorePageProps> = async ({
   searchParams: { [key: string]: string | string[] | undefined };
 }) => {
   return (
-    <SidebarLayout searchParams={searchParams}>
+    <SidebarLayout>
+      <LeftSidebar
+        searchParams={searchParams}
+        baseRoute="explore"
+      ></LeftSidebar>
       <section className="flex min-h-screen w-full flex-col justify-start md:w-1/2">
         <h1 className="w-full bg-accent/50 p-2 text-center text-4xl font-semibold">
           {String(metadata.title ?? "Default Title")}
@@ -46,6 +52,7 @@ const ExplorePage: React.FC<ExplorePageProps> = async ({
           </form>
         </div>
       </section>
+      <RightSidebar searchParams={searchParams}></RightSidebar>
     </SidebarLayout>
   );
 };

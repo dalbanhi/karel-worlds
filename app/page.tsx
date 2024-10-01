@@ -13,10 +13,10 @@ const TryItOutHeader = dynamic(
 );
 
 export default async function Home() {
-  // const myCurrentUser = await getCurrentUser();
-  // if (myCurrentUser?.onboardingComplete) {
-  //   redirect("/my-stuff");
-  // }
+  const myCurrentUser = await getCurrentUser();
+  if (myCurrentUser?.onboardingComplete) {
+    redirect("/my-stuff");
+  }
 
   return (
     <section className="flex flex-col items-center justify-between">
