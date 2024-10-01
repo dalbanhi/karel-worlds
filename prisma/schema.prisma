@@ -45,6 +45,8 @@ model Puzzle {
   karelImage    String
   beeperImage   String
   wallImage     String
+  rating        Float
+  difficulty    Float
   backgroundImage String
   startWorldInfo  Json
   goalWorldInfo   Json
