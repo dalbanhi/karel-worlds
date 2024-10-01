@@ -22,6 +22,9 @@ import { useClerk } from "@clerk/nextjs";
 import { useSessionClearOnSignOut } from "@/hooks/useSessionClearOnSignOut";
 import { ToastAction } from "@radix-ui/react-toast";
 
+import { createPuzzle } from "@/lib/actions/puzzles";
+import { useRouter } from "next/navigation";
+
 export type WorldInfoContextType = {
   worldInfo: worldInfoType;
   setWorldInfo: React.Dispatch<React.SetStateAction<worldInfoType>>;
@@ -45,9 +48,9 @@ const NewPuzzleLayout: React.FC<NewPuzzleLayoutProps> = ({
   currentUserID,
 }) => {
   const { toast } = useToast();
-  const { isSignedIn, userId } = useAuth();
-  const tempUserID = "7c48f53a-b32b-4021-a097-e87e50d89286";
+  const { isSignedIn } = useAuth();
   const { redirectToSignIn } = useClerk();
+  const router = useRouter();
 
   const isUserSignedIn = () => {
     if (!isSignedIn) {
@@ -80,10 +83,13 @@ const NewPuzzleLayout: React.FC<NewPuzzleLayoutProps> = ({
     return true;
   };
 
-  const onSubmitForm = (data: any) => {
+  const onSubmitForm = async (data: z.infer<typeof puzzleSchema>) => {
     // Handle form submission
     console.log("Form data submitted 2:");
     console.log(data);
+    const newPuzzle = await createPuzzle(data);
+
+    router.push(`/puzzle/${newPuzzle.id}`);
   };
 
   const storedPuzzleFormData =
@@ -96,6 +102,8 @@ const NewPuzzleLayout: React.FC<NewPuzzleLayoutProps> = ({
     : {
         worldWidth: 10,
         worldHeight: 10,
+        difficulty: 3,
+        rating: 3,
         name: "",
         karelImage: "",
         beepersImage: "",
@@ -104,13 +112,13 @@ const NewPuzzleLayout: React.FC<NewPuzzleLayoutProps> = ({
         wallImage: "",
         tags: [],
         hints: [],
-        creatorId: tempUserID, // TODO: change to currentUserID
+        creatorId: currentUserID, // TODO: change to currentUserID
       };
   const form = useForm<z.infer<typeof puzzleSchema>>({
     resolver: zodResolver(puzzleSchema),
     defaultValues: {
       ...initialFormValues,
-      creatorId: tempUserID, // TODO: change to currentUserID
+      creatorId: currentUserID, // TODO: change to currentUserID
     },
   });
 
