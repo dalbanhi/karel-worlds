@@ -58,6 +58,8 @@ const examplePuzzle1: Puzzle = {
     walls: [],
   },
   creatorId: "user_2lLy2QBFPFE2Ewry7L7hl2yqDyR",
+  rating: 0,
+  difficulty: 0,
 };
 
 const examplePuzzle2: Puzzle = {
@@ -93,6 +95,8 @@ const examplePuzzle2: Puzzle = {
     walls: [],
   },
   creatorId: "user_2lLy2QBFPFE2Ewry7L7hl2yqDyR",
+  rating: 0,
+  difficulty: 0,
 };
 
 const MyDashboard = async ({
