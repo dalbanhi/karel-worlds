@@ -99,7 +99,11 @@ const TagsSelector: React.FC<TagsSelectorProps> = ({ form, tagsString }) => {
                 getOptionValue={(option: any) => option.value}
                 onChange={(newValue: unknown, actionMeta: any) => {
                   const selectedOptions = newValue as any[];
-                  field.onChange(selectedOptions);
+                  const selectedOptionsValues = selectedOptions.map(
+                    (option) => option.value
+                  );
+                  console.log("selectedOptions", selectedOptionsValues);
+                  field.onChange(selectedOptionsValues);
                   setNumSelectedOptions(selectedOptions.length);
                 }}
               />

@@ -10,13 +10,13 @@ const PuzzlePage = async ({ params }: { params: { id: string } }) => {
   if (!puzzle) {
     return <div>loading...</div>;
   }
-
+  console.log(puzzle);
   return (
     <div className="w-full">
       <Puzzle
         worldDimensions={{
-          width: puzzle?.worldWidth,
-          height: puzzle?.worldHeight,
+          width: puzzle.worldWidth,
+          height: puzzle.worldHeight,
         }}
         puzzleImages={{
           background: puzzle.backgroundImage,
@@ -24,20 +24,8 @@ const PuzzlePage = async ({ params }: { params: { id: string } }) => {
           karel: puzzle.karelImage,
           wall: puzzle.wallImage,
         }}
-        startWorldInfo={
-          JSON.parse(
-            typeof puzzle?.startWorldInfo === "string"
-              ? puzzle.startWorldInfo
-              : "{}"
-          ) as worldInfoType
-        }
-        goalWorldInfo={
-          JSON.parse(
-            typeof puzzle?.goalWorldInfo === "string"
-              ? puzzle.goalWorldInfo
-              : "{}"
-          ) as worldInfoType
-        }
+        startWorldInfo={puzzle.startWorldInfo as unknown as worldInfoType}
+        goalWorldInfo={puzzle.goalWorldInfo as unknown as worldInfoType}
         puzzleName={puzzle.name || ""}
       />
     </div>

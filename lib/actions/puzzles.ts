@@ -39,28 +39,56 @@ export async function createPuzzle(puzzleData: any) {
   //for each tag, check if it exists in the database, if not, create it
   //then add the tag to the puzzle
   const tags = puzzleData.tags;
+  const puzzleTags = [];
   for (const tag of tags) {
+    const existingTag = await db.tags.findUnique({
+      where: {
+        name: tag,
+      },
+    });
+    if (!existingTag) {
+      const newTag = await db.tags.create({
+        data: {
+          name: tag,
+        },
+      });
+      console.log("Created new tag:", newTag);
+      puzzleTags.push(newTag);
+    } else {
+      puzzleTags.push(existingTag);
+    }
   }
 
+  //get the creator from the creator
+  const creator = await db.user.findUnique({
+    where: {
+      id: puzzleData.creatorId,
+    },
+  });
+
   try {
-    // const newPuzzle = await db.puzzle.create({
-    //   data: {
-    //     name: puzzleData.name,
-    //     worldWidth: puzzleData.worldWidth,
-    //     worldHeight: puzzleData.worldHeight,
-    //     beeperImage: puzzleData.beepersImage,
-    //     wallImage: puzzleData.wallImage,
-    //     karelImage: puzzleData.karelImage,
-    //     backgroundImage: puzzleData.backgroundImage,
-    //     startWorldInfo: puzzleData.startWorldInfo,
-    //     goalWorldInfo: puzzleData.goalWorldInfo,
-    //     description: puzzleData.description,
-    //     creatorId: puzzleData.creator,
-    //     rating: puzzleData.rating,
-    //     difficulty: puzzleData.difficulty,
-    //   },
-    // });
-    // return newPuzzle;
+    const newPuzzle = await db.puzzle.create({
+      data: {
+        name: puzzleData.name,
+        worldWidth: puzzleData.worldWidth,
+        worldHeight: puzzleData.worldHeight,
+        beeperImage: puzzleData.beepersImage,
+        wallImage: puzzleData.wallImage,
+        karelImage: puzzleData.karelImage,
+        backgroundImage: puzzleData.backgroundImage,
+        startWorldInfo: puzzleData.startWorldInfo,
+        goalWorldInfo: puzzleData.goalWorldInfo,
+        description: puzzleData.description,
+        creatorId: puzzleData.creator,
+        rating: puzzleData.rating,
+        difficulty: puzzleData.difficulty,
+        creator: { connect: { id: creator?.id } },
+        tags: {
+          connect: puzzleTags.map((tag) => ({ id: tag.id })),
+        },
+      },
+    });
+    return newPuzzle;
   } catch (error: any) {
     console.error(error);
     throw new Error(`Failed to create puzzle: ${error.message}`);

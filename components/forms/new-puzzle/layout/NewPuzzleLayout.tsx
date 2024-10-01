@@ -91,9 +91,9 @@ const NewPuzzleLayout: React.FC<NewPuzzleLayoutProps> = ({
     console.log("startWorldInfo", startWorldInfo);
     data.startWorldInfo = startWorldInfo;
     data.goalWorldInfo = goalWorldInfo;
-    // const newPuzzle = await createPuzzle(data);
+    const newPuzzle = await createPuzzle(data);
 
-    // router.push(`/puzzle/${newPuzzle.id}`);
+    router.push(`/puzzle/${newPuzzle.id}`);
   };
 
   const storedPuzzleFormData =
