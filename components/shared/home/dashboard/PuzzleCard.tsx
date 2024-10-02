@@ -22,8 +22,9 @@ import {
   ShuffleIcon,
 } from "@radix-ui/react-icons";
 import { ButtonGroup } from "@/components/ui/ButtonGroup";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { PuzzleWithMoreStuff } from "@/types/puzzleExtensions";
+import CardButtons from "./CardButtons";
 
 const StarRating: React.FC<{ rating: number; type: string }> = ({
   rating,
@@ -103,7 +104,8 @@ const PuzzleCard: React.FC<PuzzleCardProps> = async ({
   const userImage = isCreator
     ? viewerImage
     : await getUserImage(puzzleInfo.creatorId);
-  console.log("puzzleInfo, ", puzzleInfo);
+  // const userImage = "";
+  // console.log("puzzleInfo, ", puzzleInfo);
 
   return (
     <Card className="max-w-64">
@@ -116,7 +118,7 @@ const PuzzleCard: React.FC<PuzzleCardProps> = async ({
                 Tag{puzzleInfo.tags.length === 1 ? "" : "s"}:{" "}
               </span>
             )}
-            <div className="flex flex-wrap gap-1">
+            <span className="flex flex-wrap gap-1">
               {puzzleInfo.tags.map((tag, index) => {
                 const content =
                   index === puzzleInfo.tags.length - 1
@@ -132,7 +134,7 @@ const PuzzleCard: React.FC<PuzzleCardProps> = async ({
                   </Link>
                 );
               })}
-            </div>
+            </span>
           </CardDescription>
         </div>
         <Avatar>
@@ -169,17 +171,22 @@ const PuzzleCard: React.FC<PuzzleCardProps> = async ({
         </div>
       </CardContent>
       <CardFooter className="w-full">
-        <ButtonGroup className="w-full" areCardButtons={true}>
-          <Button aria-label="Solve the Puzzle" className="grow">
+        <CardButtons userID={viewerID} puzzleID={puzzleInfo.id} />
+        {/* <ButtonGroup className="w-full" areCardButtons={true}>
+          <Link
+            href={`/puzzle/${puzzleInfo.id}`}
+            aria-label="Solve the Puzzle"
+            className={`grow ${buttonVariants({ variant: "default" })}`}
+          >
             <PlayIcon />
-          </Button>
+          </Link>
           <Button aria-label="Like or Unlike the Puzzle" className="grow">
             <HeartIcon />
           </Button>
           <Button aria-label="Remix this puzzle" className="grow">
             <ShuffleIcon />
           </Button>
-        </ButtonGroup>
+        </ButtonGroup> */}
       </CardFooter>
     </Card>
   );

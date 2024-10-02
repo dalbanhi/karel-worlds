@@ -38,12 +38,16 @@ async function _createUser(data: any) {
 
 export async function getUserImage(userId: string) {
   // This function gets the user's image
-  const user = await db.user.findUnique({
-    where: {
-      id: userId,
-    },
-  });
-  return user?.imageUrl;
+  try {
+    const user = await db.user.findUnique({
+      where: {
+        id: userId,
+      },
+    });
+    return user?.imageUrl;
+  } catch {
+    throw new Error("Error getting user image");
+  }
 }
 
 export const createUser = cache(_createUser, ["create-user"], {
