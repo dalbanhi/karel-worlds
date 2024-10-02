@@ -10,7 +10,6 @@ const PuzzlePage = async ({ params }: { params: { id: string } }) => {
   if (!puzzle) {
     return <div>loading...</div>;
   }
-  console.log(puzzle);
   return (
     <div className="w-full">
       <Puzzle

@@ -52,8 +52,13 @@ async function getPuzzles(userId: string, options?: any) {
     where: {
       creatorId: userId,
     },
+    include: {
+      likedBy: true,
+    },
   });
-  return puzzles;
+
+  console.log("Puzzles:", puzzles);
+  return JSON.stringify(puzzles);
 }
 
 export const createUser = cache(_createUser, ["create-user"], {

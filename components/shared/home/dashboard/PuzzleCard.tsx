@@ -1,4 +1,3 @@
-import { Puzzle } from "@prisma/client";
 import React from "react";
 import Image from "next/image";
 import {
@@ -23,6 +22,7 @@ import {
 } from "@radix-ui/react-icons";
 import { ButtonGroup } from "@/components/ui/ButtonGroup";
 import { Button } from "@/components/ui/button";
+import { PuzzleWithLikedBy } from "@/types/puzzleExtensions";
 
 const StarRating: React.FC<{ rating: number }> = ({ rating }) => {
   return (
@@ -80,15 +80,14 @@ const ImagesOverlay: React.FC<ImagesOverlayProps> = ({ images }) => {
 };
 
 interface PuzzleCardProps {
-  puzzleInfo: Puzzle;
+  puzzleInfo: PuzzleWithLikedBy;
 }
 
 const exampleTags = ["Loops", "Functions", "Conditionals"];
 
 const PuzzleCard: React.FC<PuzzleCardProps> = async ({ puzzleInfo }) => {
-  //   const userImage = await getUserImage(puzzleInfo.creatorId);
-  const userImage =
-    "https://img.clerk.com/eyJ0eXBlIjoicHJveHkiLCJzcmMiOiJodHRwczovL2ltYWdlcy5jbGVyay5kZXYvb2F1dGhfZ29vZ2xlL2ltZ18ybEx5MlRoZW9NZnVYd0NZU1poR0E3aTR6UmEifQ";
+  const userImage = await getUserImage(puzzleInfo.creatorId);
+  console.log("puzzleInfo, ", puzzleInfo);
 
   return (
     <Card className="max-w-64">
@@ -105,8 +104,8 @@ const PuzzleCard: React.FC<PuzzleCardProps> = async ({ puzzleInfo }) => {
           </CardDescription>
         </div>
         <Avatar>
-          <AvatarImage src={userImage} alt="The user's image" />
-          {/* add avatar fallback */}
+          <AvatarImage src={userImage ?? undefined} alt="The user's image" />
+          <AvatarFallback>??</AvatarFallback>
         </Avatar>
       </CardHeader>
       <CardContent className="flex flex-col items-center justify-center gap-2">
@@ -125,14 +124,15 @@ const PuzzleCard: React.FC<PuzzleCardProps> = async ({ puzzleInfo }) => {
           </p>
           <div className="flex items-center justify-start gap-2 text-sm ">
             <span className="font-semibold">Rating:</span>{" "}
-            <StarRating rating={4} />
+            <StarRating rating={puzzleInfo.rating} />
           </div>
           <div className="flex items-center justify-start gap-2 text-sm ">
             <span className="font-semibold">Difficulty:</span>{" "}
-            <StarRating rating={4} />
+            <StarRating rating={puzzleInfo.difficulty} />
           </div>
           <div className="flex items-center justify-start gap-2 text-sm ">
-            <span className="font-semibold">Likes:</span> {52}
+            <span className="font-semibold">Likes:</span>{" "}
+            {puzzleInfo.likedBy.length}
           </div>
         </div>
       </CardContent>
