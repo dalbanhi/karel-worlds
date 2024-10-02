@@ -5,15 +5,14 @@ import { redirect } from "next/navigation";
 import React from "react";
 
 import { Metadata } from "next";
-import { Puzzle } from "@prisma/client";
+import { PuzzleWithMoreStuff } from "@/types/puzzleExtensions";
 import PuzzleCard from "@/components/shared/home/dashboard/PuzzleCard";
 import { ButtonGroup } from "@/components/ui/ButtonGroup";
 import Link from "next/link";
-import { buttonVariants } from "@/components/ui/button";
 import SidebarLayout from "../layout";
 import LeftSidebar from "@/components/shared/layout/LeftSidebar";
 import RightSidebar from "@/components/shared/layout/RightSidebar";
-import { getUserPuzzles } from "@/lib/actions/users";
+import { getUserPuzzles } from "@/lib/actions/puzzles";
 import { getCurrentUser } from "@/lib/auth/checkUser";
 
 export const metadata: Metadata = {
@@ -45,7 +44,7 @@ const MyDashboard = async ({
     redirect("/my-stuff?view=my-puzzles");
   }
 
-  const puzzlesToShow = JSON.parse(
+  const puzzlesToShow: PuzzleWithMoreStuff[] = JSON.parse(
     await getUserPuzzles(currentDBUser.id, currentTab)
   );
   console.log(puzzlesToShow);
@@ -102,8 +101,15 @@ const MyDashboard = async ({
         <div className="mt-2 ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2">
           <div className="flex flex-wrap justify-center gap-4 p-4">
             {puzzlesToShow.length > 0 &&
-              puzzlesToShow.map((puzzle: Puzzle) => {
-                return <PuzzleCard key={puzzle.id} puzzleInfo={puzzle} />;
+              puzzlesToShow.map((puzzle: PuzzleWithMoreStuff) => {
+                return (
+                  <PuzzleCard
+                    key={puzzle.id}
+                    puzzleInfo={puzzle}
+                    viewerImage={clerkUser.imageUrl}
+                    viewerID={currentDBUser.id}
+                  />
+                );
               })}
             {puzzlesToShow.length === 0 && <p>No puzzles to show</p>}
           </div>

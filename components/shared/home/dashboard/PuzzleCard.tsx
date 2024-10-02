@@ -23,7 +23,7 @@ import {
 } from "@radix-ui/react-icons";
 import { ButtonGroup } from "@/components/ui/ButtonGroup";
 import { Button } from "@/components/ui/button";
-import { PuzzleWithLikedBy } from "@/types/puzzleExtensions";
+import { PuzzleWithMoreStuff } from "@/types/puzzleExtensions";
 
 const StarRating: React.FC<{ rating: number; type: string }> = ({
   rating,
@@ -87,11 +87,22 @@ const ImagesOverlay: React.FC<ImagesOverlayProps> = ({ images }) => {
 };
 
 interface PuzzleCardProps {
-  puzzleInfo: PuzzleWithLikedBy;
+  puzzleInfo: PuzzleWithMoreStuff;
+  viewerImage: string;
+  viewerID: string;
 }
 
-const PuzzleCard: React.FC<PuzzleCardProps> = async ({ puzzleInfo }) => {
-  const userImage = await getUserImage(puzzleInfo.creatorId);
+const PuzzleCard: React.FC<PuzzleCardProps> = async ({
+  puzzleInfo,
+  viewerImage,
+  viewerID,
+}) => {
+  //check if the creator id of the puzzle is the same as the viewer id
+  const isCreator = viewerID === puzzleInfo.creatorId;
+
+  const userImage = isCreator
+    ? viewerImage
+    : await getUserImage(puzzleInfo.creatorId);
   console.log("puzzleInfo, ", puzzleInfo);
 
   return (

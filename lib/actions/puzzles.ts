@@ -95,6 +95,65 @@ export async function createPuzzle(puzzleData: any) {
   }
 }
 
+async function _getUserPuzzles(
+  userId: string,
+  currentTab: "my-puzzles" | "liked-puzzles" | "solved-puzzles"
+) {
+  //get puzzles created by the user
+  switch (currentTab) {
+    case "my-puzzles":
+      const puzzles = await db.puzzle.findMany({
+        where: {
+          creatorId: userId,
+        },
+        include: {
+          likedBy: true,
+          tags: true,
+        },
+      });
+      console.log("Puzzles:", puzzles);
+      return JSON.stringify(puzzles);
+    case "liked-puzzles":
+      const likedPuzzles = await db.puzzle.findMany({
+        where: {
+          likedBy: {
+            some: {
+              id: userId,
+            },
+          },
+        },
+        include: {
+          likedBy: true,
+          tags: true,
+        },
+      });
+      console.log("Liked puzzles:", likedPuzzles);
+      return JSON.stringify(likedPuzzles);
+    case "solved-puzzles":
+      const solvedPuzzles = await db.puzzle.findMany({
+        where: {
+          solvedBy: {
+            some: {
+              id: userId,
+            },
+          },
+        },
+        include: {
+          likedBy: true,
+          tags: true,
+        },
+      });
+      console.log("Solved puzzles:", solvedPuzzles);
+      return JSON.stringify(solvedPuzzles);
+    default:
+      throw new Error("Invalid tab");
+  }
+}
+
+export const getUserPuzzles = cache(_getUserPuzzles, ["get-user-puzzles"], {
+  tags: ["puzzle"],
+});
+
 export const getPuzzle = cache(_getPuzzle, ["get-puzzle"], {
   tags: ["puzzles"],
 });

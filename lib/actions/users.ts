@@ -46,26 +46,6 @@ export async function getUserImage(userId: string) {
   return user?.imageUrl;
 }
 
-async function getPuzzles(userId: string, options?: any) {
-  //get puzzles created by the user
-  const puzzles = await db.puzzle.findMany({
-    where: {
-      creatorId: userId,
-    },
-    include: {
-      likedBy: true,
-      tags: true,
-    },
-  });
-
-  console.log("Puzzles:", puzzles);
-  return JSON.stringify(puzzles);
-}
-
 export const createUser = cache(_createUser, ["create-user"], {
   tags: ["user"],
-});
-
-export const getUserPuzzles = cache(getPuzzles, ["get-user-puzzles"], {
-  tags: ["puzzle"],
 });
