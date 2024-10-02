@@ -54,6 +54,7 @@ async function getPuzzles(userId: string, options?: any) {
     },
     include: {
       likedBy: true,
+      tags: true,
     },
   });
 

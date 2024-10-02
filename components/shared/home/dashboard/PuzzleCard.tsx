@@ -1,5 +1,6 @@
 import React from "react";
 import Image from "next/image";
+import Link from "next/link";
 import {
   Card,
   CardContent,
@@ -89,8 +90,6 @@ interface PuzzleCardProps {
   puzzleInfo: PuzzleWithLikedBy;
 }
 
-const exampleTags = ["Loops", "Functions", "Conditionals"];
-
 const PuzzleCard: React.FC<PuzzleCardProps> = async ({ puzzleInfo }) => {
   const userImage = await getUserImage(puzzleInfo.creatorId);
   console.log("puzzleInfo, ", puzzleInfo);
@@ -100,13 +99,29 @@ const PuzzleCard: React.FC<PuzzleCardProps> = async ({ puzzleInfo }) => {
       <CardHeader className=" items-center justify-center gap-2">
         <div className="flex flex-col gap-1">
           <CardTitle>{puzzleInfo.name}</CardTitle>
-          <CardDescription>
-            Tags:{" "}
-            {exampleTags.map((tag, index) => {
-              const content =
-                index === exampleTags.length - 1 ? tag : `${tag}, `;
-              return <span key={tag}>{content}</span>;
-            })}
+          <CardDescription className="flex gap-2">
+            {puzzleInfo.tags.length > 0 && (
+              <span className="">
+                Tag{puzzleInfo.tags.length === 1 ? "" : "s"}:{" "}
+              </span>
+            )}
+            <div className="flex flex-wrap gap-1">
+              {puzzleInfo.tags.map((tag, index) => {
+                const content =
+                  index === puzzleInfo.tags.length - 1
+                    ? tag.name
+                    : `${tag.name}, `;
+                return (
+                  <Link
+                    className={`capitalize text-ring underline underline-offset-4 hover:text-primary`}
+                    href={`/explore?tag=${tag.name}`}
+                    key={tag.id}
+                  >
+                    {content}
+                  </Link>
+                );
+              })}
+            </div>
           </CardDescription>
         </div>
         <Avatar>
