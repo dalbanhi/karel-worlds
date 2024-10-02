@@ -20,8 +20,8 @@ export const puzzleSchema = z.object({
   worldWidth: z.number().int().min(1), // Positive integer for 'worldWidth'
   worldHeight: z.number().int().min(1), // Positive integer for 'worldHeight'
   hints: z.array(z.string()), // Array of strings for the 'hints' field
-  difficulty: z.number().int().min(1).max(5), // Integer between 1 and 5 for 'difficulty'
-  rating: z.number().int().min(1).max(5), // Integer between 1 and 5 for 'rating'
+  difficulty: z.number().int().min(-1).max(5), // Integer between 1 and 5 for 'difficulty'
+  rating: z.number().int().min(-1).max(5), // Integer between 1 and 5 for 'rating'
   karelImage: z
     .string()
     .refine((val) => val === "" || z.string().url().safeParse(val).success, {

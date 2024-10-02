@@ -106,8 +106,8 @@ const NewPuzzleLayout: React.FC<NewPuzzleLayoutProps> = ({
     : {
         worldWidth: 10,
         worldHeight: 10,
-        difficulty: 3,
-        rating: 3,
+        difficulty: -1,
+        rating: -1,
         name: "",
         karelImage: "",
         beepersImage: "",

@@ -24,7 +24,13 @@ import { ButtonGroup } from "@/components/ui/ButtonGroup";
 import { Button } from "@/components/ui/button";
 import { PuzzleWithLikedBy } from "@/types/puzzleExtensions";
 
-const StarRating: React.FC<{ rating: number }> = ({ rating }) => {
+const StarRating: React.FC<{ rating: number; type: string }> = ({
+  rating,
+  type,
+}) => {
+  if (rating < 0) {
+    return <span className="italic text-warning">No {type} yet. </span>;
+  }
   return (
     <div className="flex gap-1">
       {[1, 2, 3, 4, 5].map((star) => {
@@ -124,11 +130,11 @@ const PuzzleCard: React.FC<PuzzleCardProps> = async ({ puzzleInfo }) => {
           </p>
           <div className="flex items-center justify-start gap-2 text-sm ">
             <span className="font-semibold">Rating:</span>{" "}
-            <StarRating rating={puzzleInfo.rating} />
+            <StarRating rating={puzzleInfo.rating} type="rating" />
           </div>
           <div className="flex items-center justify-start gap-2 text-sm ">
             <span className="font-semibold">Difficulty:</span>{" "}
-            <StarRating rating={puzzleInfo.difficulty} />
+            <StarRating rating={puzzleInfo.difficulty} type="difficulty" />
           </div>
           <div className="flex items-center justify-start gap-2 text-sm ">
             <span className="font-semibold">Likes:</span>{" "}
