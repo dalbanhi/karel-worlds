@@ -14,6 +14,7 @@ import LeftSidebar from "@/components/shared/layout/LeftSidebar";
 import RightSidebar from "@/components/shared/layout/RightSidebar";
 import { getUserPuzzles } from "@/lib/actions/puzzles";
 import { getCurrentUser } from "@/lib/auth/checkUser";
+import { SortOptionType, TabType } from "@/types/puzzleDB";
 
 export const metadata: Metadata = {
   title: "My Stuff",
@@ -39,15 +40,21 @@ const MyDashboard = async ({
     ? searchParams.view[0]
     : (searchParams.view ?? "my-puzzles");
 
+  const currentSort = searchParams.sort ? searchParams.sort : "";
+  const urlPrepend = currentSort !== "" ? `sort=${currentSort}&` : "";
+
   const possibleTabs = ["my-puzzles", "liked-puzzles", "solved-puzzles"];
   if (!possibleTabs.includes(currentTab)) {
     redirect("/my-stuff?view=my-puzzles");
   }
 
   const puzzlesToShow: PuzzleWithMoreStuff[] = JSON.parse(
-    await getUserPuzzles(currentDBUser.id, currentTab)
+    await getUserPuzzles(
+      currentDBUser.id,
+      currentTab as TabType,
+      currentSort as SortOptionType
+    )
   );
-  console.log(puzzlesToShow);
 
   const tabsClassName =
     "inline-flex items-center justify-center whitespace-nowrap border-b-2 rounded-sm rounded-b-none border-primary px-3 py-1.5 text-sm font-medium ring-offset-background transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-background data-[state=active]:text-ring data-[state=active]:border-x-2 data-[state=active]:border-primary data-[state=active]:border-t-2 data-[state=active]:border-b-0 data-[state=active]:rounded-t-sm data-[state=active]:rounded-b-none data-[state=active]:border-b-none";
@@ -70,21 +77,21 @@ const MyDashboard = async ({
           >
             <Link
               className={tabsClassName}
-              href="/my-stuff?view=my-puzzles"
+              href={`/my-stuff?${urlPrepend}view=my-puzzles`}
               data-state={currentTab === "my-puzzles" ? "active" : ""}
             >
               My Puzzles
             </Link>
             <Link
               className={tabsClassName}
-              href="/my-stuff?view=liked-puzzles"
+              href={`/my-stuff?${urlPrepend}view=liked-puzzles`}
               data-state={currentTab === "liked-puzzles" ? "active" : ""}
             >
               Liked Puzzles
             </Link>
             <Link
               className={tabsClassName}
-              href="/my-stuff?view=solved-puzzles"
+              href={`/my-stuff?${urlPrepend}view=solved-puzzles`}
               data-state={currentTab === "solved-puzzles" ? "active" : ""}
             >
               Solved Puzzles

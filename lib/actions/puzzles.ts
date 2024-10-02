@@ -9,6 +9,7 @@ import {
   adjectives,
   nouns,
 } from "unique-username-generator";
+import { SortOptionType, TabType } from "@/types/puzzleDB";
 
 const config: Config = {
   dictionaries: [adjectives, nouns, nouns],
@@ -97,8 +98,37 @@ export async function createPuzzle(puzzleData: any) {
 
 async function _getUserPuzzles(
   userId: string,
-  currentTab: "my-puzzles" | "liked-puzzles" | "solved-puzzles"
+  currentTab: TabType,
+  sortOption: SortOptionType
 ) {
+  let orderBy;
+  switch (sortOption) {
+    case "diff-l-h":
+      orderBy = {
+        difficulty: "asc" as const,
+      };
+      break;
+    case "diff-h-l":
+      orderBy = {
+        difficulty: "desc" as const,
+      };
+      break;
+    case "rating-l-h":
+      orderBy = {
+        rating: "asc" as const,
+      };
+      break;
+    case "rating-h-l":
+      orderBy = {
+        rating: "desc" as const,
+      };
+      break;
+    default:
+      orderBy = {
+        createdAt: "desc" as const,
+      };
+  }
+
   //get puzzles created by the user
   switch (currentTab) {
     case "my-puzzles":
@@ -110,6 +140,7 @@ async function _getUserPuzzles(
           likedBy: true,
           tags: true,
         },
+        orderBy,
       });
       console.log("Puzzles:", puzzles);
       return JSON.stringify(puzzles);
@@ -126,6 +157,7 @@ async function _getUserPuzzles(
           likedBy: true,
           tags: true,
         },
+        orderBy,
       });
       console.log("Liked puzzles:", likedPuzzles);
       return JSON.stringify(likedPuzzles);
@@ -142,6 +174,7 @@ async function _getUserPuzzles(
           likedBy: true,
           tags: true,
         },
+        orderBy,
       });
       console.log("Solved puzzles:", solvedPuzzles);
       return JSON.stringify(solvedPuzzles);

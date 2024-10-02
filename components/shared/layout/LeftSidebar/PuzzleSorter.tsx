@@ -23,7 +23,12 @@ const PuzzleSorter: React.FC<PuzzleSorterProps> = ({
   }
 
   const currentTag = searchParams.tag as string;
-  const urlAddition = currentTag ? `&tag=${currentTag}` : "";
+  const currentView = searchParams.view as string;
+  const urlAddition = currentTag
+    ? `&tag=${currentTag}`
+    : currentView
+      ? `&view=${currentView}`
+      : "";
 
   const sortOptions = [
     {
