@@ -191,19 +191,21 @@ async function _getUserPuzzles(
   }
 }
 
-async function _likeOrUnlikePuzzle(
+export async function likeOrUnlikePuzzle(
   userId: string,
   puzzleId: string,
   shouldLike: boolean
 ) {
+  console.log("HERERE");
   console.log(`${userId} is liking ${puzzleId}`);
+  console.log("shouldLike:", shouldLike);
 
   //check to see if the user already likes the puzzle
 
   try {
     // Check if the user already likes the puzzl
 
-    if (shouldLike) {
+    if (!shouldLike) {
       // If the user already likes the puzzle, unlike it
       await db.puzzle.update({
         where: {
@@ -234,6 +236,8 @@ async function _likeOrUnlikePuzzle(
       });
       console.log(`User ${userId} liked puzzle ${puzzleId}`);
     }
+
+    revalidateTag("puzzles");
   } catch (e: any) {
     console.log(e);
     throw new Error("Error liking puzzle.");
@@ -252,7 +256,6 @@ async function _hasUserLiked(userId: string, puzzleId: string) {
         },
       },
     });
-
     return existingLike !== null;
   } catch {
     throw new Error("Error getting if the user has already liked the puzzle");
@@ -260,10 +263,6 @@ async function _hasUserLiked(userId: string, puzzleId: string) {
 }
 
 export const hasUserLiked = cache(_hasUserLiked, ["get-liked"], {
-  tags: ["puzzles"],
-});
-
-export const likeOrUnlikePuzzle = cache(_likeOrUnlikePuzzle, ["like-puzzle"], {
   tags: ["puzzles"],
 });
 

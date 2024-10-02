@@ -51,7 +51,7 @@ const CardButtons: React.FC<CardButtonsProps> = ({ userID, puzzleID }) => {
         aria-label="Like or Unlike the Puzzle"
         className="grow"
       >
-        <HeartIcon />
+        {hasAlreadyLiked ? <HeartFilledIcon /> : <HeartIcon />}
       </Button>
       <Button type="button" aria-label="Remix this puzzle" className="grow">
         <ShuffleIcon />
