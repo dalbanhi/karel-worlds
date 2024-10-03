@@ -26,6 +26,10 @@ async function _getPuzzle(id: string) {
       where: {
         id,
       },
+      include: {
+        likedBy: true,
+        tags: true,
+      },
     });
     return puzzle;
   } catch {

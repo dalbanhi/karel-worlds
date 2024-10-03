@@ -11,7 +11,6 @@ import { useRouter } from "next/navigation";
 import React, { useState, useEffect } from "react";
 import { likeOrUnlikePuzzle, hasUserLiked } from "@/lib/actions/puzzles";
 import { useToast } from "@/hooks/use-toast";
-// import { auth } from "@clerk/nextjs/server";
 import { ToastAction } from "@radix-ui/react-toast";
 import { useClerk } from "@clerk/nextjs";
 

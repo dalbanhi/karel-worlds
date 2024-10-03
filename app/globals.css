@@ -24,6 +24,7 @@
     --success-foreground: 244 5% 99%;
     --warning: 23 100% 63%;
     --warning-foreground: 244 5% 99%;
+    --warning-dark: 23 100% 26%;
     --star-yellow: 42.99 100% 61.96%;
     --info: 43 100% 62%;
     --border: 244 15% 80%;
@@ -35,7 +36,6 @@
     --chart-3: 197 37% 24%;
     --chart-4: 43 74% 66%;
     --chart-5: 27 87% 67%;
-
     --accent-semi: 153 69% 81% / 0.5;
   }
 }

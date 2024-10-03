@@ -19,6 +19,7 @@ import {
   SimpleGridElementType,
 } from "@/types/karelWorld";
 import { useToast } from "@/hooks/use-toast";
+import { PuzzleWithMoreStuff } from "@/types/puzzleExtensions";
 
 interface PuzzleProps {
   worldDimensions: { width: number; height: number };
@@ -26,6 +27,7 @@ interface PuzzleProps {
   goalWorldInfo: worldInfoType;
   puzzleImages: puzzleImagesType;
   puzzleName: string;
+  puzzleInfoFromDB?: PuzzleWithMoreStuff;
 }
 
 const Puzzle: React.FC<PuzzleProps> = ({
@@ -34,6 +36,7 @@ const Puzzle: React.FC<PuzzleProps> = ({
   goalWorldInfo,
   puzzleImages,
   puzzleName,
+  puzzleInfoFromDB,
 }) => {
   return (
     <RunningKarelProvider>
@@ -43,6 +46,7 @@ const Puzzle: React.FC<PuzzleProps> = ({
         goalWorldInfo={goalWorldInfo}
         puzzleImages={puzzleImages}
         puzzleName={puzzleName}
+        puzzleInfoFromDB={puzzleInfoFromDB}
       />
     </RunningKarelProvider>
   );
@@ -54,6 +58,7 @@ const PuzzleContent: React.FC<PuzzleProps> = ({
   goalWorldInfo,
   puzzleImages,
   puzzleName,
+  puzzleInfoFromDB,
 }) => {
   const { toast } = useToast();
   const canvasSize = useCanvasSize(
@@ -200,6 +205,9 @@ const PuzzleContent: React.FC<PuzzleProps> = ({
         <div className="flex h-full flex-col gap-2 p-4">
           {puzzleName && (
             <h1 className="text-xl font-extrabold">{puzzleName}</h1>
+          )}
+          {puzzleInfoFromDB?.description && (
+            <p>{puzzleInfoFromDB.description}</p>
           )}
           <div className="flex size-full flex-col">
             <RunnableWorld

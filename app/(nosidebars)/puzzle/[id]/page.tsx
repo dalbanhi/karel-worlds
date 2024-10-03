@@ -26,6 +26,7 @@ const PuzzlePage = async ({ params }: { params: { id: string } }) => {
         startWorldInfo={puzzle.startWorldInfo as unknown as worldInfoType}
         goalWorldInfo={puzzle.goalWorldInfo as unknown as worldInfoType}
         puzzleName={puzzle.name || ""}
+        puzzleInfoFromDB={puzzle}
       />
     </div>
   );

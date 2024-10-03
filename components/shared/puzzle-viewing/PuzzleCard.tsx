@@ -9,6 +9,22 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+
+import { headers } from "next/headers";
+import { isMobile } from "@/lib/utils/isMobile";
+
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 import { getUserImage } from "@/lib/actions/users";
@@ -24,7 +40,7 @@ const StarRating: React.FC<{ rating: number; type: string }> = ({
   type,
 }) => {
   if (rating < 0) {
-    return <span className="italic text-warning">No {type} yet. </span>;
+    return <span className="italic text-warning-dark">No {type} yet. </span>;
   }
   return (
     <div className="flex gap-1">
@@ -91,6 +107,9 @@ const PuzzleCard: React.FC<PuzzleCardProps> = async ({
   viewerImage,
   viewerID,
 }) => {
+  const userAgent = headers().get("user-agent") || "";
+  const mobileCheck = isMobile(userAgent);
+  console.log("mobileCheck, should be rendering tooltip", mobileCheck);
   //check if the creator id of the puzzle is the same as the viewer id, if the viewer id is not the empty string
   const isCreator = viewerID !== "" ? viewerID === puzzleInfo.creatorId : false;
 
@@ -100,15 +119,21 @@ const PuzzleCard: React.FC<PuzzleCardProps> = async ({
   // const userImage = "";
   // console.log("puzzleInfo, ", puzzleInfo);
 
+  const descriptionExists = puzzleInfo.description !== "";
+
   return (
     <Card className="w-64 flex flex-col min-h-80">
       <CardHeader className=" items-center justify-center gap-2 flex-grow">
         <div className="flex flex-col gap-1 justify-start w-full h-full">
-          <CardTitle>{puzzleInfo.name}</CardTitle>
+          <CardTitle className="line-clamp-2">{puzzleInfo.name}</CardTitle>
           <CardDescription className="flex gap-2">
-            {puzzleInfo.tags.length > 0 && (
-              <span className="">
-                Tag{puzzleInfo.tags.length === 1 ? "" : "s"}:{" "}
+            <span className="">
+              Tag{puzzleInfo.tags.length === 1 ? "" : "s"}:{" "}
+            </span>
+            {puzzleInfo.tags.length <= 0 && (
+              <span className="italic text-warning-dark">
+                {" "}
+                No tags to show.
               </span>
             )}
             <span className="flex flex-wrap h-full gap-1">
@@ -145,6 +170,38 @@ const PuzzleCard: React.FC<PuzzleCardProps> = async ({
           }}
         />
         <div className="flex w-full flex-col justify-start gap-1">
+          {!mobileCheck && (
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger className="underline">
+                  Description
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p
+                    className={`${!descriptionExists ? "text-warning-dark italic" : ""} `}
+                  >
+                    {descriptionExists
+                      ? puzzleInfo.description
+                      : "No description given by the puzzle maker."}
+                  </p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+          )}
+          {mobileCheck && (
+            <Popover>
+              <PopoverTrigger className="underline">Description</PopoverTrigger>
+              <PopoverContent>
+                <p
+                  className={`${!descriptionExists ? "text-warning-dark italic" : ""} `}
+                >
+                  {descriptionExists
+                    ? puzzleInfo.description
+                    : "No description given by the puzzle maker."}
+                </p>
+              </PopoverContent>
+            </Popover>
+          )}
           <p className="text-sm">
             <span className="font-semibold">World Dimensions:</span>{" "}
             {puzzleInfo.worldWidth}x{puzzleInfo.worldHeight}
