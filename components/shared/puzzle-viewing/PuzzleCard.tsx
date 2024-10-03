@@ -122,9 +122,9 @@ const PuzzleCard: React.FC<PuzzleCardProps> = async ({
   const descriptionExists = puzzleInfo.description !== "";
 
   return (
-    <Card className="w-64 flex flex-col min-h-80">
-      <CardHeader className=" items-center justify-center gap-2 flex-grow">
-        <div className="flex flex-col gap-1 justify-start w-full h-full">
+    <Card className="flex min-h-80 w-64 flex-col">
+      <CardHeader className=" grow items-center justify-center gap-2">
+        <div className="flex size-full flex-col justify-start gap-1">
           <CardTitle className="line-clamp-2">{puzzleInfo.name}</CardTitle>
           <CardDescription className="flex gap-2">
             <span className="">
@@ -136,7 +136,7 @@ const PuzzleCard: React.FC<PuzzleCardProps> = async ({
                 No tags to show.
               </span>
             )}
-            <span className="flex flex-wrap h-full gap-1">
+            <span className="flex h-full flex-wrap gap-1">
               {puzzleInfo.tags.map((tag, index) => {
                 const content =
                   index === puzzleInfo.tags.length - 1
@@ -178,7 +178,7 @@ const PuzzleCard: React.FC<PuzzleCardProps> = async ({
                 </TooltipTrigger>
                 <TooltipContent>
                   <p
-                    className={`${!descriptionExists ? "text-warning-dark italic" : ""} `}
+                    className={`${!descriptionExists ? "italic text-warning-dark" : ""} `}
                   >
                     {descriptionExists
                       ? puzzleInfo.description
@@ -193,7 +193,7 @@ const PuzzleCard: React.FC<PuzzleCardProps> = async ({
               <PopoverTrigger className="underline">Description</PopoverTrigger>
               <PopoverContent>
                 <p
-                  className={`${!descriptionExists ? "text-warning-dark italic" : ""} `}
+                  className={`${!descriptionExists ? "italic text-warning-dark" : ""} `}
                 >
                   {descriptionExists
                     ? puzzleInfo.description
