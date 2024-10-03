@@ -5,4 +5,6 @@ export type SortOptionType =
   | "diff-h-l"
   | "rating-l-h"
   | "rating-h-l"
+  | "newest"
+  | "oldest"
   | undefined;

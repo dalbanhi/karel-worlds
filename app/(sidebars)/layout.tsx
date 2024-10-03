@@ -1,8 +1,3 @@
-import type { Metadata } from "next";
-import type { Viewport } from "next";
-import LeftSidebar from "@/components/shared/layout/LeftSidebar";
-import RightSidebar from "@/components/shared/layout/RightSidebar";
-
 export default function SidebarLayout({
   children,
   params,

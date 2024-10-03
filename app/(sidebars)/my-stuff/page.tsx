@@ -6,7 +6,6 @@ import React from "react";
 
 import { Metadata } from "next";
 import { PuzzleWithMoreStuff } from "@/types/puzzleExtensions";
-import PuzzleCard from "@/components/shared/puzzle-viewing/PuzzleCard";
 import { ButtonGroup } from "@/components/ui/ButtonGroup";
 import Link from "next/link";
 import SidebarLayout from "../layout";
@@ -15,53 +14,12 @@ import RightSidebar from "@/components/shared/layout/RightSidebar";
 import { getUserPuzzles } from "@/lib/actions/puzzles";
 import { getCurrentUser } from "@/lib/auth/checkUser";
 import { SortOptionType, TabType } from "@/types/puzzleDB";
-import { Tags, User } from "@prisma/client";
 import PuzzleList from "@/components/shared/puzzle-viewing/PuzzleList";
 
 export const metadata: Metadata = {
   title: "My Stuff",
   description:
     "A place to store your Karel Worlds puzzles and view your classes",
-};
-
-const fakeOtherUser: User = {
-  name: "Mr. Howe",
-  id: "",
-  clerkUserId: "",
-  email: "dalbanhi@gmai.com",
-  username: "",
-  role: "TEACHER",
-  onboardingComplete: false,
-  imageUrl: null,
-  createdAt: new Date(),
-  updatedAt: new Date(),
-};
-
-const fakeTag: Tags = {
-  name: "loops",
-  id: "123",
-};
-
-const examplePuzzle1: PuzzleWithMoreStuff = {
-  name: "some name",
-  id: "example-id",
-  description: "example description",
-  worldWidth: 10,
-  worldHeight: 10,
-  hints: ["hint1", "hint2"],
-  karelImage: "",
-  beeperImage: "",
-  wallImage: "",
-  rating: 5,
-  difficulty: 3,
-  createdAt: new Date(),
-  updatedAt: new Date(),
-  backgroundImage: "",
-  startWorldInfo: {},
-  goalWorldInfo: {},
-  creatorId: "example-creator-id",
-  likedBy: [fakeOtherUser],
-  tags: [], // Add this line to fix the error
 };
 
 const MyDashboard = async ({

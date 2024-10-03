@@ -5,7 +5,7 @@ import React from "react";
 interface PuzzleListProps {
   puzzlesToShow: PuzzleWithMoreStuff[];
   viewerImage: string;
-  viewerId: string;
+  viewerId: string | "";
 }
 
 const PuzzleList: React.FC<PuzzleListProps> = ({

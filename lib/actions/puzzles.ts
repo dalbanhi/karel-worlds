@@ -91,6 +91,8 @@ export async function createPuzzle(puzzleData: any) {
         },
       },
     });
+    revalidateTag("puzzles");
+    revalidateTag("tags");
     return newPuzzle;
   } catch (error: any) {
     console.error(error);
@@ -248,27 +250,27 @@ export async function likeOrUnlikePuzzle(
   puzzleId: string,
   shouldLike: boolean
 ) {
-  //check to see if the user already likes the puzzle
-
+  console.log("user id ", userId);
+  console.log("puzzleID", puzzleId);
+  console.log("");
   try {
-    // Check if the user already likes the puzzl
+    // Ensure the puzzle and user exist
+    const puzzleExists = await db.puzzle.findUnique({
+      where: { id: puzzleId },
+    });
+    if (!puzzleExists) {
+      throw new Error(`Puzzle with id ${puzzleId} not found.`);
+    }
 
-    if (!shouldLike) {
-      // If the user already likes the puzzle, unlike it
-      await db.puzzle.update({
-        where: {
-          id: puzzleId,
-        },
-        data: {
-          likedBy: {
-            disconnect: {
-              id: userId,
-            },
-          },
-        },
-      });
-    } else {
-      // If the user does not already like the puzzle, like it
+    const userExists = await db.user.findUnique({
+      where: { id: userId },
+    });
+    if (!userExists) {
+      throw new Error(`User with id ${userId} not found.`);
+    }
+
+    if (shouldLike) {
+      // Like the puzzle
       await db.puzzle.update({
         where: {
           id: puzzleId,
@@ -281,12 +283,26 @@ export async function likeOrUnlikePuzzle(
           },
         },
       });
+    } else {
+      // Unlike the puzzle
+      await db.puzzle.update({
+        where: {
+          id: puzzleId,
+        },
+        data: {
+          likedBy: {
+            disconnect: {
+              id: userId,
+            },
+          },
+        },
+      });
     }
 
     revalidateTag("puzzles");
   } catch (e: any) {
-    console.log(e);
-    throw new Error("Error liking puzzle.");
+    console.error(e);
+    throw new Error("Error liking or unliking puzzle.");
   }
 }
 

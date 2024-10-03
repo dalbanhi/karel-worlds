@@ -14,15 +14,8 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { getUserImage } from "@/lib/actions/users";
 import { puzzleImagesType } from "@/types/karelWorld";
 
-import {
-  HeartIcon,
-  PlayIcon,
-  StarFilledIcon,
-  StarIcon,
-  ShuffleIcon,
-} from "@radix-ui/react-icons";
-import { ButtonGroup } from "@/components/ui/ButtonGroup";
-import { Button, buttonVariants } from "@/components/ui/button";
+import { StarFilledIcon, StarIcon } from "@radix-ui/react-icons";
+
 import { PuzzleWithMoreStuff } from "@/types/puzzleExtensions";
 import CardButtons from "./CardButtons";
 
@@ -98,8 +91,8 @@ const PuzzleCard: React.FC<PuzzleCardProps> = async ({
   viewerImage,
   viewerID,
 }) => {
-  //check if the creator id of the puzzle is the same as the viewer id
-  const isCreator = viewerID === puzzleInfo.creatorId;
+  //check if the creator id of the puzzle is the same as the viewer id, if the viewer id is not the empty string
+  const isCreator = viewerID !== "" ? viewerID === puzzleInfo.creatorId : false;
 
   const userImage = isCreator
     ? viewerImage
@@ -108,9 +101,9 @@ const PuzzleCard: React.FC<PuzzleCardProps> = async ({
   // console.log("puzzleInfo, ", puzzleInfo);
 
   return (
-    <Card className="max-w-64">
-      <CardHeader className=" items-center justify-center gap-2">
-        <div className="flex flex-col gap-1">
+    <Card className="w-64 flex flex-col min-h-80">
+      <CardHeader className=" items-center justify-center gap-2 flex-grow">
+        <div className="flex flex-col gap-1 justify-start w-full h-full">
           <CardTitle>{puzzleInfo.name}</CardTitle>
           <CardDescription className="flex gap-2">
             {puzzleInfo.tags.length > 0 && (
@@ -118,7 +111,7 @@ const PuzzleCard: React.FC<PuzzleCardProps> = async ({
                 Tag{puzzleInfo.tags.length === 1 ? "" : "s"}:{" "}
               </span>
             )}
-            <span className="flex flex-wrap gap-1">
+            <span className="flex flex-wrap h-full gap-1">
               {puzzleInfo.tags.map((tag, index) => {
                 const content =
                   index === puzzleInfo.tags.length - 1
@@ -172,21 +165,6 @@ const PuzzleCard: React.FC<PuzzleCardProps> = async ({
       </CardContent>
       <CardFooter className="w-full">
         <CardButtons userID={viewerID} puzzleID={puzzleInfo.id} />
-        {/* <ButtonGroup className="w-full" areCardButtons={true}>
-          <Link
-            href={`/puzzle/${puzzleInfo.id}`}
-            aria-label="Solve the Puzzle"
-            className={`grow ${buttonVariants({ variant: "default" })}`}
-          >
-            <PlayIcon />
-          </Link>
-          <Button aria-label="Like or Unlike the Puzzle" className="grow">
-            <HeartIcon />
-          </Button>
-          <Button aria-label="Remix this puzzle" className="grow">
-            <ShuffleIcon />
-          </Button>
-        </ButtonGroup> */}
       </CardFooter>
     </Card>
   );

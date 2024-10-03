@@ -28,13 +28,13 @@ const ExplorePage: React.FC<ExplorePageProps> = async ({
   searchParams: { [key: string]: string | string[] | undefined };
 }) => {
   const clerkUser = await currentUser();
-  if (!clerkUser) {
-    redirect("/");
-  }
+  // if (!clerkUser) {
+  //   redirect("/");
+  // }
   const currentDBUser = await getCurrentUser();
-  if (!currentDBUser) {
-    redirect("/");
-  }
+  // if (!currentDBUser) {
+  //   redirect("/");
+  // }
 
   const currentSort = Array.isArray(searchParams.sort)
     ? searchParams.sort[0]
@@ -84,8 +84,8 @@ const ExplorePage: React.FC<ExplorePageProps> = async ({
         </div>
         <div>
           <PuzzleList
-            viewerId={currentDBUser.id}
-            viewerImage={clerkUser.imageUrl}
+            viewerId={currentDBUser?.id || ""}
+            viewerImage={clerkUser?.imageUrl || ""}
             puzzlesToShow={allPuzzles}
           />
         </div>
