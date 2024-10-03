@@ -10,6 +10,7 @@ import {
   nouns,
 } from "unique-username-generator";
 import { SortOptionType, TabType } from "@/types/puzzleDB";
+import { Prisma } from "@prisma/client";
 
 const config: Config = {
   dictionaries: [adjectives, nouns, nouns],
@@ -97,38 +98,95 @@ export async function createPuzzle(puzzleData: any) {
   }
 }
 
+const getOrderBy = (sortOption: SortOptionType) => {
+  switch (sortOption) {
+    case "diff-l-h":
+      return {
+        difficulty: "asc" as const,
+      };
+    case "diff-h-l":
+      return {
+        difficulty: "desc" as const,
+      };
+    case "rating-l-h":
+      return {
+        rating: "asc" as const,
+      };
+    case "rating-h-l":
+      return {
+        rating: "desc" as const,
+      };
+    default:
+      return {
+        createdAt: "desc" as const,
+      };
+  }
+};
+
+async function _getAllPuzzles(
+  sortOption: SortOptionType,
+  currentTag?: string,
+  currentSearch?: string
+) {
+  const orderBy = getOrderBy(sortOption);
+
+  const where: Prisma.PuzzleWhereInput = {
+    ...(currentTag && {
+      tags: {
+        some: {
+          name: {
+            equals: currentTag,
+            mode: "insensitive",
+          },
+        },
+      },
+    }),
+    ...(currentSearch && {
+      OR: [
+        {
+          tags: {
+            some: {
+              name: {
+                contains: currentSearch,
+                mode: "insensitive",
+              },
+            },
+          },
+        },
+        {
+          name: {
+            contains: currentSearch,
+            mode: "insensitive",
+          },
+        },
+        {
+          description: {
+            contains: currentSearch,
+            mode: "insensitive",
+          },
+        },
+      ],
+    }),
+  };
+
+  const puzzles = await db.puzzle.findMany({
+    where: Object.keys(where).length ? where : undefined,
+    include: {
+      likedBy: true,
+      tags: true,
+    },
+    orderBy,
+  });
+
+  return puzzles;
+}
+
 async function _getUserPuzzles(
   userId: string,
   currentTab: TabType,
   sortOption: SortOptionType
 ) {
-  let orderBy;
-  switch (sortOption) {
-    case "diff-l-h":
-      orderBy = {
-        difficulty: "asc" as const,
-      };
-      break;
-    case "diff-h-l":
-      orderBy = {
-        difficulty: "desc" as const,
-      };
-      break;
-    case "rating-l-h":
-      orderBy = {
-        rating: "asc" as const,
-      };
-      break;
-    case "rating-h-l":
-      orderBy = {
-        rating: "desc" as const,
-      };
-      break;
-    default:
-      orderBy = {
-        createdAt: "desc" as const,
-      };
-  }
+  const orderBy = getOrderBy(sortOption);
 
   //get puzzles created by the user
   try {
@@ -249,6 +307,10 @@ async function _hasUserLiked(userId: string, puzzleId: string) {
     throw new Error("Error getting if the user has already liked the puzzle");
   }
 }
+
+export const getAllPuzzles = cache(_getAllPuzzles, ["get-all-puzzles"], {
+  tags: ["puzzles"],
+});
 
 export const hasUserLiked = cache(_hasUserLiked, ["get-liked"], {
   tags: ["puzzles"],

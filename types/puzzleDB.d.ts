@@ -4,4 +4,5 @@ export type SortOptionType =
   | "diff-l-h"
   | "diff-h-l"
   | "rating-l-h"
-  | "rating-h-l";
+  | "rating-h-l"
+  | undefined;

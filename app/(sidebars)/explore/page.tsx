@@ -5,6 +5,12 @@ import React from "react";
 import SidebarLayout from "../layout";
 import LeftSidebar from "@/components/shared/layout/LeftSidebar";
 import RightSidebar from "@/components/shared/layout/RightSidebar";
+import { getAllPuzzles } from "@/lib/actions/puzzles";
+import { SortOptionType } from "@/types/puzzleDB";
+import PuzzleList from "@/components/shared/puzzle-viewing/PuzzleList";
+import { getCurrentUser } from "@/lib/auth/checkUser";
+import { currentUser } from "@clerk/nextjs/server";
+import { redirect } from "next/navigation";
 
 interface ExplorePageProps {
   searchParams: { [key: string]: string | string[] | undefined };
@@ -21,6 +27,31 @@ const ExplorePage: React.FC<ExplorePageProps> = async ({
 }: {
   searchParams: { [key: string]: string | string[] | undefined };
 }) => {
+  const clerkUser = await currentUser();
+  if (!clerkUser) {
+    redirect("/");
+  }
+  const currentDBUser = await getCurrentUser();
+  if (!currentDBUser) {
+    redirect("/");
+  }
+
+  const currentSort = Array.isArray(searchParams.sort)
+    ? searchParams.sort[0]
+    : searchParams.sort;
+  const currentTag = Array.isArray(searchParams.tag)
+    ? searchParams.tag[0]
+    : searchParams.tag;
+  const currentSearchTerm = Array.isArray(searchParams.search)
+    ? searchParams.search[0]
+    : searchParams.search;
+
+  const allPuzzles = await getAllPuzzles(
+    currentSort as SortOptionType,
+    currentTag,
+    currentSearchTerm
+  );
+  console.log(allPuzzles);
   return (
     <SidebarLayout>
       <LeftSidebar
@@ -50,6 +81,13 @@ const ExplorePage: React.FC<ExplorePageProps> = async ({
               />
             </div> */}
           </form>
+        </div>
+        <div>
+          <PuzzleList
+            viewerId={currentDBUser.id}
+            viewerImage={clerkUser.imageUrl}
+            puzzlesToShow={allPuzzles}
+          />
         </div>
       </section>
       <RightSidebar searchParams={searchParams}></RightSidebar>

@@ -6,7 +6,7 @@ import React from "react";
 
 import { Metadata } from "next";
 import { PuzzleWithMoreStuff } from "@/types/puzzleExtensions";
-import PuzzleCard from "@/components/shared/home/dashboard/PuzzleCard";
+import PuzzleCard from "@/components/shared/puzzle-viewing/PuzzleCard";
 import { ButtonGroup } from "@/components/ui/ButtonGroup";
 import Link from "next/link";
 import SidebarLayout from "../layout";
@@ -16,6 +16,7 @@ import { getUserPuzzles } from "@/lib/actions/puzzles";
 import { getCurrentUser } from "@/lib/auth/checkUser";
 import { SortOptionType, TabType } from "@/types/puzzleDB";
 import { Tags, User } from "@prisma/client";
+import PuzzleList from "@/components/shared/puzzle-viewing/PuzzleList";
 
 export const metadata: Metadata = {
   title: "My Stuff",
@@ -149,7 +150,7 @@ const MyDashboard = async ({
           </ButtonGroup>
         </div>
         <div className="mt-2 ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2">
-          <div className="flex flex-wrap justify-center gap-4 p-4">
+          {/* <div className="flex flex-wrap justify-center gap-4 p-4">
             {puzzlesToShow.length > 0 &&
               puzzlesToShow.map((puzzle: PuzzleWithMoreStuff) => {
                 return (
@@ -162,7 +163,12 @@ const MyDashboard = async ({
                 );
               })}
             {puzzlesToShow.length === 0 && <p>No puzzles to show</p>}
-          </div>
+          </div> */}
+          <PuzzleList
+            viewerId={currentDBUser.id}
+            viewerImage={clerkUser.imageUrl}
+            puzzlesToShow={puzzlesToShow}
+          />
         </div>
       </section>
       <RightSidebar searchParams={searchParams}></RightSidebar>
