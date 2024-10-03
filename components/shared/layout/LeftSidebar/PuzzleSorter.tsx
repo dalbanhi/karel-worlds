@@ -47,6 +47,14 @@ const PuzzleSorter: React.FC<PuzzleSorterProps> = ({
       label: "Rating (high-low)",
       value: "rating-h-l",
     },
+    {
+      label: "Newest First",
+      value: "newest",
+    },
+    {
+      label: "Oldest First",
+      value: "oldest",
+    },
   ];
 
   const selectedSort = searchParams.sort as string;

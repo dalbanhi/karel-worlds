@@ -47,13 +47,13 @@ export async function createPuzzle(puzzleData: any) {
   for (const tag of tags) {
     const existingTag = await db.tags.findUnique({
       where: {
-        name: tag,
+        name: tag.toLowerCase(),
       },
     });
     if (!existingTag) {
       const newTag = await db.tags.create({
         data: {
-          name: tag,
+          name: tag.toLowerCase(),
         },
       });
       puzzleTags.push(newTag);
@@ -117,6 +117,14 @@ const getOrderBy = (sortOption: SortOptionType) => {
     case "rating-h-l":
       return {
         rating: "desc" as const,
+      };
+    case "newest":
+      return {
+        createdAt: "desc" as const,
+      };
+    case "oldest":
+      return {
+        createdAt: "asc" as const,
       };
     default:
       return {
