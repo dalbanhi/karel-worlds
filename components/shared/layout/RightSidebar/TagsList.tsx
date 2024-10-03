@@ -4,6 +4,7 @@ import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { buttonVariants } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
+import { Tags } from "@prisma/client";
 
 interface TagsListProps {
   tags: string;
@@ -20,7 +21,7 @@ const TagsList: React.FC<TagsListProps> = ({ tags, searchParams }) => {
     ? `/explore?sort=${currentSort}&`
     : "/explore?";
 
-  const allTags = JSON.parse(tags) as string[];
+  const allTags = JSON.parse(tags) as Tags[];
   return (
     <div className="flex h-fit w-full flex-col items-center rounded-none p-2 text-muted-foreground">
       <div className="flex w-full flex-col items-center justify-center gap-4 p-2">
@@ -29,12 +30,12 @@ const TagsList: React.FC<TagsListProps> = ({ tags, searchParams }) => {
           {allTags?.map((tag, index) => {
             return (
               <Link
-                data-state={searchParams.tag === tag ? "active" : ""}
+                data-state={searchParams.tag === tag.name ? "active" : ""}
                 className={` capitalize ${buttonVariants({ variant: "outline" })}`}
-                href={`${baseURLToGoTo}tag=${tag}`}
-                key={tag}
+                href={`${baseURLToGoTo}tag=${tag.name}`}
+                key={tag.id}
               >
-                {tag}
+                {tag.name}
               </Link>
             );
           })}

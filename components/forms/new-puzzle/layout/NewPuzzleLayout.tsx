@@ -92,6 +92,10 @@ const NewPuzzleLayout: React.FC<NewPuzzleLayoutProps> = ({
     data.startWorldInfo = startWorldInfo;
     data.goalWorldInfo = goalWorldInfo;
     const newPuzzle = await createPuzzle(data);
+    //clear the session storage
+    sessionStorage.removeItem("puzzleFormData");
+    sessionStorage.removeItem("startWorldInfo");
+    sessionStorage.removeItem("goalWorldInfo");
 
     router.push(`/puzzle/${newPuzzle.id}`);
   };
