@@ -34,11 +34,9 @@ async function _getPuzzle(id: string) {
 
 export async function createPuzzle(puzzleData: any) {
   puzzleSchema.parse(puzzleData);
-  // console.log("Creating puzzle with data:", puzzleData);
   // Generate a random name if none is provided
   if (puzzleData.name === "") {
     puzzleData.name = uniqueUsernameGenerator(config);
-    // console.log("Generated puzzle name:", puzzleData.puzzleName);
   }
 
   //for each tag, check if it exists in the database, if not, create it
@@ -57,7 +55,6 @@ export async function createPuzzle(puzzleData: any) {
           name: tag,
         },
       });
-      // console.log("Created new tag:", newTag);
       puzzleTags.push(newTag);
     } else {
       puzzleTags.push(existingTag);
@@ -147,7 +144,6 @@ async function _getUserPuzzles(
           },
           orderBy,
         });
-        // console.log("Puzzles:", puzzles);
         return JSON.stringify(puzzles);
       case "liked-puzzles":
         const likedPuzzles = await db.puzzle.findMany({
@@ -164,7 +160,6 @@ async function _getUserPuzzles(
           },
           orderBy,
         });
-        // console.log("Liked puzzles:", likedPuzzles);
         return JSON.stringify(likedPuzzles);
       case "solved-puzzles":
         const solvedPuzzles = await db.puzzle.findMany({
@@ -181,7 +176,6 @@ async function _getUserPuzzles(
           },
           orderBy,
         });
-        // console.log("Solved puzzles:", solvedPuzzles);
         return JSON.stringify(solvedPuzzles);
       default:
         throw new Error("Invalid tab");
@@ -196,10 +190,6 @@ export async function likeOrUnlikePuzzle(
   puzzleId: string,
   shouldLike: boolean
 ) {
-  console.log("HERERE");
-  console.log(`${userId} is liking ${puzzleId}`);
-  console.log("shouldLike:", shouldLike);
-
   //check to see if the user already likes the puzzle
 
   try {
@@ -219,7 +209,6 @@ export async function likeOrUnlikePuzzle(
           },
         },
       });
-      console.log(`User ${userId} unliked puzzle ${puzzleId}`);
     } else {
       // If the user does not already like the puzzle, like it
       await db.puzzle.update({
@@ -234,7 +223,6 @@ export async function likeOrUnlikePuzzle(
           },
         },
       });
-      console.log(`User ${userId} liked puzzle ${puzzleId}`);
     }
 
     revalidateTag("puzzles");
