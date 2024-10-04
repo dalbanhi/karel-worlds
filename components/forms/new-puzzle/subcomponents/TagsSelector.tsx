@@ -6,8 +6,8 @@ import { FormField, FormLabel } from "@/components/ui/form";
 import { puzzleSchema } from "@/lib/validators/puzzle.schema";
 import { z } from "zod";
 import { maxNumTags } from "@/constants/puzzle";
-import { getAllTags } from "@/lib/actions/tags";
-import { raw } from "@prisma/client/runtime/library";
+import { getTags } from "@/lib/actions/tags";
+// import { maxTagsOnExplore } from "@/constants/database";
 
 const CreatableSelect = dynamic(() => import("react-select/creatable"), {
   ssr: false,
@@ -27,7 +27,7 @@ const TagsSelector: React.FC<TagsSelectorProps> = ({ form }) => {
 
   useEffect(() => {
     const getTagsFromServer = async () => {
-      const rawTagsFromServer = await getAllTags();
+      const rawTagsFromServer = await getTags();
       const tagNames = rawTagsFromServer.map((tagObject) => {
         return tagObject.name;
       });

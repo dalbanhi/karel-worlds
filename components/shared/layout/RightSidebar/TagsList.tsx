@@ -5,6 +5,8 @@ import Link from "next/link";
 import { buttonVariants } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Tags } from "@prisma/client";
+import { Separator } from "@/components/ui/separator";
+import { maxTagsOnExplore } from "@/constants/database";
 
 interface TagsListProps {
   tags: string;
@@ -33,6 +35,10 @@ const TagsList: React.FC<TagsListProps> = ({ tags, searchParams }) => {
         >
           {"All Puzzles"}
         </Link>
+        <Separator />
+        <Label className="text-sm text-ring">
+          Filter by Tag (Top {maxTagsOnExplore})
+        </Label>
         <div className="flex flex-wrap items-center justify-center gap-2">
           {allTags?.map((tag, index) => {
             return (
