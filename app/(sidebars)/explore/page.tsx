@@ -11,6 +11,7 @@ import PuzzleList from "@/components/shared/puzzle-viewing/PuzzleList";
 import { getCurrentUser } from "@/lib/auth/checkUser";
 import { currentUser } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
+import TagSearchAndFilterDrawer from "@/components/shared/puzzle-viewing/explore/TagSearchAndFilterDrawer";
 
 interface ExplorePageProps {
   searchParams: { [key: string]: string | string[] | undefined };
@@ -72,16 +73,10 @@ const ExplorePage: React.FC<ExplorePageProps> = async ({
                 className="w-full pl-8"
               />
             </div>
-            {/* <div className="relative">
-              <MagnifyingGlassIcon className="absolute left-2.5 top-2.5 size-4 text-muted-foreground" />
-              <Input
-                type="search"
-                placeholder="Search tags..."
-                className="w-fit pl-8"
-              />
-            </div> */}
           </form>
         </div>
+        <TagSearchAndFilterDrawer searchParams={searchParams} />
+
         <div>
           <PuzzleList
             viewerId={currentDBUser?.id || ""}

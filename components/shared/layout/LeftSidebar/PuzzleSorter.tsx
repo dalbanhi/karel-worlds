@@ -2,7 +2,6 @@ import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import Link from "next/link";
 import React from "react";
-import { string } from "zod";
 
 interface PuzzleSorterProps {
   searchParams: { [key: string]: string | string[] | undefined };
