@@ -2,6 +2,7 @@
 import { unstable_cache as cache, revalidateTag } from "next/cache";
 import { puzzleSchema } from "../validators/puzzle.schema";
 import { db } from "../db";
+import examplePuzzle from "@/public/data/example-puzzle.json";
 
 import {
   uniqueUsernameGenerator,
@@ -11,6 +12,7 @@ import {
 } from "unique-username-generator";
 import { SortOptionType, TabType } from "@/types/puzzleDB";
 import { Prisma } from "@prisma/client";
+import { PuzzleWithMoreStuff } from "@/types/puzzleExtensions";
 
 const config: Config = {
   dictionaries: [adjectives, nouns, nouns],
@@ -191,8 +193,33 @@ async function _getAllPuzzles(
     },
     orderBy,
   });
-
   return puzzles;
+
+  const fakePuzzles: PuzzleWithMoreStuff[] = [
+    {
+      id: "example-id",
+      name: "Example Puzzle",
+      description: "This is an example puzzle.",
+      worldWidth: 10,
+      worldHeight: 10,
+      hints: ["Hint 1", "Hint 2"],
+      karelImage: "",
+      beeperImage: "",
+      wallImage: "",
+      backgroundImage: "",
+      startWorldInfo: {},
+      goalWorldInfo: {},
+      creatorId: "example-creator-id",
+      rating: 5,
+      difficulty: 3,
+      likedBy: [],
+      tags: [],
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    },
+  ];
+
+  return fakePuzzles;
 }
 
 async function _getUserPuzzles(
@@ -320,6 +347,7 @@ export async function likeOrUnlikePuzzle(
 
 async function _hasUserLiked(userId: string, puzzleId: string) {
   try {
+    // return false;
     const existingLike = await db.puzzle.findFirst({
       where: {
         id: puzzleId,

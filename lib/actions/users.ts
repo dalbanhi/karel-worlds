@@ -39,6 +39,7 @@ async function _createUser(data: any) {
 export async function getUserImage(userId: string) {
   // This function gets the user's image
   try {
+    // return "https://img.clerk.com/eyJ0eXBlIjoicHJveHkiLCJzcmMiOiJodHRwczovL2ltYWdlcy5jbGVyay5kZXYvb2F1dGhfZ29vZ2xlL2ltZ18ybDg0Tlp2S2d2MWw4QlNCY01VdGpjM1djRUkifQ";
     const user = await db.user.findUnique({
       where: {
         id: userId,

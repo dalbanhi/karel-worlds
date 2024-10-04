@@ -11,10 +11,10 @@ const RightSidebar: React.FC<RightSidebarProps> = async ({
   children,
   searchParams,
 }) => {
-  const allTags = await getTags(maxTagsOnExplore);
+  const topTags = await getTags(maxTagsOnExplore);
   return (
     <aside className="min-h-screen w-3/12 flex-col gap-2 border-l-2 p-4 max-sm:hidden sm:flex">
-      <TagsList tags={JSON.stringify(allTags)} searchParams={searchParams} />
+      <TagsList tags={JSON.stringify(topTags)} searchParams={searchParams} />
     </aside>
   );
 };

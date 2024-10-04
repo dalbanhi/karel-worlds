@@ -7,6 +7,7 @@ import { Label } from "@/components/ui/label";
 import { Tags } from "@prisma/client";
 import { Separator } from "@/components/ui/separator";
 import { maxTagsOnExplore } from "@/constants/database";
+import TagSearchCombobox from "./TagSearchCombobox";
 
 interface TagsListProps {
   tags: string;
@@ -23,7 +24,7 @@ const TagsList: React.FC<TagsListProps> = ({ tags, searchParams }) => {
     ? `/explore?sort=${currentSort}`
     : "/explore?";
 
-  const allTags = JSON.parse(tags) as Tags[];
+  const topTags = JSON.parse(tags) as Tags[];
   return (
     <div className="flex h-fit w-full flex-col items-center rounded-none p-2 text-muted-foreground">
       <div className="flex w-full flex-col items-center justify-center gap-4 p-2">
@@ -35,12 +36,12 @@ const TagsList: React.FC<TagsListProps> = ({ tags, searchParams }) => {
         >
           {"All Puzzles"}
         </Link>
+
         <Separator />
-        <Label className="text-sm text-ring">
-          Filter by Tag (Top {maxTagsOnExplore})
-        </Label>
+        <Label className="text-sm text-ring">Filter by Tags</Label>
+        <TagSearchCombobox baseURLToGoTo={baseURLToGoTo} />
         <div className="flex flex-wrap items-center justify-center gap-2">
-          {allTags?.map((tag, index) => {
+          {topTags?.map((tag, index) => {
             return (
               <Link
                 data-state={searchParams.tag === tag.name ? "active" : ""}
