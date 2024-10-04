@@ -31,7 +31,7 @@ import {
 import useDevice from "@/hooks/useMediaQuery";
 
 interface DynamicTagListProps {
-  baseURLToGoTo: string;
+  baseURLWithSearchAndSort: string;
   matchingTags: Tags[] | null;
   setMatchingTags: React.Dispatch<React.SetStateAction<Tags[] | null>>;
   value: string;
@@ -41,7 +41,7 @@ interface DynamicTagListProps {
 }
 
 const DynamicTagList: React.FC<DynamicTagListProps> = ({
-  baseURLToGoTo,
+  baseURLWithSearchAndSort,
   matchingTags,
   setMatchingTags,
   value,
@@ -77,7 +77,7 @@ const DynamicTagList: React.FC<DynamicTagListProps> = ({
     return () => {
       if (timeoutID) clearTimeout(timeoutID);
     };
-  }, [tagSearchTerm]);
+  }, [tagSearchTerm, setMatchingTags]);
   return (
     <Command className="rounded-md" shouldFilter={false}>
       <CommandInput
@@ -113,7 +113,9 @@ const DynamicTagList: React.FC<DynamicTagListProps> = ({
                       setValue(currentValue === value ? "" : tag.name);
                       setOpen(false);
                       //route to the tag with the previous search params
-                      router.push(`${baseURLToGoTo}&tag=${tag.name}`);
+                      router.push(
+                        `${baseURLWithSearchAndSort}&tag=${tag.name}`
+                      );
                     }}
                   >
                     {tag.name}
@@ -137,12 +139,12 @@ const DynamicTagList: React.FC<DynamicTagListProps> = ({
 };
 
 interface TagSearchComboboxProps {
-  baseURLToGoTo: string;
+  baseURLWithSearchAndSort: string;
   searchParams: { [key: string]: string | string[] | undefined };
 }
 
 const TagSearchCombobox: React.FC<TagSearchComboboxProps> = ({
-  baseURLToGoTo,
+  baseURLWithSearchAndSort,
   searchParams,
 }) => {
   const [open, setOpen] = useState(false);
@@ -170,7 +172,7 @@ const TagSearchCombobox: React.FC<TagSearchComboboxProps> = ({
         </PopoverTrigger>
         <PopoverContent className="w-full p-0">
           <DynamicTagList
-            baseURLToGoTo={baseURLToGoTo}
+            baseURLWithSearchAndSort={baseURLWithSearchAndSort}
             matchingTags={matchingTags}
             setMatchingTags={setMatchingTags}
             value={value}
@@ -210,7 +212,7 @@ const TagSearchCombobox: React.FC<TagSearchComboboxProps> = ({
           </DrawerHeader>
           <div className="mt-4 border-t">
             <DynamicTagList
-              baseURLToGoTo={baseURLToGoTo}
+              baseURLWithSearchAndSort={baseURLWithSearchAndSort}
               matchingTags={matchingTags}
               setMatchingTags={setMatchingTags}
               value={value}

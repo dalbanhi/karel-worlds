@@ -122,7 +122,7 @@ const PuzzleCard: React.FC<PuzzleCardProps> = async ({
   const descriptionExists = puzzleInfo.description !== "";
 
   return (
-    <Card className="flex min-h-80 max-h-fit w-64 flex-col">
+    <Card className="flex max-h-fit min-h-80 w-64 flex-col">
       <CardHeader className=" grow items-center justify-center gap-2">
         <div className="flex size-full flex-col justify-start gap-1">
           <CardTitle className="line-clamp-2">{puzzleInfo.name}</CardTitle>

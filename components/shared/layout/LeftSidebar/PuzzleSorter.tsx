@@ -20,11 +20,15 @@ const PuzzleSorter: React.FC<PuzzleSorterProps> = ({
 
   const currentTag = searchParams.tag as string;
   const currentView = searchParams.view as string;
-  const urlAddition = currentTag
-    ? `&tag=${currentTag}`
-    : currentView
-      ? `&view=${currentView}`
-      : "";
+  const currentSearch = searchParams.search as string;
+
+  const baseURLWithTag = currentTag ? `${baseURL}tag=${currentTag}` : baseURL;
+  const baseURLWithTagAndView = currentView
+    ? `${baseURLWithTag}&view=${currentView}`
+    : baseURLWithTag;
+  const baseURLWithTagAndViewAndSearch = currentSearch
+    ? `${baseURLWithTagAndView}&search=${currentSearch}`
+    : baseURLWithTagAndView;
 
   const selectedSort = searchParams.sort as string;
   return (
@@ -41,7 +45,7 @@ const PuzzleSorter: React.FC<PuzzleSorterProps> = ({
               <div key={option.value} className="flex items-center space-x-2">
                 <Link
                   className="inline-flex gap-1"
-                  href={`${baseURL}sort=${option.value}${urlAddition}`}
+                  href={`${baseURLWithTagAndViewAndSearch}&sort=${option.value}`}
                 >
                   <RadioGroupItem value={option.value} id={option.value} />
                   <Label htmlFor={option.value} id={`${option.value}-label`}>

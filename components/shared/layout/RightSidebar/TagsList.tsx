@@ -24,9 +24,17 @@ const TagsList: React.FC<TagsListProps> = ({ tags, searchParams }) => {
   if (!pathname.includes("explore")) return null;
 
   const currentSort = searchParams.sort as string;
-  const baseURLToGoTo = currentSort
-    ? `/explore?sort=${currentSort}`
-    : "/explore?";
+  const currentSearch = searchParams.search as string;
+  const baseURL = `/explore?`;
+  const baseURLWithSort = currentSort
+    ? `${baseURL}sort=${currentSort}`
+    : baseURL;
+  const baseURLWithSearchAndSort = currentSearch
+    ? `${baseURLWithSort}search=${baseURLWithSort}`
+    : baseURL;
+  // const baseURLToGoTo = currentSort
+  //   ? `/explore?sort=${currentSort}`
+  //   : "/explore?";
 
   const topTags = JSON.parse(tags) as Tags[];
   return (
@@ -36,7 +44,7 @@ const TagsList: React.FC<TagsListProps> = ({ tags, searchParams }) => {
         <Link
           data-state={!searchParams.tag ? "active" : ""}
           className={` capitalize ${buttonVariants({ variant: "outline" })}`}
-          href={`${baseURLToGoTo}`}
+          href={`${baseURLWithSearchAndSort}`}
         >
           {"All Puzzles"}
         </Link>
@@ -44,7 +52,7 @@ const TagsList: React.FC<TagsListProps> = ({ tags, searchParams }) => {
         <Separator />
         <Label className="text-sm text-ring">Filter by Tags</Label>
         <TagSearchCombobox
-          baseURLToGoTo={baseURLToGoTo}
+          baseURLWithSearchAndSort={baseURLWithSearchAndSort}
           searchParams={searchParams}
         />
         <div className="flex flex-wrap items-center justify-center gap-2">
@@ -53,7 +61,7 @@ const TagsList: React.FC<TagsListProps> = ({ tags, searchParams }) => {
               <Link
                 data-state={searchParams.tag === tag.name ? "active" : ""}
                 className={` capitalize ${buttonVariants({ variant: "outline" })}`}
-                href={`${baseURLToGoTo}&tag=${tag.name}`}
+                href={`${baseURLWithSearchAndSort}&tag=${tag.name}`}
                 key={tag.id}
               >
                 {tag.name}
