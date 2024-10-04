@@ -64,7 +64,7 @@ const DynamicTagList: React.FC<DynamicTagListProps> = ({
     };
   }, [tagSearchTerm]);
   return (
-    <Command shouldFilter={false}>
+    <Command className="rounded-md" shouldFilter={false}>
       <CommandInput
         placeholder="Search tags..."
         className="h-9"
@@ -131,9 +131,7 @@ const TagSearchCombobox: React.FC<TagSearchComboboxProps> = ({
   const [value, setValue] = useState("");
 
   const [matchingTags, setMatchingTags] = useState<Tags[] | null>(null);
-  //   const userAgent = headers().get("user-agent") || "";
-  //   const isMobileDevice = isMobile(userAgent);
-  const isMobileDevice = false;
+  const isMobileDevice = true;
 
   if (!isMobileDevice) {
     return (
@@ -166,7 +164,7 @@ const TagSearchCombobox: React.FC<TagSearchComboboxProps> = ({
     );
   } else {
     return (
-      <Drawer open={open} onOpenChange={setOpen}>
+      <Drawer direction="top" open={open} onOpenChange={setOpen}>
         <DrawerTrigger asChild>
           <Button
             variant="outline"
@@ -181,7 +179,7 @@ const TagSearchCombobox: React.FC<TagSearchComboboxProps> = ({
             <CaretSortIcon className="ml-2 size-4 shrink-0 opacity-50" />
           </Button>
         </DrawerTrigger>
-        <DrawerContent>
+        <DrawerContent className="bg-card">
           <div className="mt-4 border-t">
             <DynamicTagList
               baseURLToGoTo={baseURLToGoTo}
