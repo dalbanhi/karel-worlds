@@ -185,15 +185,15 @@ async function _getAllPuzzles(
     }),
   };
 
-  const puzzles = await db.puzzle.findMany({
-    where: Object.keys(where).length ? where : undefined,
-    include: {
-      likedBy: true,
-      tags: true,
-    },
-    orderBy,
-  });
-  return puzzles;
+  // const puzzles = await db.puzzle.findMany({
+  //   where: Object.keys(where).length ? where : undefined,
+  //   include: {
+  //     likedBy: true,
+  //     tags: true,
+  //   },
+  //   orderBy,
+  // });
+  // return puzzles;
 
   const fakePuzzles: PuzzleWithMoreStuff[] = [
     {
@@ -213,7 +213,10 @@ async function _getAllPuzzles(
       rating: 5,
       difficulty: 3,
       likedBy: [],
-      tags: [],
+      tags: [
+        { id: "1", name: "loops" },
+        { id: "2", name: "texas" },
+      ],
       createdAt: new Date(),
       updatedAt: new Date(),
     },
@@ -347,7 +350,7 @@ export async function likeOrUnlikePuzzle(
 
 async function _hasUserLiked(userId: string, puzzleId: string) {
   try {
-    // return false;
+    return false;
     const existingLike = await db.puzzle.findFirst({
       where: {
         id: puzzleId,

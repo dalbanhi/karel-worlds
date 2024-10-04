@@ -4,9 +4,9 @@ import { db } from "@/lib/db";
 
 export const getCurrentUser = async () => {
   const user = await currentUser();
-  // if (!user) {
-  //   return null;
-  // }
+  if (!user) {
+    return null;
+  }
 
   // const dbUser = await db.user.findUnique({
   //   where: {

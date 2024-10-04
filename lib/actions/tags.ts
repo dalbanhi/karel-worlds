@@ -19,46 +19,50 @@ const fakeTags: { name: string; id: string; _count: number }[] = [
 ];
 
 async function _getTags(top?: number) {
-  const tags = await db.tags.findMany({
-    take: top,
-    orderBy: {
-      puzzles: {
-        _count: "desc",
-      },
-    },
-    include: {
-      _count: {
-        select: {
-          puzzles: true,
-        },
-      },
-    },
-  });
-  return tags;
+  // const tags = await db.tags.findMany({
+  //   take: top,
+  //   orderBy: {
+  //     puzzles: {
+  //       _count: "desc",
+  //     },
+  //   },
+  //   include: {
+  //     _count: {
+  //       select: {
+  //         puzzles: true,
+  //       },
+  //     },
+  //   },
+  // });
+  // return tags;
   // simulate getting the top
 
   //sort the fake tags by the count
-  // fakeTags.sort((a, b) => b._count - a._count);
+  fakeTags.sort((a, b) => b._count - a._count);
 
-  // await new Promise((resolve) => setTimeout(resolve, 500));
+  await new Promise((resolve) => setTimeout(resolve, 500));
 
-  // return top ? fakeTags.slice(0, top) : fakeTags;
+  return top ? fakeTags.slice(0, top) : fakeTags;
 }
 
 async function _searchTags(searchTerm: string) {
-  const tags = await db.tags.findMany({
-    where: {
-      name: {
-        contains: searchTerm,
-        mode: "insensitive",
-      },
-    },
-  });
-  return tags;
+  if (searchTerm.length < 3) {
+    return [];
+  }
+
+  // const tags = await db.tags.findMany({
+  //   where: {
+  //     name: {
+  //       contains: searchTerm,
+  //       mode: "insensitive",
+  //     },
+  //   },
+  // });
+  // return tags;
   // const tags: Tags[] = fakeTags;
 
   //filter the tags that contain the serach term
-  const filteredTags = tags.filter((tag) =>
+  const filteredTags = fakeTags.filter((tag) =>
     tag.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 

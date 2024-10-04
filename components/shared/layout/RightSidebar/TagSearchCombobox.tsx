@@ -21,25 +21,6 @@ import { searchTags } from "@/lib/actions/tags";
 import { useRouter } from "next/navigation";
 import { CommandLoading } from "cmdk";
 
-const tags = [
-  {
-    value: "loops",
-    label: "Loops",
-  },
-  {
-    value: "texas",
-    label: "Texas",
-  },
-  {
-    value: "conditionals",
-    label: "Conditionals",
-  },
-  {
-    value: "starter tutorial",
-    label: "Starter Tutorial ",
-  },
-];
-
 interface TagSearchComboboxProps {
   baseURLToGoTo: string;
 }
@@ -105,8 +86,8 @@ const TagSearchCombobox: React.FC<TagSearchComboboxProps> = ({
               {matchingTags &&
                 matchingTags.length === 0 &&
                 tagSearchTerm.length < 3 && (
-                  <div className="italic">
-                    Type more than 3 characters to search tags
+                  <div className="text-xs italic">
+                    Type 3+ characters to search tags.
                   </div>
                 )}
               {matchingTags && (
@@ -114,27 +95,31 @@ const TagSearchCombobox: React.FC<TagSearchComboboxProps> = ({
                   {isLoading && (
                     <CommandLoading>Loading tags...</CommandLoading>
                   )}
-                  {matchingTags.map((tag) => (
-                    <CommandItem
-                      className="capitalize"
-                      key={tag.id}
-                      value={tag.id}
-                      onSelect={(currentValue) => {
-                        setValue(currentValue === value ? "" : tag.name);
-                        setOpen(false);
-                        //route to the tag with the previous search params
-                        router.push(`${baseURLToGoTo}&tag=${tag.name}`);
-                      }}
-                    >
-                      {tag.name}
-                      <CheckIcon
-                        className={cn(
-                          "ml-auto size-4",
-                          value === tag.name ? "opacity-100" : "opacity-0"
-                        )}
-                      />
-                    </CommandItem>
-                  ))}
+                  {matchingTags.length > 0 &&
+                    matchingTags.map((tag) => (
+                      <CommandItem
+                        className="capitalize"
+                        key={tag.id}
+                        value={tag.id}
+                        onSelect={(currentValue) => {
+                          setValue(currentValue === value ? "" : tag.name);
+                          setOpen(false);
+                          //route to the tag with the previous search params
+                          router.push(`${baseURLToGoTo}&tag=${tag.name}`);
+                        }}
+                      >
+                        {tag.name}
+                        <CheckIcon
+                          className={cn(
+                            "ml-auto size-4",
+                            value === tag.name ? "opacity-100" : "opacity-0"
+                          )}
+                        />
+                      </CommandItem>
+                    ))}
+                  {matchingTags.length === 0 && tagSearchTerm.length >= 3 && (
+                    <div className="text-xs italic">No tags found.</div>
+                  )}
                 </>
               )}
             </CommandGroup>
