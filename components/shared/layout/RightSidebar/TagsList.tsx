@@ -6,8 +6,12 @@ import { buttonVariants } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Tags } from "@prisma/client";
 import { Separator } from "@/components/ui/separator";
-import { maxTagsOnExplore } from "@/constants/database";
-import TagSearchCombobox from "./TagSearchCombobox";
+import dynamic from "next/dynamic";
+
+const TagSearchCombobox = dynamic(() => import("./TagSearchCombobox"), {
+  ssr: false,
+  loading: () => <div>Loading...</div>,
+});
 
 interface TagsListProps {
   tags: string;
@@ -39,7 +43,10 @@ const TagsList: React.FC<TagsListProps> = ({ tags, searchParams }) => {
 
         <Separator />
         <Label className="text-sm text-ring">Filter by Tags</Label>
-        <TagSearchCombobox baseURLToGoTo={baseURLToGoTo} />
+        <TagSearchCombobox
+          baseURLToGoTo={baseURLToGoTo}
+          searchParams={searchParams}
+        />
         <div className="flex flex-wrap items-center justify-center gap-2">
           {topTags?.map((tag, index) => {
             return (

@@ -2,6 +2,7 @@ import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import Link from "next/link";
 import React from "react";
+import { sortOptions } from "@/constants/database";
 
 interface PuzzleSorterProps {
   searchParams: { [key: string]: string | string[] | undefined };
@@ -13,11 +14,7 @@ const PuzzleSorter: React.FC<PuzzleSorterProps> = ({
   baseRoute,
 }) => {
   const baseURL = `/${baseRoute}?`;
-  if (
-    searchParams === undefined ||
-    searchParams === null
-    // Object.keys(searchParams).length === 0
-  ) {
+  if (searchParams === undefined || searchParams === null) {
     return null;
   }
 
@@ -28,33 +25,6 @@ const PuzzleSorter: React.FC<PuzzleSorterProps> = ({
     : currentView
       ? `&view=${currentView}`
       : "";
-
-  const sortOptions = [
-    {
-      label: "Difficulty (low-high)",
-      value: "diff-l-h",
-    },
-    {
-      label: "Difficulty (high-low)",
-      value: "diff-h-l",
-    },
-    {
-      label: "Rating (low-high)",
-      value: "rating-l-h",
-    },
-    {
-      label: "Rating (high-low)",
-      value: "rating-h-l",
-    },
-    {
-      label: "Newest First",
-      value: "newest",
-    },
-    {
-      label: "Oldest First",
-      value: "oldest",
-    },
-  ];
 
   const selectedSort = searchParams.sort as string;
   return (

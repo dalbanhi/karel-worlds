@@ -108,20 +108,6 @@ const MyDashboard = async ({
           </ButtonGroup>
         </div>
         <div className="mt-2 ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2">
-          {/* <div className="flex flex-wrap justify-center gap-4 p-4">
-            {puzzlesToShow.length > 0 &&
-              puzzlesToShow.map((puzzle: PuzzleWithMoreStuff) => {
-                return (
-                  <PuzzleCard
-                    key={puzzle.id}
-                    puzzleInfo={puzzle}
-                    viewerImage={clerkUser.imageUrl}
-                    viewerID={currentDBUser.id}
-                  />
-                );
-              })}
-            {puzzlesToShow.length === 0 && <p>No puzzles to show</p>}
-          </div> */}
           <PuzzleList
             viewerId={currentDBUser.id}
             viewerImage={clerkUser.imageUrl}

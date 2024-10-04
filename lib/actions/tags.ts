@@ -19,22 +19,22 @@ const fakeTags: { name: string; id: string; _count: number }[] = [
 ];
 
 async function _getTags(top?: number) {
-  // const tags = await db.tags.findMany({
-  //   take: top,
-  //   orderBy: {
-  //     puzzles: {
-  //       _count: "desc",
-  //     },
-  //   },
-  //   include: {
-  //     _count: {
-  //       select: {
-  //         puzzles: true,
-  //       },
-  //     },
-  //   },
-  // });
-  // return tags;
+  const tags = await db.tags.findMany({
+    take: top,
+    orderBy: {
+      puzzles: {
+        _count: "desc",
+      },
+    },
+    include: {
+      _count: {
+        select: {
+          puzzles: true,
+        },
+      },
+    },
+  });
+  return tags;
   // simulate getting the top
 
   //sort the fake tags by the count
@@ -50,15 +50,15 @@ async function _searchTags(searchTerm: string) {
     return [];
   }
 
-  // const tags = await db.tags.findMany({
-  //   where: {
-  //     name: {
-  //       contains: searchTerm,
-  //       mode: "insensitive",
-  //     },
-  //   },
-  // });
-  // return tags;
+  const tags = await db.tags.findMany({
+    where: {
+      name: {
+        contains: searchTerm,
+        mode: "insensitive",
+      },
+    },
+  });
+  return tags;
   // const tags: Tags[] = fakeTags;
 
   //filter the tags that contain the serach term

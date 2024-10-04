@@ -14,7 +14,7 @@ const PuzzleList: React.FC<PuzzleListProps> = ({
   viewerImage,
 }) => {
   return (
-    <div className="flex flex-wrap justify-center gap-4 p-4">
+    <div className="flex grow flex-wrap justify-center gap-4 p-4">
       {puzzlesToShow.length > 0 &&
         puzzlesToShow.map((puzzle: PuzzleWithMoreStuff) => {
           return (

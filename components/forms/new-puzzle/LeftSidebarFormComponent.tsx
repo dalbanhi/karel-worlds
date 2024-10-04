@@ -26,7 +26,7 @@ const LeftSidebarFormComponent: React.FC<LeftSidebarFormComponentProps> = ({
   form,
 }) => {
   return (
-    <aside className="min-h-screen w-3/12 shrink grow flex-col gap-2 border-r-2 border-primary bg-card p-4 max-md:hidden md:flex">
+    <aside className="min-h-dvh w-3/12 shrink grow flex-col gap-2 border-r-2 border-primary bg-card p-4 max-md:hidden md:flex">
       <h2 className="text-center text-base font-semibold text-ring">
         Customize Your Sprites
       </h2>

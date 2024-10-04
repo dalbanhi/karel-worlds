@@ -1,3 +1,4 @@
+"use client";
 import React, { useState, useEffect } from "react";
 import { CaretSortIcon, CheckIcon } from "@radix-ui/react-icons";
 
@@ -19,7 +20,15 @@ import { Tags } from "@prisma/client";
 import { searchTags } from "@/lib/actions/tags";
 import { useRouter } from "next/navigation";
 import { CommandLoading } from "cmdk";
-import { Drawer, DrawerTrigger, DrawerContent } from "@/components/ui/drawer";
+import {
+  Drawer,
+  DrawerTrigger,
+  DrawerContent,
+  DrawerDescription,
+  DrawerHeader,
+  DrawerTitle,
+} from "@/components/ui/drawer";
+import useDevice from "@/hooks/useMediaQuery";
 
 interface DynamicTagListProps {
   baseURLToGoTo: string;
@@ -28,6 +37,7 @@ interface DynamicTagListProps {
   value: string;
   setValue: React.Dispatch<React.SetStateAction<string>>;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  searchParams: { [key: string]: string | string[] | undefined };
 }
 
 const DynamicTagList: React.FC<DynamicTagListProps> = ({
@@ -37,9 +47,14 @@ const DynamicTagList: React.FC<DynamicTagListProps> = ({
   value,
   setValue,
   setOpen,
+  searchParams,
 }) => {
   const router = useRouter();
-  const [tagSearchTerm, setTagSearchTerm] = useState("");
+  const [tagSearchTerm, setTagSearchTerm] = useState(
+    Array.isArray(searchParams.tag)
+      ? searchParams.tag[0]
+      : searchParams.tag || ""
+  );
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   useEffect(() => {
@@ -67,9 +82,10 @@ const DynamicTagList: React.FC<DynamicTagListProps> = ({
     <Command className="rounded-md" shouldFilter={false}>
       <CommandInput
         placeholder="Search tags..."
-        className="h-9"
+        className="h-8"
         value={tagSearchTerm}
         onValueChange={(value) => setTagSearchTerm(value)}
+        autoFocus
       />
       <CommandList>
         <CommandGroup>
@@ -122,18 +138,20 @@ const DynamicTagList: React.FC<DynamicTagListProps> = ({
 
 interface TagSearchComboboxProps {
   baseURLToGoTo: string;
+  searchParams: { [key: string]: string | string[] | undefined };
 }
 
 const TagSearchCombobox: React.FC<TagSearchComboboxProps> = ({
   baseURLToGoTo,
+  searchParams,
 }) => {
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState("");
 
   const [matchingTags, setMatchingTags] = useState<Tags[] | null>(null);
-  const isMobileDevice = true;
+  const { isSmall } = useDevice();
 
-  if (!isMobileDevice) {
+  if (!isSmall) {
     return (
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
@@ -158,6 +176,7 @@ const TagSearchCombobox: React.FC<TagSearchComboboxProps> = ({
             value={value}
             setValue={setValue}
             setOpen={setOpen}
+            searchParams={searchParams}
           />
         </PopoverContent>
       </Popover>
@@ -179,7 +198,16 @@ const TagSearchCombobox: React.FC<TagSearchComboboxProps> = ({
             <CaretSortIcon className="ml-2 size-4 shrink-0 opacity-50" />
           </Button>
         </DrawerTrigger>
-        <DrawerContent className="bg-card">
+        <DrawerContent
+          aria-describedby="A drawer to search tags"
+          className="bg-card"
+        >
+          <DrawerHeader>
+            <DrawerTitle className="text-lg">Search Tags</DrawerTitle>
+            <DrawerDescription className="text-sm">
+              An easy way to filter puzzles by tags.
+            </DrawerDescription>
+          </DrawerHeader>
           <div className="mt-4 border-t">
             <DynamicTagList
               baseURLToGoTo={baseURLToGoTo}
@@ -188,6 +216,7 @@ const TagSearchCombobox: React.FC<TagSearchComboboxProps> = ({
               value={value}
               setValue={setValue}
               setOpen={setOpen}
+              searchParams={searchParams}
             />
           </div>
         </DrawerContent>

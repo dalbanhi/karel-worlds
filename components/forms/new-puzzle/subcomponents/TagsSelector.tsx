@@ -7,7 +7,6 @@ import { puzzleSchema } from "@/lib/validators/puzzle.schema";
 import { z } from "zod";
 import { maxNumTags } from "@/constants/puzzle";
 import { getTags } from "@/lib/actions/tags";
-// import { maxTagsOnExplore } from "@/constants/database";
 
 const CreatableSelect = dynamic(() => import("react-select/creatable"), {
   ssr: false,

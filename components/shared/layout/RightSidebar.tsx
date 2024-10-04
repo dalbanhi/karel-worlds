@@ -1,6 +1,12 @@
 import TagsList from "./RightSidebar/TagsList";
 import { getTags } from "@/lib/actions/tags";
 import { maxTagsOnExplore } from "@/constants/database";
+import dynamic from "next/dynamic";
+
+// const TagsList = dynamic(() => import("./RightSidebar/TagsList"), {
+//   ssr: false,
+//   loading: () => <div>Loading...</div>,
+// });
 
 interface RightSidebarProps {
   children?: React.ReactNode;
@@ -13,7 +19,7 @@ const RightSidebar: React.FC<RightSidebarProps> = async ({
 }) => {
   const topTags = await getTags(maxTagsOnExplore);
   return (
-    <aside className="min-h-screen w-3/12 flex-col gap-2 border-l-2 p-4 max-sm:hidden sm:flex">
+    <aside className="min-h-svh grow w-3/12 flex-col gap-2 border-l-2 p-4 max-sm:hidden sm:flex">
       <TagsList tags={JSON.stringify(topTags)} searchParams={searchParams} />
     </aside>
   );

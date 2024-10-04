@@ -109,7 +109,7 @@ const PuzzleCard: React.FC<PuzzleCardProps> = async ({
 }) => {
   const userAgent = headers().get("user-agent") || "";
   const mobileCheck = isMobile(userAgent);
-  console.log("mobileCheck, should be rendering tooltip", mobileCheck);
+  // console.log("mobileCheck, should be rendering tooltip", mobileCheck);
   //check if the creator id of the puzzle is the same as the viewer id, if the viewer id is not the empty string
   const isCreator = viewerID !== "" ? viewerID === puzzleInfo.creatorId : false;
 
@@ -122,7 +122,7 @@ const PuzzleCard: React.FC<PuzzleCardProps> = async ({
   const descriptionExists = puzzleInfo.description !== "";
 
   return (
-    <Card className="flex min-h-80 w-64 flex-col">
+    <Card className="flex min-h-80 max-h-fit w-64 flex-col">
       <CardHeader className=" grow items-center justify-center gap-2">
         <div className="flex size-full flex-col justify-start gap-1">
           <CardTitle className="line-clamp-2">{puzzleInfo.name}</CardTitle>
