@@ -7,6 +7,7 @@ import { Label } from "@/components/ui/label";
 import { Tags } from "@prisma/client";
 import { Separator } from "@/components/ui/separator";
 import dynamic from "next/dynamic";
+import { buildRouteWithUpdatedParams } from "@/lib/utils/getCombinedSearchParams";
 
 const TagSearchCombobox = dynamic(() => import("./TagSearchCombobox"), {
   ssr: false,
@@ -22,19 +23,11 @@ const TagsList: React.FC<TagsListProps> = ({ tags, searchParams }) => {
   const pathname = usePathname();
   if (pathname === "/") return null;
   if (!pathname.includes("explore")) return null;
+  const baseRoute = `explore`;
 
-  const currentSort = searchParams.sort as string;
-  const currentSearch = searchParams.search as string;
-  const baseURL = `/explore?`;
-  const baseURLWithSort = currentSort
-    ? `${baseURL}sort=${currentSort}`
-    : baseURL;
-  const baseURLWithSearchAndSort = currentSearch
-    ? `${baseURLWithSort}search=${baseURLWithSort}`
-    : baseURL;
-  // const baseURLToGoTo = currentSort
-  //   ? `/explore?sort=${currentSort}`
-  //   : "/explore?";
+  const noTagURL = buildRouteWithUpdatedParams(baseRoute, searchParams, {
+    tag: undefined,
+  });
 
   const topTags = JSON.parse(tags) as Tags[];
   return (
@@ -44,24 +37,28 @@ const TagsList: React.FC<TagsListProps> = ({ tags, searchParams }) => {
         <Link
           data-state={!searchParams.tag ? "active" : ""}
           className={` capitalize ${buttonVariants({ variant: "outline" })}`}
-          href={`${baseURLWithSearchAndSort}`}
+          href={noTagURL}
         >
           {"All Puzzles"}
         </Link>
 
         <Separator />
         <Label className="text-sm text-ring">Filter by Tags</Label>
-        <TagSearchCombobox
-          baseURLWithSearchAndSort={baseURLWithSearchAndSort}
-          searchParams={searchParams}
-        />
+        <TagSearchCombobox baseRoute={baseRoute} searchParams={searchParams} />
         <div className="flex flex-wrap items-center justify-center gap-2">
           {topTags?.map((tag, index) => {
+            const tagURL = buildRouteWithUpdatedParams(
+              baseRoute,
+              searchParams,
+              {
+                tag: tag.name,
+              }
+            );
             return (
               <Link
                 data-state={searchParams.tag === tag.name ? "active" : ""}
                 className={` capitalize ${buttonVariants({ variant: "outline" })}`}
-                href={`${baseURLWithSearchAndSort}&tag=${tag.name}`}
+                href={tagURL}
                 key={tag.id}
               >
                 {tag.name}

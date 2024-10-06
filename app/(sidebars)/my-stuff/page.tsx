@@ -15,12 +15,19 @@ import { getUserPuzzles } from "@/lib/actions/puzzles";
 import { getCurrentUser } from "@/lib/auth/checkUser";
 import { SortOptionType, TabType } from "@/types/puzzleDB";
 import PuzzleList from "@/components/shared/puzzle-viewing/PuzzleList";
+import { buildRouteWithUpdatedParams } from "@/lib/utils/getCombinedSearchParams";
 
 export const metadata: Metadata = {
   title: "My Stuff",
   description:
     "A place to store your Karel Worlds puzzles and view your classes",
 };
+
+const availableTabs = [
+  { name: "My Puzzles", value: "my-puzzles" },
+  { name: "Liked Puzzles", value: "liked-puzzles" },
+  { name: "Solved Puzzles", value: "solved-puzzles" },
+];
 
 const MyDashboard = async ({
   searchParams,
@@ -41,14 +48,18 @@ const MyDashboard = async ({
     : (searchParams.view ?? "my-puzzles");
 
   const currentSort = searchParams.sort ? searchParams.sort : "";
-  const urlPrepend = currentSort !== "" ? `sort=${currentSort}&` : "";
+  // const urlPrepend = currentSort !== "" ? `sort=${currentSort}&` : "";
 
   const possibleTabs = ["my-puzzles", "liked-puzzles", "solved-puzzles"];
   if (!possibleTabs.includes(currentTab)) {
     redirect("/my-stuff?view=my-puzzles");
   }
 
-  // const puzzlesToShow: PuzzleWithMoreStuff[] = [examplePuzzle1, examplePuzzle1];
+  // const baseRouteWithOtherParams = getBaseStringForNewRouteFromSearchParams(
+  //   "my-stuff",
+  //   searchParams,
+  //   "view"
+  // );
 
   const puzzlesToShow: PuzzleWithMoreStuff[] = JSON.parse(
     await getUserPuzzles(
@@ -77,27 +88,23 @@ const MyDashboard = async ({
             orientation="horizontal"
             areCardButtons={false}
           >
-            <Link
-              className={tabsClassName}
-              href={`/my-stuff?${urlPrepend}view=my-puzzles`}
-              data-state={currentTab === "my-puzzles" ? "active" : ""}
-            >
-              My Puzzles
-            </Link>
-            <Link
-              className={tabsClassName}
-              href={`/my-stuff?${urlPrepend}view=liked-puzzles`}
-              data-state={currentTab === "liked-puzzles" ? "active" : ""}
-            >
-              Liked Puzzles
-            </Link>
-            <Link
-              className={tabsClassName}
-              href={`/my-stuff?${urlPrepend}view=solved-puzzles`}
-              data-state={currentTab === "solved-puzzles" ? "active" : ""}
-            >
-              Solved Puzzles
-            </Link>
+            {availableTabs.map((tab) => {
+              const routeLink = buildRouteWithUpdatedParams(
+                "my-stuff",
+                searchParams,
+                { view: tab.value }
+              );
+              return (
+                <Link
+                  key={tab.value}
+                  className={tabsClassName}
+                  href={routeLink}
+                  data-state={currentTab === tab.value ? "active" : ""}
+                >
+                  {tab.name}
+                </Link>
+              );
+            })}
             {/* <Link
               className={tabsClassName}
               href="/my-stuff?view=my-classes"

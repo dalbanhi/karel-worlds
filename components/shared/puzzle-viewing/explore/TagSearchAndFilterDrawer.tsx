@@ -5,6 +5,7 @@ import React from "react";
 import { Label } from "@/components/ui/label";
 import PuzzleSorterClientSelect from "./PuzzleSorterClientSelect";
 import dynamic from "next/dynamic";
+import { buildRouteWithUpdatedParams } from "@/lib/utils/getCombinedSearchParams";
 
 const TagSearchCombobox = dynamic(
   () => import("../../layout/RightSidebar/TagSearchCombobox"),
@@ -14,24 +15,20 @@ const TagSearchCombobox = dynamic(
   }
 );
 
-interface TagSearchAndFilterDrawerProps {
+interface FilterDrawerProps {
   searchParams: { [key: string]: string | string[] | undefined };
   baseRoute: string;
 }
 
-const TagSearchAndFilterDrawer: React.FC<TagSearchAndFilterDrawerProps> = ({
+const FilterDrawer: React.FC<FilterDrawerProps> = ({
   searchParams,
   baseRoute,
 }) => {
-  const currentSort = searchParams.sort as string;
-  const currentSearch = searchParams.search as string;
-  const baseURL = `/explore?`;
-  const baseURLWithSort = currentSort
-    ? `${baseURL}&sort=${currentSort}`
-    : baseURL;
-  const baseURLWithSearchAndSort = currentSearch
-    ? `${baseURLWithSort}&search=${baseURLWithSort}`
-    : baseURL;
+  const baseURLWithSearchAndSort = buildRouteWithUpdatedParams(
+    baseRoute,
+    searchParams,
+    { tag: undefined }
+  );
   return (
     <div className="h-fit items-center justify-center gap-2 rounded-none border-t-2 border-card bg-primary p-2 text-muted-foreground max-sm:flex max-sm:flex-wrap sm:hidden">
       <div className="flex items-center gap-2">
@@ -44,10 +41,7 @@ const TagSearchAndFilterDrawer: React.FC<TagSearchAndFilterDrawerProps> = ({
           {"All Puzzles"}
         </Link>
 
-        <TagSearchCombobox
-          baseURLWithSearchAndSort={baseURLWithSearchAndSort}
-          searchParams={searchParams}
-        />
+        <TagSearchCombobox searchParams={searchParams} baseRoute={baseRoute} />
       </div>
       <div className="flex items-center gap-2">
         <Label className="text-base text-ring">Sort</Label>
@@ -60,4 +54,4 @@ const TagSearchAndFilterDrawer: React.FC<TagSearchAndFilterDrawerProps> = ({
   );
 };
 
-export default TagSearchAndFilterDrawer;
+export default FilterDrawer;

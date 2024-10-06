@@ -9,6 +9,7 @@ import {
 import React from "react";
 import { sortOptions } from "@/constants/database";
 import { useRouter } from "next/navigation";
+import { buildRouteWithUpdatedParams } from "@/lib/utils/getCombinedSearchParams";
 
 interface PuzzleSorterClientSelectProps {
   searchParams: { [key: string]: string | string[] | undefined };
@@ -20,20 +21,20 @@ const PuzzleSorterClientSelect: React.FC<PuzzleSorterClientSelectProps> = ({
   baseRoute,
 }) => {
   const router = useRouter();
-  const baseURL = `/${baseRoute}?`;
-  const currentTag = searchParams.tag as string;
-  const currentView = searchParams.view as string;
-  const urlAddition = currentTag
-    ? `&tag=${currentTag}`
-    : currentView
-      ? `&view=${currentView}`
-      : "";
+  // const baseURLWithOtherParams = buildRouteWithUpdatedParams(
+  //   baseRoute,
+  //   searchParams,
+
+  // );
   return (
     <Select
       value={searchParams.sort as string}
       onValueChange={(val) => {
         console.log(`${val} selected`);
-        router.push(`${baseURL}sort=${val}${urlAddition}`);
+        const routeLink = buildRouteWithUpdatedParams(baseRoute, searchParams, {
+          sort: val,
+        });
+        router.push(`${routeLink}`);
       }}
     >
       <SelectTrigger className="min-w-max">

@@ -1,5 +1,4 @@
 import PuzzleSorter from "./LeftSidebar/PuzzleSorter";
-
 interface LeftSidebarProps {
   children?: React.ReactNode;
   searchParams: { [key: string]: string | string[] | undefined };

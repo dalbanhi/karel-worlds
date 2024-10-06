@@ -68,6 +68,7 @@ const ExplorePage: React.FC<ExplorePageProps> = async ({
           initialSearch={currentSearchTerm}
           initialSort={currentSort}
           initialTag={currentTag}
+          searchParams={searchParams}
           baseRoute="explore"
         />
         <TagSearchAndFilterDrawer

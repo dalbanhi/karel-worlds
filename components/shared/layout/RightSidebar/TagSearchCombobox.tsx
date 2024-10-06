@@ -29,9 +29,10 @@ import {
   DrawerTitle,
 } from "@/components/ui/drawer";
 import useDevice from "@/hooks/useMediaQuery";
+import { buildRouteWithUpdatedParams } from "@/lib/utils/getCombinedSearchParams";
 
 interface DynamicTagListProps {
-  baseURLWithSearchAndSort: string;
+  baseRoute: string;
   matchingTags: Tags[] | null;
   setMatchingTags: React.Dispatch<React.SetStateAction<Tags[] | null>>;
   value: string;
@@ -41,7 +42,7 @@ interface DynamicTagListProps {
 }
 
 const DynamicTagList: React.FC<DynamicTagListProps> = ({
-  baseURLWithSearchAndSort,
+  baseRoute,
   matchingTags,
   setMatchingTags,
   value,
@@ -50,6 +51,11 @@ const DynamicTagList: React.FC<DynamicTagListProps> = ({
   searchParams,
 }) => {
   const router = useRouter();
+  // const baseURLWithSearchAndSort = getBaseStringForNewRouteFromSearchParams(
+  //   baseRoute,
+  //   searchParams,
+  //   "tag"
+  // );
   const [tagSearchTerm, setTagSearchTerm] = useState(
     Array.isArray(searchParams.tag)
       ? searchParams.tag[0]
@@ -112,10 +118,13 @@ const DynamicTagList: React.FC<DynamicTagListProps> = ({
                     onSelect={(currentValue) => {
                       setValue(currentValue === value ? "" : tag.name);
                       setOpen(false);
-                      //route to the tag with the previous search params
-                      router.push(
-                        `${baseURLWithSearchAndSort}&tag=${tag.name}`
+                      const routeLink = buildRouteWithUpdatedParams(
+                        baseRoute,
+                        searchParams,
+                        { tag: tag.name }
                       );
+                      //route to the tag with the previous search params
+                      router.push(routeLink);
                     }}
                   >
                     {tag.name}
@@ -139,12 +148,12 @@ const DynamicTagList: React.FC<DynamicTagListProps> = ({
 };
 
 interface TagSearchComboboxProps {
-  baseURLWithSearchAndSort: string;
+  baseRoute: string;
   searchParams: { [key: string]: string | string[] | undefined };
 }
 
 const TagSearchCombobox: React.FC<TagSearchComboboxProps> = ({
-  baseURLWithSearchAndSort,
+  baseRoute,
   searchParams,
 }) => {
   const [open, setOpen] = useState(false);
@@ -172,7 +181,7 @@ const TagSearchCombobox: React.FC<TagSearchComboboxProps> = ({
         </PopoverTrigger>
         <PopoverContent className="w-full p-0">
           <DynamicTagList
-            baseURLWithSearchAndSort={baseURLWithSearchAndSort}
+            baseRoute={baseRoute}
             matchingTags={matchingTags}
             setMatchingTags={setMatchingTags}
             value={value}
@@ -212,7 +221,7 @@ const TagSearchCombobox: React.FC<TagSearchComboboxProps> = ({
           </DrawerHeader>
           <div className="mt-4 border-t">
             <DynamicTagList
-              baseURLWithSearchAndSort={baseURLWithSearchAndSort}
+              baseRoute={baseRoute}
               matchingTags={matchingTags}
               setMatchingTags={setMatchingTags}
               value={value}
