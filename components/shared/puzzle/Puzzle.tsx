@@ -1,6 +1,5 @@
 "use client";
-
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect } from "react";
 import { serialization, WorkspaceSvg, Events, getMainWorkspace } from "blockly";
 import "@/utils/custom/blocks/CustomBlocks";
 import { javascriptGenerator } from "blockly/javascript";
@@ -20,6 +19,10 @@ import {
 } from "@/types/karelWorld";
 import { useToast } from "@/hooks/use-toast";
 import { PuzzleWithMoreStuff } from "@/types/puzzleExtensions";
+import { buttonVariants } from "@/components/ui/button";
+import { ToastAction } from "@radix-ui/react-toast";
+import PuzzleRatingForm from "@/components/forms/rating-puzzle/PuzzleRatingForm";
+import { User } from "@prisma/client";
 
 interface PuzzleProps {
   worldDimensions: { width: number; height: number };
@@ -28,6 +31,7 @@ interface PuzzleProps {
   puzzleImages: puzzleImagesType;
   puzzleName: string;
   puzzleInfoFromDB?: PuzzleWithMoreStuff;
+  currentUser: User | null;
 }
 
 const Puzzle: React.FC<PuzzleProps> = ({
@@ -37,6 +41,7 @@ const Puzzle: React.FC<PuzzleProps> = ({
   puzzleImages,
   puzzleName,
   puzzleInfoFromDB,
+  currentUser,
 }) => {
   return (
     <RunningKarelProvider>
@@ -47,6 +52,7 @@ const Puzzle: React.FC<PuzzleProps> = ({
         puzzleImages={puzzleImages}
         puzzleName={puzzleName}
         puzzleInfoFromDB={puzzleInfoFromDB}
+        currentUser={currentUser}
       />
     </RunningKarelProvider>
   );
@@ -59,6 +65,7 @@ const PuzzleContent: React.FC<PuzzleProps> = ({
   puzzleImages,
   puzzleName,
   puzzleInfoFromDB,
+  currentUser,
 }) => {
   const { toast } = useToast();
   const canvasSize = useCanvasSize(
@@ -74,6 +81,8 @@ const PuzzleContent: React.FC<PuzzleProps> = ({
   const [editorMode, setEditorMode] = useState("block");
 
   const [showGoalWorld, setShowGoalWorld] = useState(true);
+
+  const [openRatingDialog, setOpenRatingDialog] = useState(false);
 
   const onAceChange = (value: string) => {
     // setUserJavaScriptCode(value);
@@ -171,6 +180,18 @@ const PuzzleContent: React.FC<PuzzleProps> = ({
               variant: "success",
               title: "Puzzle Solved",
               description: "You have successfully solved the puzzle!",
+              action: (
+                <ToastAction
+                  className={`text-ring ${buttonVariants({ variant: "outline" })}`}
+                  onClick={() => {
+                    console.log("rate the puzzle");
+                    setOpenRatingDialog(true);
+                  }}
+                  altText="Rate the Puzzle"
+                >
+                  Rate the Puzzle
+                </ToastAction>
+              ),
             });
           } else {
             if (!karelsEqual) {
@@ -261,6 +282,12 @@ const PuzzleContent: React.FC<PuzzleProps> = ({
           )}
         </div>
       </section>
+      <PuzzleRatingForm
+        open={openRatingDialog}
+        setOpen={setOpenRatingDialog}
+        puzzleId={puzzleInfoFromDB?.id}
+        currentUser={currentUser}
+      />
     </section>
   );
 };
