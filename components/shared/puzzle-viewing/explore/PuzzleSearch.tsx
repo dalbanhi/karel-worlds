@@ -5,6 +5,7 @@ import React, { useEffect, useState } from "react";
 import { buttonVariants } from "@/components/ui/button";
 import Link from "next/link";
 import { buildRouteWithUpdatedParams } from "@/lib/utils/getCombinedSearchParams";
+import { useRouter } from "next/navigation";
 
 interface PuzzleSearchProps {
   initialSort?: string;
@@ -15,25 +16,14 @@ interface PuzzleSearchProps {
 }
 
 const PuzzleSearch: React.FC<PuzzleSearchProps> = ({
-  initialTag,
   initialSearch,
-  initialSort,
   baseRoute,
   searchParams,
 }) => {
-  // const baseURLWithSortAndTag = buildRouteWithUpdatedParams(
-  //   baseRoute,
-  //   searchParams,
-  // );
-  // const baseURL = `/${baseRoute}?`;
-  // const baseURLWithSort = initialSort
-  //   ? `${baseURL}&sort=${initialSort}`
-  //   : `${baseURL}`;
-  // const baseURLWithSortAndTag = initialTag
-  //   ? `${baseURLWithSort}&tag=${initialTag}`
-  //   : `${baseURLWithSort}`;
   const [searchTerm, setSearchTerm] = useState(initialSearch || "");
   const [searchLink, setSearchLink] = useState(`${baseRoute}`);
+
+  const router = useRouter();
 
   useEffect(() => {
     const newSearchLink = buildRouteWithUpdatedParams(baseRoute, searchParams, {
@@ -41,6 +31,12 @@ const PuzzleSearch: React.FC<PuzzleSearchProps> = ({
     });
     setSearchLink(newSearchLink);
   }, [searchTerm, baseRoute, searchParams]);
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      router.push(searchLink);
+    }
+  };
   return (
     <div className="inline-flex h-fit items-center justify-start rounded-none bg-muted p-2 text-muted-foreground">
       <div className="flex h-fit w-full justify-center gap-4 sm:flex-initial">
@@ -51,6 +47,7 @@ const PuzzleSearch: React.FC<PuzzleSearchProps> = ({
             placeholder="Search puzzles"
             className="w-full pl-8"
             value={searchTerm}
+            onKeyDown={handleKeyDown}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
         </div>

@@ -66,8 +66,6 @@ const ExplorePage: React.FC<ExplorePageProps> = async ({
         </h1>
         <PuzzleSearch
           initialSearch={currentSearchTerm}
-          initialSort={currentSort}
-          initialTag={currentTag}
           searchParams={searchParams}
           baseRoute="explore"
         />

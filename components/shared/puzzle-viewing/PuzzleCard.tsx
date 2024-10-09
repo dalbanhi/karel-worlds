@@ -203,7 +203,7 @@ const PuzzleCard: React.FC<PuzzleCardProps> = async ({
           }}
         />
         <div className="flex w-full flex-col justify-start gap-1">
-          {!mobileCheck && (
+          {/* {!mobileCheck && (
             <TooltipProvider>
               <Tooltip>
                 <TooltipTrigger className="underline">
@@ -212,16 +212,18 @@ const PuzzleCard: React.FC<PuzzleCardProps> = async ({
                 <TooltipContent></TooltipContent>
               </Tooltip>
             </TooltipProvider>
-          )}
-          <ShowFullText isMobile={mobileCheck} trigger={"Description"}>
-            <p
-              className={`${!descriptionExists ? "italic text-warning-dark" : ""} `}
-            >
-              {descriptionExists
-                ? puzzleInfo.description
-                : "No description given by the puzzle maker."}
-            </p>
-          </ShowFullText>
+          )} */}
+          <div className="flex justify-center">
+            <ShowFullText isMobile={mobileCheck} trigger={"Description"}>
+              <p
+                className={`${!descriptionExists ? "italic text-warning-dark" : ""} `}
+              >
+                {descriptionExists
+                  ? puzzleInfo.description
+                  : "No description given by the puzzle maker."}
+              </p>
+            </ShowFullText>
+          </div>
 
           <p className="text-sm">
             <span className="font-semibold">World Dimensions:</span>{" "}
