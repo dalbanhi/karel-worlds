@@ -34,6 +34,8 @@ import { StarFilledIcon, StarIcon } from "@radix-ui/react-icons";
 
 import { PuzzleWithMoreStuff } from "@/types/puzzleExtensions";
 import CardButtons from "./CardButtons";
+import ShowFullText from "./ShowFullText";
+import { Description } from "@radix-ui/react-toast";
 
 const StarRating: React.FC<{ rating: number; type: string }> = ({
   rating,
@@ -118,6 +120,7 @@ const PuzzleCard: React.FC<PuzzleCardProps> = async ({
     : await getUserImage(puzzleInfo.creatorId);
   // const userImage = "";
   // console.log("puzzleInfo, ", puzzleInfo);
+  console.log("isMobile", mobileCheck);
 
   const descriptionExists = puzzleInfo.description !== "";
 
@@ -125,7 +128,16 @@ const PuzzleCard: React.FC<PuzzleCardProps> = async ({
     <Card className="flex max-h-fit min-h-80 w-64 flex-col">
       <CardHeader className=" grow items-center justify-center gap-2">
         <div className="flex size-full flex-col justify-start gap-1">
-          <CardTitle className="line-clamp-2">{puzzleInfo.name}</CardTitle>
+          <ShowFullText
+            isMobile={mobileCheck}
+            trigger={
+              <CardTitle className="line-clamp-1 text-start">
+                {puzzleInfo.name}
+              </CardTitle>
+            }
+          >
+            <CardTitle>{puzzleInfo.name}</CardTitle>
+          </ShowFullText>
           <CardDescription className="flex gap-2">
             <span className="">
               Tag{puzzleInfo.tags.length === 1 ? "" : "s"}:{" "}
@@ -136,23 +148,44 @@ const PuzzleCard: React.FC<PuzzleCardProps> = async ({
                 No tags to show.
               </span>
             )}
-            <span className="flex h-full flex-wrap gap-1">
-              {puzzleInfo.tags.map((tag, index) => {
-                const content =
-                  index === puzzleInfo.tags.length - 1
-                    ? tag.name
-                    : `${tag.name}, `;
-                return (
-                  <Link
-                    className={`capitalize text-ring underline underline-offset-4 hover:text-primary`}
-                    href={`/explore?tag=${tag.name}`}
-                    key={tag.id}
-                  >
-                    {content}
-                  </Link>
-                );
-              })}
-            </span>
+            {puzzleInfo.tags.length === 1 && (
+              <span className="flex h-full flex-wrap gap-1">
+                <Link
+                  className={`capitalize text-ring underline underline-offset-4 hover:text-primary`}
+                  href={`/explore?tag=${puzzleInfo.tags[0].name}`}
+                >
+                  {puzzleInfo.tags[0].name}
+                </Link>
+              </span>
+            )}
+            {puzzleInfo.tags.length > 1 && (
+              <ShowFullText
+                isMobile={mobileCheck}
+                trigger={
+                  <span className="flex h-full flex-wrap gap-1">
+                    See tags...
+                  </span>
+                }
+              >
+                <span className="flex h-full flex-wrap gap-1">
+                  {puzzleInfo.tags.map((tag, index) => {
+                    const content =
+                      index === puzzleInfo.tags.length - 1
+                        ? tag.name
+                        : `${tag.name}, `;
+                    return (
+                      <Link
+                        className={`capitalize text-ring underline underline-offset-4 hover:text-primary`}
+                        href={`/explore?tag=${tag.name}`}
+                        key={tag.id}
+                      >
+                        {content}
+                      </Link>
+                    );
+                  })}
+                </span>
+              </ShowFullText>
+            )}
           </CardDescription>
         </div>
         <Avatar>
@@ -176,32 +209,20 @@ const PuzzleCard: React.FC<PuzzleCardProps> = async ({
                 <TooltipTrigger className="underline">
                   Description
                 </TooltipTrigger>
-                <TooltipContent>
-                  <p
-                    className={`${!descriptionExists ? "italic text-warning-dark" : ""} `}
-                  >
-                    {descriptionExists
-                      ? puzzleInfo.description
-                      : "No description given by the puzzle maker."}
-                  </p>
-                </TooltipContent>
+                <TooltipContent></TooltipContent>
               </Tooltip>
             </TooltipProvider>
           )}
-          {mobileCheck && (
-            <Popover>
-              <PopoverTrigger className="underline">Description</PopoverTrigger>
-              <PopoverContent>
-                <p
-                  className={`${!descriptionExists ? "italic text-warning-dark" : ""} `}
-                >
-                  {descriptionExists
-                    ? puzzleInfo.description
-                    : "No description given by the puzzle maker."}
-                </p>
-              </PopoverContent>
-            </Popover>
-          )}
+          <ShowFullText isMobile={mobileCheck} trigger={"Description"}>
+            <p
+              className={`${!descriptionExists ? "italic text-warning-dark" : ""} `}
+            >
+              {descriptionExists
+                ? puzzleInfo.description
+                : "No description given by the puzzle maker."}
+            </p>
+          </ShowFullText>
+
           <p className="text-sm">
             <span className="font-semibold">World Dimensions:</span>{" "}
             {puzzleInfo.worldWidth}x{puzzleInfo.worldHeight}
