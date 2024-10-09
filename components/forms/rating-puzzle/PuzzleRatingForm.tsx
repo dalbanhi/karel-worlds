@@ -30,14 +30,14 @@ interface PuzzleRatingFormProps {
   open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
   puzzleId: string | undefined;
-  currentUser: User | null;
+  currentUserID: string | undefined;
 }
 
 const PuzzleRatingForm: React.FC<PuzzleRatingFormProps> = ({
   open,
   setOpen,
   puzzleId,
-  currentUser,
+  currentUserID,
 }) => {
   if (!puzzleId) return null;
   const onSubmit = async (data: z.infer<typeof contactSchema>) => {

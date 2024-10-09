@@ -31,7 +31,7 @@ interface PuzzleProps {
   puzzleImages: puzzleImagesType;
   puzzleName: string;
   puzzleInfoFromDB?: PuzzleWithMoreStuff;
-  currentUser: User | null;
+  currentUserID: string;
 }
 
 const Puzzle: React.FC<PuzzleProps> = ({
@@ -41,7 +41,7 @@ const Puzzle: React.FC<PuzzleProps> = ({
   puzzleImages,
   puzzleName,
   puzzleInfoFromDB,
-  currentUser,
+  currentUserID,
 }) => {
   return (
     <RunningKarelProvider>
@@ -52,7 +52,7 @@ const Puzzle: React.FC<PuzzleProps> = ({
         puzzleImages={puzzleImages}
         puzzleName={puzzleName}
         puzzleInfoFromDB={puzzleInfoFromDB}
-        currentUser={currentUser}
+        currentUserID={currentUserID}
       />
     </RunningKarelProvider>
   );
@@ -65,7 +65,7 @@ const PuzzleContent: React.FC<PuzzleProps> = ({
   puzzleImages,
   puzzleName,
   puzzleInfoFromDB,
-  currentUser,
+  currentUserID,
 }) => {
   const { toast } = useToast();
   const canvasSize = useCanvasSize(
@@ -286,7 +286,7 @@ const PuzzleContent: React.FC<PuzzleProps> = ({
         open={openRatingDialog}
         setOpen={setOpenRatingDialog}
         puzzleId={puzzleInfoFromDB?.id}
-        currentUser={currentUser}
+        currentUserID={currentUserID}
       />
     </section>
   );

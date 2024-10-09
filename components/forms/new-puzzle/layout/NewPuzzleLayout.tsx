@@ -308,6 +308,7 @@ const NewPuzzleLayout: React.FC<NewPuzzleLayoutProps> = ({
                     startWorldInfo={startWorldInfo}
                     goalWorldInfo={goalWorldInfo}
                     puzzleName={puzzleName || ""}
+                    currentUserID={currentUserID || ""}
                   />
                 </div>
               </div>

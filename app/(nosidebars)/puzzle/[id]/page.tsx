@@ -29,7 +29,7 @@ const PuzzlePage = async ({ params }: { params: { id: string } }) => {
         goalWorldInfo={puzzle.goalWorldInfo as unknown as worldInfoType}
         puzzleName={puzzle.name || ""}
         puzzleInfoFromDB={puzzle}
-        currentUser={currUser}
+        currentUserID={currUser?.id || ""}
       />
     </div>
   );
