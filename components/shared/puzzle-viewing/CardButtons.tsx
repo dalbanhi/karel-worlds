@@ -35,6 +35,39 @@ const CardButtons: React.FC<CardButtonsProps> = ({ userID, puzzleID }) => {
 
   const [isLiking, setIsLiking] = useState(false);
   const router = useRouter();
+
+  const tryToLike = async () => {
+    setIsLiking(true);
+    try {
+      if (isSignedIn) {
+        await likeOrUnlikePuzzle(userID, puzzleID, !hasAlreadyLiked);
+        setHasAlreadyLiked((prev) => !prev); // Update the state after like/unlike
+      } else {
+        toast({
+          variant: "warning",
+          title: "Cannot like without signing in",
+          description: `Sign in to like and share puzzles!`,
+          action: (
+            <ToastAction
+              className={`text-ring ${buttonVariants({ variant: "outline" })}`}
+              onClick={() => {
+                auth.redirectToSignIn({
+                  signInForceRedirectUrl: "/explore",
+                });
+              }}
+              altText="Sign In"
+            >
+              Sign In
+            </ToastAction>
+          ),
+        });
+      }
+    } catch (error) {
+      console.error("Error liking/unliking puzzle:", error);
+    } finally {
+      setIsLiking(false);
+    }
+  };
   return (
     <ButtonGroup className="w-full" areCardButtons={true}>
       <Button
@@ -49,45 +82,25 @@ const CardButtons: React.FC<CardButtonsProps> = ({ userID, puzzleID }) => {
       </Button>
       <Button
         disabled={isLiking}
-        onClick={async () => {
-          setIsLiking(true);
-          try {
-            if (isSignedIn) {
-              await likeOrUnlikePuzzle(userID, puzzleID, !hasAlreadyLiked);
-              setHasAlreadyLiked((prev) => !prev); // Update the state after like/unlike
-            } else {
-              toast({
-                variant: "warning",
-                title: "Cannot like without signing in",
-                description: `Sign in to like and share puzzles!`,
-                action: (
-                  <ToastAction
-                    className={`text-ring ${buttonVariants({ variant: "outline" })}`}
-                    onClick={() => {
-                      auth.redirectToSignIn({
-                        signInForceRedirectUrl: "/explore",
-                      });
-                    }}
-                    altText="Sign In"
-                  >
-                    Sign In
-                  </ToastAction>
-                ),
-              });
-            }
-          } catch (error) {
-            console.error("Error liking/unliking puzzle:", error);
-          } finally {
-            setIsLiking(false);
-          }
-        }}
+        onClick={tryToLike}
         type="button"
         aria-label="Like or Unlike the Puzzle"
         className="grow"
       >
         {hasAlreadyLiked ? <HeartFilledIcon /> : <HeartIcon />}
       </Button>
-      <Button type="button" aria-label="Remix this puzzle" className="grow">
+      <Button
+        type="button"
+        onClick={() => {
+          toast({
+            variant: "warning",
+            title: "Coming soon",
+            description: "Puzzle remixing is coming soon!",
+          });
+        }}
+        aria-label="Remix this puzzle"
+        className="grow"
+      >
         <ShuffleIcon />
       </Button>
     </ButtonGroup>
