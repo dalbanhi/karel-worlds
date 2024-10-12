@@ -46,7 +46,11 @@ model Puzzle {
   beeperImage   String
   wallImage     String
   rating        Float
+  totalRatings  Int @default(0)
+  totalRatingsSum Int @default(0)
   difficulty    Float
+  difficultyRating Int @default(0)
+  difficultyRatingSum Int @default(0)
   backgroundImage String
   startWorldInfo  Json
   goalWorldInfo   Json
