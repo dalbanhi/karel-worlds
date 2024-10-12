@@ -16,6 +16,7 @@ interface KarelInfoEditorProps {
   setWorldInfo: React.Dispatch<React.SetStateAction<worldInfoType>>;
   worldWidth: number;
   worldHeight: number;
+  name: string;
 }
 
 const KarelInfoEditor: React.FC<KarelInfoEditorProps> = ({
@@ -23,6 +24,7 @@ const KarelInfoEditor: React.FC<KarelInfoEditorProps> = ({
   setWorldInfo,
   worldWidth,
   worldHeight,
+  name,
 }) => {
   const [widthDisabled, setWidthDisabled] = useState(false);
   const [heightDisabled, setHeightDisabled] = useState(false);
@@ -91,6 +93,7 @@ const KarelInfoEditor: React.FC<KarelInfoEditorProps> = ({
           <span>{worldInfo?.karel.x}</span>
         </FormLabel>
         <Slider
+          aria-label={`Karel X Position in ${name}`}
           min={minWorldSize - 1}
           max={worldWidth - 1}
           step={1}
@@ -121,6 +124,7 @@ const KarelInfoEditor: React.FC<KarelInfoEditorProps> = ({
           <span>{worldInfo?.karel.y}</span>
         </FormLabel>
         <Slider
+          aria-label={`Karel Y Position in ${name}`}
           min={minWorldSize - 1}
           max={worldHeight - 1}
           step={1}
@@ -146,7 +150,12 @@ const KarelInfoEditor: React.FC<KarelInfoEditorProps> = ({
         />
       </div>
       <FormItem className="flex flex-col items-center justify-center ">
-        <FormLabel className="w-full text-center">Karel Direction </FormLabel>
+        <FormLabel
+          className="w-full text-center"
+          id={`karel-direction-label-${name}`}
+        >
+          Karel Direction{" "}
+        </FormLabel>
         <FormControl>
           <Select
             value={worldInfo?.karel.direction}
@@ -167,7 +176,10 @@ const KarelInfoEditor: React.FC<KarelInfoEditorProps> = ({
               });
             }}
           >
-            <SelectTrigger className="w-full">
+            <SelectTrigger
+              className="w-full"
+              aria-labelledby={`karel-direction-label-${name}`}
+            >
               <SelectValue placeholder="Direction" />
             </SelectTrigger>
             <SelectContent>

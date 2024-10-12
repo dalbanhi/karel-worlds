@@ -12,6 +12,9 @@ export const getCurrentUser = async () => {
     where: {
       clerkUserId: user.id,
     },
+    include: {
+      puzzlesSolved: true,
+    },
   });
 
   if (dbUser) {

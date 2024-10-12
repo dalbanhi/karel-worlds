@@ -39,6 +39,7 @@ const TryItOut: React.FC<PuzzleProps> = ({
           startWorldInfo={startWorldInfo}
           goalWorldInfo={goalWorldInfo}
           puzzleName="Example Puzzle"
+          currentUserID=""
         />
       </div>
     </div>

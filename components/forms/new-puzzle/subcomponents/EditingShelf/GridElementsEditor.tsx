@@ -17,6 +17,7 @@ interface GridElementsEditorProps {
   setWorldInfo: React.Dispatch<React.SetStateAction<worldInfoType>>;
   worldWidth: number;
   worldHeight: number;
+  worldName: string;
 }
 
 const GridElementsEditor: React.FC<GridElementsEditorProps> = ({
@@ -24,6 +25,7 @@ const GridElementsEditor: React.FC<GridElementsEditorProps> = ({
   setWorldInfo,
   worldWidth,
   worldHeight,
+  worldName,
 }) => {
   const { toast } = useToast();
   interface coordsType {
@@ -179,7 +181,12 @@ const GridElementsEditor: React.FC<GridElementsEditorProps> = ({
   return (
     <div className="mt-4 flex flex-wrap justify-center gap-2">
       <FormItem className="flex items-center justify-center gap-2 ">
-        <FormLabel className="w-full text-center">Editing Mode </FormLabel>
+        <FormLabel
+          className="w-full text-center"
+          id={`editing-mode-label-for-${worldName}`}
+        >
+          Editing Mode{" "}
+        </FormLabel>
         <FormControl className="flex w-fit items-center">
           <Select
             value={editingMode}
@@ -187,7 +194,10 @@ const GridElementsEditor: React.FC<GridElementsEditorProps> = ({
               setEditingMode(val);
             }}
           >
-            <SelectTrigger className="w-fit min-w-28 text-center">
+            <SelectTrigger
+              className="w-fit min-w-28 text-center"
+              aria-labelledby={`editing-mode-label-for-${worldName}`}
+            >
               <SelectValue placeholder="--" />
             </SelectTrigger>
             <SelectContent>
@@ -199,7 +209,10 @@ const GridElementsEditor: React.FC<GridElementsEditorProps> = ({
       </FormItem>
       <div className="flex flex-wrap items-center justify-center gap-2">
         <FormItem className="flex items-center justify-center gap-2 ">
-          <FormLabel className="w-full text-center capitalize">
+          <FormLabel
+            className="w-full text-center capitalize"
+            id={`${editingMode}-label-for-${worldName}`}
+          >
             {editingMode}{" "}
           </FormLabel>
           <FormControl>
@@ -209,7 +222,10 @@ const GridElementsEditor: React.FC<GridElementsEditorProps> = ({
                 setEditingElement(val);
               }}
             >
-              <SelectTrigger className="w-full">
+              <SelectTrigger
+                className="w-full"
+                aria-labelledby={`${editingMode}-label-for-${worldName}`}
+              >
                 <SelectValue placeholder="--" />
               </SelectTrigger>
               <SelectContent>

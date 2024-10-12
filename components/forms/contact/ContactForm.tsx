@@ -24,7 +24,6 @@ const ContactForm = () => {
   const { toast } = useToast();
   const [isDisabled, setIsDisabled] = useState(false);
   const onSubmit = async (data: z.infer<typeof contactSchema>) => {
-    console.log(data);
     const { name, email, subject, message } = data;
     try {
       setIsDisabled(true);

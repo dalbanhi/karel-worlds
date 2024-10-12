@@ -14,7 +14,7 @@ import Image from "next/image";
 import Interpreter from "js-interpreter";
 import { toast, useToast } from "@/hooks/use-toast";
 import { ToastAction } from "@/components/ui/toast";
-import { Application, ICanvas } from "pixi.js";
+import { Application, autoDetectFormat, ICanvas } from "pixi.js";
 
 //from: https://overreacted.io/making-setinterval-declarative-with-react-hooks/
 function useInterval(callback: () => void, delay: number | null) {
@@ -64,7 +64,7 @@ const RunnableWorld: React.FC<RunnableWorldProps> = ({
 
   //references for grid, interpreter and runLoop
   const runLoop = useRef<boolean>(false);
-  // const interpreter = useRef<typeof Interpreter | null>(null);
+  const interpreter = useRef<typeof Interpreter | null>(null);
   const gridRef = useRef<any>(null);
   const shouldCheckPuzzle = useRef<boolean>(false);
   const stepCodeRef = useRef<() => void>(() => {});
@@ -251,10 +251,6 @@ const RunnableWorld: React.FC<RunnableWorldProps> = ({
     },
     [toast]
   );
-  // interpreter.current = new Interpreter(rawCode, initApi);
-  const interpreter = useMemo(() => {
-    return new Interpreter(rawCode, initApi);
-  }, [rawCode, initApi]);
 
   const resetGridWithNewCode = () => {
     gridRef.current.resetGrid();
@@ -311,7 +307,7 @@ const RunnableWorld: React.FC<RunnableWorldProps> = ({
 
   const stepCode = useCallback(() => {
     let stack: any = [];
-    let ok = interpreter.step();
+    let ok = interpreter.current.step();
     //TODO: Add code highlighting?
     stack = interpreter.current.getStateStack();
     let stepAgain = !isLine(stack);
@@ -331,14 +327,10 @@ const RunnableWorld: React.FC<RunnableWorldProps> = ({
     }
   }, [interpreter, isLine]);
 
-  stepCodeRef.current = stepCode;
-
   // Update the ref to ensure stepCode is up-to-date
-  const [app, setApp] = useState<Application<ICanvas>>();
   //slider values for speed
-  //slider values for speed
-  const minSliderValue = 50;
-  const stepValue = 50;
+  const minSliderValue = 25;
+  const stepValue = 25;
   const maxSliderValue = 500;
   const [sliderValue, setSliderValue] = useState<number>(50);
 
@@ -434,6 +426,7 @@ const RunnableWorld: React.FC<RunnableWorldProps> = ({
               alt="Slow"
               width={20}
               height={20}
+              style={{ width: "auto", height: "auto" }}
             />
           </span>
           <Slider
@@ -459,6 +452,7 @@ const RunnableWorld: React.FC<RunnableWorldProps> = ({
               alt="Slow"
               width={20}
               height={20}
+              style={{ width: "auto", height: "auto" }}
             />
           </span>
         </div>

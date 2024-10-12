@@ -20,7 +20,7 @@ export default async function Home() {
 
   return (
     <section className="flex flex-col items-center justify-between">
-      <div className="p-4">
+      <div className="w-full p-4">
         <HeroDesktop />
         <HeroMobile />
       </div>

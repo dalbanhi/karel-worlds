@@ -18,19 +18,11 @@ const MainNewPuzzle: React.FC<MainNewPuzzleProps> = ({
   form,
   setShowPreview,
 }) => {
-  const { watch } = form;
-
-  // Watch specific form fields or the entire form
-  const watchedValues = watch(); // Watches the entire form
-
-  useEffect(() => {
-    // console.log("Form state changed:", watchedValues);
-  }, [watchedValues]); // Log form state whenever it changes
   return (
     <div className="w-full grow">
       <NameAndPreview form={form} setShowPreview={setShowPreview} />
       <div className="flex flex-col items-center justify-center gap-2 bg-card p-2">
-        <TagsSelector form={form} tagsString="" />
+        <TagsSelector form={form} />
         <CustomizePanel form={form} />
       </div>
       <WorldsEditor form={form} />
