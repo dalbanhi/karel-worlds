@@ -76,7 +76,6 @@ const ViewableWorld: React.FC<ViewableWorldProps> = ({
   showGoalWorld,
   setShowGoalWorld,
 }) => {
-  // const [showGoal, setShowGoal] = useState(true);
   const initialKarel = useMemo(
     () =>
       new KarelElement(
@@ -99,11 +98,6 @@ const ViewableWorld: React.FC<ViewableWorldProps> = ({
   );
   const [karel, setKarel] = useState<KarelElement>(initialKarel);
   const [beepers, setBeepers] = useState([...initialBeepers]);
-
-  //   const showHints = hints.forEach((hint) => {
-  //     return false;
-  //   });
-
   const firstEmptyGrid = makeNewGrid(
     worldDimensions.width,
     worldDimensions.height

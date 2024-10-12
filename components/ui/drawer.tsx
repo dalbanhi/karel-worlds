@@ -5,14 +5,14 @@ import { Drawer as DrawerPrimitive } from "vaul";
 
 import { cn } from "@/lib/utils";
 const DrawerContext = React.createContext<{
-  direction?: "top" | "bottom" | "left" | "right";
-}>({});
+  direction: "top" | "bottom" | "left" | "right";
+}>({ direction: "bottom" });
 
 const Drawer = ({
   shouldScaleBackground = true,
   ...props
 }: React.ComponentProps<typeof DrawerPrimitive.Root>) => (
-  <DrawerContext.Provider value={{ direction: props.direction }}>
+  <DrawerContext.Provider value={{ direction: props.direction ?? "bottom" }}>
     <DrawerPrimitive.Root
       shouldScaleBackground={shouldScaleBackground}
       {...props}
@@ -50,7 +50,9 @@ const DrawerContent = React.forwardRef<
       <DrawerPrimitive.Content
         ref={ref}
         className={cn(
-          `fixed z-100 flex h-auto ${direction === "bottom" || direction === "top" ? "flex-col" : direction === "left" ? "flex-row-reverse" : ""}  rounded-t-[10px] border bg-background`,
+          `fixed z-100 flex h-auto ${direction === "bottom" || direction === "top" ? "flex-col" : direction === "left" ? "flex-row-reverse" : ""}   border bg-background`,
+          direction !== "top" && "rounded-t-[10px]",
+          direction === "top" && "rounded-b-[10px]",
           (!direction || direction === "bottom") && "inset-x-0 bottom-0 mt-24",
           direction === "top" && "inset-x-0 top-0 mb-24",
           direction === "left" && "top-0 left-0 w-screen max-w-72 h-full",

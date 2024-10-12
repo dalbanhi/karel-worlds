@@ -6,7 +6,6 @@ export const useSessionClearOnSignOut = () => {
 
   useEffect(() => {
     if (!isSignedIn) {
-      console.log("Clearing session storage on signout");
       // Clear sessionStorage when the user signs out
       sessionStorage.removeItem("puzzleFormData");
       sessionStorage.removeItem("startWorldInfo");

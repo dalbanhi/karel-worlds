@@ -22,6 +22,9 @@ import { useClerk } from "@clerk/nextjs";
 import { useSessionClearOnSignOut } from "@/hooks/useSessionClearOnSignOut";
 import { ToastAction } from "@radix-ui/react-toast";
 
+import { createPuzzle } from "@/lib/actions/puzzles";
+import { useRouter } from "next/navigation";
+
 export type WorldInfoContextType = {
   worldInfo: worldInfoType;
   setWorldInfo: React.Dispatch<React.SetStateAction<worldInfoType>>;
@@ -45,9 +48,9 @@ const NewPuzzleLayout: React.FC<NewPuzzleLayoutProps> = ({
   currentUserID,
 }) => {
   const { toast } = useToast();
-  const { isSignedIn, userId } = useAuth();
-  const tempUserID = "7c48f53a-b32b-4021-a097-e87e50d89286";
+  const { isSignedIn } = useAuth();
   const { redirectToSignIn } = useClerk();
+  const router = useRouter();
 
   const isUserSignedIn = () => {
     if (!isSignedIn) {
@@ -80,10 +83,20 @@ const NewPuzzleLayout: React.FC<NewPuzzleLayoutProps> = ({
     return true;
   };
 
-  const onSubmitForm = (data: any) => {
+  const onSubmitForm = async (data: z.infer<typeof puzzleSchema>) => {
     // Handle form submission
-    console.log("Form data submitted 2:");
-    console.log(data);
+    data.startWorldInfo = startWorldInfo;
+    data.goalWorldInfo = goalWorldInfo;
+    const newPuzzle = await createPuzzle(data);
+    //clear the session storage
+    const clearSessionStorage = async () => {
+      sessionStorage.removeItem("puzzleFormData");
+      sessionStorage.removeItem("startWorldInfo");
+      sessionStorage.removeItem("goalWorldInfo");
+    };
+    await clearSessionStorage();
+
+    router.push(`/puzzle/${newPuzzle.id}`);
   };
 
   const storedPuzzleFormData =
@@ -96,6 +109,8 @@ const NewPuzzleLayout: React.FC<NewPuzzleLayoutProps> = ({
     : {
         worldWidth: 10,
         worldHeight: 10,
+        difficulty: -1,
+        rating: -1,
         name: "",
         karelImage: "",
         beepersImage: "",
@@ -104,26 +119,20 @@ const NewPuzzleLayout: React.FC<NewPuzzleLayoutProps> = ({
         wallImage: "",
         tags: [],
         hints: [],
-        creatorId: tempUserID, // TODO: change to currentUserID
+        creatorId: currentUserID, // TODO: change to currentUserID
       };
   const form = useForm<z.infer<typeof puzzleSchema>>({
     resolver: zodResolver(puzzleSchema),
     defaultValues: {
       ...initialFormValues,
-      creatorId: tempUserID, // TODO: change to currentUserID
+      creatorId: currentUserID, // TODO: change to currentUserID
     },
   });
 
   const watchValues = form.watch();
   useEffect(() => {
-    console.log(watchValues);
     sessionStorage.setItem("puzzleFormData", JSON.stringify(watchValues));
   }, [watchValues]);
-
-  const errors = form.formState.errors;
-  useEffect(() => {
-    console.log("Errors:", errors);
-  }, [errors, redirectToSignIn, toast]);
 
   const [showPreview, setShowPreview] = useState(false);
 
@@ -152,8 +161,6 @@ const NewPuzzleLayout: React.FC<NewPuzzleLayoutProps> = ({
     useState<worldInfoType>(initialStartWorld);
 
   useEffect(() => {
-    console.log("start world changed");
-    console.log("startWorldInfo", startWorldInfo);
     sessionStorage.setItem("startWorldInfo", JSON.stringify(startWorldInfo));
   }, [startWorldInfo]);
 
@@ -272,7 +279,6 @@ const NewPuzzleLayout: React.FC<NewPuzzleLayoutProps> = ({
                     className="flex w-fit gap-2"
                     variant={"gradient"}
                     onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
-                      console.log("Form data submitted 1:");
                       e.preventDefault();
                       if (isUserSignedIn()) {
                         form.handleSubmit(onSubmitForm)();
@@ -289,6 +295,7 @@ const NewPuzzleLayout: React.FC<NewPuzzleLayoutProps> = ({
                     startWorldInfo={startWorldInfo}
                     goalWorldInfo={goalWorldInfo}
                     puzzleName={puzzleName || ""}
+                    currentUserID={currentUserID || ""}
                   />
                 </div>
               </div>

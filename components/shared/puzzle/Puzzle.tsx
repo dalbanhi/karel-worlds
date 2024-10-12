@@ -1,6 +1,5 @@
 "use client";
-
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { serialization, WorkspaceSvg, Events, getMainWorkspace } from "blockly";
 import "@/utils/custom/blocks/CustomBlocks";
 import { javascriptGenerator } from "blockly/javascript";
@@ -19,6 +18,11 @@ import {
   SimpleGridElementType,
 } from "@/types/karelWorld";
 import { useToast } from "@/hooks/use-toast";
+import { PuzzleWithMoreStuff } from "@/types/puzzleExtensions";
+import { buttonVariants } from "@/components/ui/button";
+import { ToastAction } from "@radix-ui/react-toast";
+import PuzzleRatingForm from "@/components/forms/rating-puzzle/PuzzleRatingForm";
+import { addPuzzleToSolvedList } from "@/lib/actions/puzzles";
 
 interface PuzzleProps {
   worldDimensions: { width: number; height: number };
@@ -26,6 +30,8 @@ interface PuzzleProps {
   goalWorldInfo: worldInfoType;
   puzzleImages: puzzleImagesType;
   puzzleName: string;
+  puzzleInfoFromDB?: PuzzleWithMoreStuff;
+  currentUserID: string;
 }
 
 const Puzzle: React.FC<PuzzleProps> = ({
@@ -34,6 +40,8 @@ const Puzzle: React.FC<PuzzleProps> = ({
   goalWorldInfo,
   puzzleImages,
   puzzleName,
+  puzzleInfoFromDB,
+  currentUserID,
 }) => {
   return (
     <RunningKarelProvider>
@@ -43,6 +51,8 @@ const Puzzle: React.FC<PuzzleProps> = ({
         goalWorldInfo={goalWorldInfo}
         puzzleImages={puzzleImages}
         puzzleName={puzzleName}
+        puzzleInfoFromDB={puzzleInfoFromDB}
+        currentUserID={currentUserID}
       />
     </RunningKarelProvider>
   );
@@ -54,6 +64,8 @@ const PuzzleContent: React.FC<PuzzleProps> = ({
   goalWorldInfo,
   puzzleImages,
   puzzleName,
+  puzzleInfoFromDB,
+  currentUserID,
 }) => {
   const { toast } = useToast();
   const canvasSize = useCanvasSize(
@@ -69,6 +81,8 @@ const PuzzleContent: React.FC<PuzzleProps> = ({
   const [editorMode, setEditorMode] = useState("block");
 
   const [showGoalWorld, setShowGoalWorld] = useState(true);
+
+  const [openRatingDialog, setOpenRatingDialog] = useState(false);
 
   const onAceChange = (value: string) => {
     // setUserJavaScriptCode(value);
@@ -143,6 +157,13 @@ const PuzzleContent: React.FC<PuzzleProps> = ({
     return true;
   }
 
+  const addSolvedPuzzle = useCallback(async () => {
+    // add the puzzle to the user's solved puzzles
+    if (!puzzleInfoFromDB?.id) return;
+    if (!currentUserID) return;
+    await addPuzzleToSolvedList(puzzleInfoFromDB?.id, currentUserID);
+  }, [puzzleInfoFromDB?.id, currentUserID]);
+
   useEffect(() => {
     if (shouldCheckSolution) {
       const checkPuzzleSolution = () => {
@@ -162,11 +183,32 @@ const PuzzleContent: React.FC<PuzzleProps> = ({
             runningWorldBeeperList
           );
           if (karelsEqual && beepersEqual) {
-            toast({
-              variant: "success",
-              title: "Puzzle Solved",
-              description: "You have successfully solved the puzzle!",
-            });
+            if (currentUserID) {
+              toast({
+                variant: "success",
+                title: "Puzzle Solved",
+                description: "You have successfully solved the puzzle!",
+                action: (
+                  <ToastAction
+                    className={`text-ring ${buttonVariants({ variant: "outline" })}`}
+                    onClick={() => {
+                      setOpenRatingDialog(true);
+                    }}
+                    altText="Rate the Puzzle"
+                  >
+                    Rate the Puzzle
+                  </ToastAction>
+                ),
+              });
+
+              addSolvedPuzzle();
+            } else {
+              toast({
+                variant: "success",
+                title: "Puzzle Solved",
+                description: "You have successfully solved the puzzle!",
+              });
+            }
           } else {
             if (!karelsEqual) {
               toast({
@@ -192,7 +234,14 @@ const PuzzleContent: React.FC<PuzzleProps> = ({
       };
       checkPuzzleSolution();
     }
-  }, [goalWorldInfo, runningWorldInfo, shouldCheckSolution, toast]);
+  }, [
+    goalWorldInfo,
+    runningWorldInfo,
+    shouldCheckSolution,
+    toast,
+    addSolvedPuzzle,
+    currentUserID,
+  ]);
 
   return (
     <section className=" w-full flex-col items-center p-2">
@@ -200,6 +249,9 @@ const PuzzleContent: React.FC<PuzzleProps> = ({
         <div className="flex h-full flex-col gap-2 p-4">
           {puzzleName && (
             <h1 className="text-xl font-extrabold">{puzzleName}</h1>
+          )}
+          {puzzleInfoFromDB?.description && (
+            <p>{puzzleInfoFromDB.description}</p>
           )}
           <div className="flex size-full flex-col">
             <RunnableWorld
@@ -253,6 +305,12 @@ const PuzzleContent: React.FC<PuzzleProps> = ({
           )}
         </div>
       </section>
+      <PuzzleRatingForm
+        open={openRatingDialog}
+        setOpen={setOpenRatingDialog}
+        puzzleId={puzzleInfoFromDB?.id}
+        currentUserID={currentUserID}
+      />
     </section>
   );
 };

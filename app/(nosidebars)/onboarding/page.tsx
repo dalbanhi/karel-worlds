@@ -10,6 +10,10 @@ const OnboardingPage = async () => {
   if (!clerkUser) {
     redirect("/sign-in");
   }
+  const myCurrentUser = await getCurrentUser();
+  if (myCurrentUser?.onboardingComplete) {
+    redirect("/my-stuff");
+  }
 
   const baseUserInfo = {
     clerkUserId: clerkUser.id,

@@ -63,18 +63,3 @@ export function useCanvasSize(rows: number, cols: number, solving: boolean) {
 
   return baseCanvasSize;
 }
-
-// let aspectRatioCols = rows / cols;
-//   let aspectRatioRows = cols / rows;
-
-//   if (aspectRatioCols > 1) {
-//     aspectRatioCols = 1;
-//   }
-//   if (aspectRatioRows > 1) {
-//     aspectRatioRows = 1;
-//   }
-
-//   const canvasSize = {
-//     width: windowSize.width * ratioSm * (2 - aspectRatioCols),
-//     height: windowSize.width * ratioSm * (2 - aspectRatioRows),
-//   };

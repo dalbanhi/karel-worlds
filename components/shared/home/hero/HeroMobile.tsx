@@ -4,9 +4,9 @@ import HeroImage from "./HeroImage";
 
 const HeroMobile = () => {
   return (
-    <div className="relative h-96 max-h-fit min-h-96 w-full grow items-center justify-center md:hidden ">
+    <div className="relative h-96 w-full md:hidden ">
       <HeroImage />
-      <div className="absolute inset-0 flex h-full items-center justify-center bg-accent/30 p-6">
+      <div className="absolute inset-0 flex h-full items-center justify-center bg-accent/30 p-1">
         <HeroText />
       </div>
     </div>

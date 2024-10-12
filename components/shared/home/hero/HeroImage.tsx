@@ -9,8 +9,11 @@ const HeroImage = () => {
       alt="Happy kids coding"
       placeholder="blur"
       className="object-cover"
+      priority
+      loading="eager"
+      fetchPriority="high"
       fill
-      sizes="(max-width: 768px) 100vw, 50vw"
+      sizes="(max-width: 768px) 100vw"
       style={{ objectFit: "cover" }}
     />
   );

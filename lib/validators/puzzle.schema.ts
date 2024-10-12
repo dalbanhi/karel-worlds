@@ -6,7 +6,6 @@ const tagSchema = z.object({
 });
 
 export const puzzleSchema = z.object({
-  //   id: z.string().uuid(), // UUID validation for the 'id' field
   name: z
     .string()
     .min(1, { message: "Name must be at least 1 character long" })
@@ -16,10 +15,12 @@ export const puzzleSchema = z.object({
     .string()
     .max(150, { message: "Description must be at most 150 characters long" })
     .or(z.literal("")), // Allow empty string
-  tags: z.array(tagSchema).max(3), // Array of strings for the 'tags' field
+  tags: z.array(z.string()), // Array of strings for the 'tags' field
   worldWidth: z.number().int().min(1), // Positive integer for 'worldWidth'
   worldHeight: z.number().int().min(1), // Positive integer for 'worldHeight'
   hints: z.array(z.string()), // Array of strings for the 'hints' field
+  difficulty: z.number().int().min(-1).max(5), // Integer between 1 and 5 for 'difficulty'
+  rating: z.number().int().min(-1).max(5), // Integer between 1 and 5 for 'rating'
   karelImage: z
     .string()
     .refine((val) => val === "" || z.string().url().safeParse(val).success, {

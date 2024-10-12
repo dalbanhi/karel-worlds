@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { UseFormReturn } from "react-hook-form";
 
 import dynamic from "next/dynamic";
@@ -6,6 +6,7 @@ import { FormField, FormLabel } from "@/components/ui/form";
 import { puzzleSchema } from "@/lib/validators/puzzle.schema";
 import { z } from "zod";
 import { maxNumTags } from "@/constants/puzzle";
+import { getTags } from "@/lib/actions/tags";
 
 const CreatableSelect = dynamic(() => import("react-select/creatable"), {
   ssr: false,
@@ -13,18 +14,28 @@ const CreatableSelect = dynamic(() => import("react-select/creatable"), {
 
 interface TagsSelectorProps {
   form: UseFormReturn<z.infer<typeof puzzleSchema>>;
-  tagsString: string;
 }
 
 function capitalizeFirstLetter(string: string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
-const TagsSelector: React.FC<TagsSelectorProps> = ({ form, tagsString }) => {
+const TagsSelector: React.FC<TagsSelectorProps> = ({ form }) => {
   const [numSelectedOptions, setNumSelectedOptions] = useState(0);
-  const tags = tagsString !== "" ? (JSON.parse(tagsString) as string[]) : [];
-  const options: string[] = ["loops", "conditionals", "functions", "variables"];
-  const tagsToPass = options.map((item: any) => {
+  const [tagsFromServer, setTagsFromServer] = useState<string[]>([]);
+
+  useEffect(() => {
+    const getTagsFromServer = async () => {
+      const rawTagsFromServer = await getTags();
+      const tagNames = rawTagsFromServer.map((tagObject) => {
+        return tagObject.name;
+      });
+      setTagsFromServer(tagNames);
+    };
+    getTagsFromServer();
+  }, []);
+
+  const tagsToPass = tagsFromServer.map((item: any) => {
     if (typeof item === "string") {
       return { label: capitalizeFirstLetter(item), value: item };
     } else {
@@ -41,32 +52,23 @@ const TagsSelector: React.FC<TagsSelectorProps> = ({ form, tagsString }) => {
         control={form.control}
         name="tags"
         render={({ field }) => {
-          // const tagsToPass = field.value.map((item: any) => {
-          //   if (typeof item === "string") {
-          //     return { label: capitalizeFirstLetter(item), value: item };
-          //   } else {
-          //     return {
-          //       label: capitalizeFirstLetter(item.label),
-          //       value: item.value,
-          //     };
-          //   }
-          // });
           return (
             <div className="flex w-full items-center justify-center gap-2">
-              <FormLabel className="text-ring">Tags</FormLabel>
+              <FormLabel className="text-ring" id="tags-selector-label">
+                Tags
+              </FormLabel>
               <CreatableSelect
+                aria-labelledby="tags-selector-label"
                 isMulti
                 instanceId={"tags"}
                 classNamePrefix="react-select"
                 className="w-full"
                 options={tagsToPass}
-                // defaultValue={}
                 isOptionDisabled={(option) => numSelectedOptions >= maxNumTags}
                 theme={(theme) => ({
                   ...theme,
                   borderRadius: 5,
                   colors: {
-                    // ...theme.colors,
                     //main bar color
                     neutral0: "hsl(var(--primary-foreground))",
                     //down arrow color when selected
@@ -99,7 +101,10 @@ const TagsSelector: React.FC<TagsSelectorProps> = ({ form, tagsString }) => {
                 getOptionValue={(option: any) => option.value}
                 onChange={(newValue: unknown, actionMeta: any) => {
                   const selectedOptions = newValue as any[];
-                  field.onChange(selectedOptions);
+                  const selectedOptionsValues = selectedOptions.map(
+                    (option) => option.value
+                  );
+                  field.onChange(selectedOptionsValues);
                   setNumSelectedOptions(selectedOptions.length);
                 }}
               />

@@ -1,6 +1,6 @@
-import Link from "next/link";
-import Image from "next/image";
 import TagsList from "./RightSidebar/TagsList";
+import { getTags } from "@/lib/actions/tags";
+import { maxTagsOnExplore } from "@/constants/database";
 
 interface RightSidebarProps {
   children?: React.ReactNode;
@@ -11,10 +11,10 @@ const RightSidebar: React.FC<RightSidebarProps> = async ({
   children,
   searchParams,
 }) => {
-  const allTags = ["tag1", "tag2", "tag3", "tag4", "tag5"];
+  const topTags = await getTags(maxTagsOnExplore);
   return (
-    <aside className="min-h-screen w-3/12 flex-col gap-2 border-l-2 p-4 max-sm:hidden sm:flex">
-      <TagsList tags={JSON.stringify(allTags)} searchParams={searchParams} />
+    <aside className="min-h-svh w-3/12 grow flex-col gap-2 border-l-2 p-4 max-sm:hidden sm:flex">
+      <TagsList tags={JSON.stringify(topTags)} searchParams={searchParams} />
     </aside>
   );
 };
