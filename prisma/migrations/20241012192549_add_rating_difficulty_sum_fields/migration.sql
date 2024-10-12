@@ -1,0 +1,5 @@
+-- AlterTable
+ALTER TABLE "puzzles" ADD COLUMN     "difficultyRating" INTEGER NOT NULL DEFAULT 0,
+ADD COLUMN     "difficultyRatingSum" INTEGER NOT NULL DEFAULT 0,
+ADD COLUMN     "totalRatings" INTEGER NOT NULL DEFAULT 0,
+ADD COLUMN     "totalRatingsSum" INTEGER NOT NULL DEFAULT 0;
