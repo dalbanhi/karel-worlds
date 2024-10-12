@@ -9,21 +9,8 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
-
 import { headers } from "next/headers";
 import { isMobile } from "@/lib/utils/isMobile";
-
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
@@ -35,9 +22,8 @@ import { StarFilledIcon, StarIcon } from "@radix-ui/react-icons";
 import { PuzzleWithMoreStuff } from "@/types/puzzleExtensions";
 import CardButtons from "./CardButtons";
 import ShowFullText from "./ShowFullText";
-import { Description } from "@radix-ui/react-toast";
 
-const StarRating: React.FC<{ rating: number; type: string }> = ({
+const StarRatingDisplay: React.FC<{ rating: number; type: string }> = ({
   rating,
   type,
 }) => {
@@ -231,11 +217,14 @@ const PuzzleCard: React.FC<PuzzleCardProps> = async ({
           </p>
           <div className="flex items-center justify-start gap-2 text-sm ">
             <span className="font-semibold">Rating:</span>{" "}
-            <StarRating rating={puzzleInfo.rating} type="rating" />
+            <StarRatingDisplay rating={puzzleInfo.rating} type="rating" />
           </div>
           <div className="flex items-center justify-start gap-2 text-sm ">
             <span className="font-semibold">Difficulty:</span>{" "}
-            <StarRating rating={puzzleInfo.difficulty} type="difficulty" />
+            <StarRatingDisplay
+              rating={puzzleInfo.difficulty}
+              type="difficulty"
+            />
           </div>
           <div className="flex items-center justify-start gap-2 text-sm ">
             <span className="font-semibold">Likes:</span>{" "}

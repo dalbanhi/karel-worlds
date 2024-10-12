@@ -15,15 +15,16 @@ import {
   FormDescription,
   FormMessage,
 } from "@/components/ui/form";
-import { Textarea } from "@/components/ui/textarea";
-import { Input } from "@/components/ui/input";
+
+import { Checkbox } from "@/components/ui/checkbox";
 
 import React from "react";
 import { Form } from "@/components/ui/form";
-import { contactSchema } from "@/lib/validators/contact.schema";
+import { puzzleRatingSchema } from "@/lib/validators/puzzleRating.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import StarRatingInteractive from "./StarRatingInteractive";
 
 interface PuzzleRatingFormProps {
   open: boolean;
@@ -38,17 +39,18 @@ const PuzzleRatingForm: React.FC<PuzzleRatingFormProps> = ({
   puzzleId,
   currentUserID,
 }) => {
-  const onSubmit = async (data: z.infer<typeof contactSchema>) => {
+  const onSubmit = async (data: z.infer<typeof puzzleRatingSchema>) => {
     console.log(data);
   };
 
-  const form = useForm<z.infer<typeof contactSchema>>({
-    resolver: zodResolver(contactSchema),
+  const form = useForm<z.infer<typeof puzzleRatingSchema>>({
+    resolver: zodResolver(puzzleRatingSchema),
     defaultValues: {
-      name: "",
-      email: "",
-      subject: "",
-      message: "",
+      liked: false,
+      rating: -1,
+      difficulty: -1,
+      puzzleId: puzzleId,
+      userId: currentUserID,
     },
   });
   if (!puzzleId) return null;
@@ -69,43 +71,45 @@ const PuzzleRatingForm: React.FC<PuzzleRatingFormProps> = ({
               onSubmit={form.handleSubmit(onSubmit)}
               className="flex flex-col gap-2 p-4"
             >
-              <div className="flex w-full justify-center gap-2">
+              <div className="flex flex-col w-full justify-center items-start gap-2">
                 <FormField
                   control={form.control}
-                  name="name"
+                  name="rating"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Name</FormLabel>
+                      <FormLabel>Rating</FormLabel>
                       <FormControl>
-                        <Input
-                          autoFocus
-                          placeholder="Your name..."
-                          {...field}
+                        <StarRatingInteractive
+                          value={field.value}
+                          onChange={field.onChange}
+                          onBlur={field.onBlur}
+                          type="rating"
                         />
                       </FormControl>
                       <FormDescription className="text-xs"></FormDescription>
                       <FormMessage>
-                        {form.formState.errors.name?.message}
+                        {form.formState.errors.rating?.message}
                       </FormMessage>
                     </FormItem>
                   )}
                 />
                 <FormField
                   control={form.control}
-                  name="email"
+                  name="difficulty"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Email</FormLabel>
+                      <FormLabel>Difficulty</FormLabel>
                       <FormControl>
-                        <Input
-                          autoFocus
-                          placeholder="Your email..."
-                          {...field}
+                        <StarRatingInteractive
+                          value={field.value}
+                          onChange={field.onChange}
+                          onBlur={field.onBlur}
+                          type="difficulty"
                         />
                       </FormControl>
                       <FormDescription className="text-xs"></FormDescription>
                       <FormMessage>
-                        {form.formState.errors.email?.message}
+                        {form.formState.errors.difficulty?.message}
                       </FormMessage>
                     </FormItem>
                   )}
@@ -113,41 +117,27 @@ const PuzzleRatingForm: React.FC<PuzzleRatingFormProps> = ({
               </div>
               <FormField
                 control={form.control}
-                name="subject"
+                name="liked"
                 render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Subject</FormLabel>
-                    <FormControl>
-                      <Input
-                        autoFocus
-                        placeholder="What are you reaching out about?"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormDescription className="text-xs"></FormDescription>
+                  <FormItem className="flex items-start flex-col">
+                    <div className="flex items-center gap-1">
+                      {" "}
+                      <FormLabel>Did you like the puzzle?</FormLabel>
+                      <FormControl>
+                        <Checkbox
+                          checked={field.value}
+                          onCheckedChange={field.onChange}
+                        />
+                      </FormControl>
+                    </div>
+
+                    <FormDescription className="text-xs">
+                      {!field.value
+                        ? "Check the box to like the puzzle."
+                        : "Uncheck the box to not like the puzzle. "}
+                    </FormDescription>
                     <FormMessage>
-                      {form.formState.errors.subject?.message}
-                    </FormMessage>
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="message"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Message</FormLabel>
-                    <FormControl>
-                      <Textarea
-                        className="w-full"
-                        //   maxLength={150}
-                        placeholder="What can we help you with today?"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormDescription className="text-xs"></FormDescription>
-                    <FormMessage>
-                      {form.formState.errors.message?.message}
+                      {form.formState.errors.liked?.message}
                     </FormMessage>
                   </FormItem>
                 )}

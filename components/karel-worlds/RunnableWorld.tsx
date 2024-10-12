@@ -332,11 +332,10 @@ const RunnableWorld: React.FC<RunnableWorldProps> = ({
   // stepCodeRef.current = stepCode;
 
   // Update the ref to ensure stepCode is up-to-date
-  const [app, setApp] = useState<Application<ICanvas>>();
   //slider values for speed
   //slider values for speed
-  const minSliderValue = 50;
-  const stepValue = 50;
+  const minSliderValue = 25;
+  const stepValue = 25;
   const maxSliderValue = 500;
   const [sliderValue, setSliderValue] = useState<number>(50);
 
