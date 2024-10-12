@@ -15,12 +15,12 @@ const PuzzlePage = async ({ params }: { params: { id: string } }) => {
     return <div>loading...</div>;
   }
   const hasSolved = currUser?.puzzlesSolved.includes(puzzle);
+  const isCreator = currUser?.id === puzzle.creatorId;
   return (
     <div className="w-full">
       <PuzzleActionButtons
-        currentUserID={currUser?.id || ""}
-        puzzleID={puzzle.id}
-        hasSolved={hasSolved}
+        isCreator={isCreator}
+        hasSolved={hasSolved || false}
       />
       <Puzzle
         worldDimensions={{

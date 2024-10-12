@@ -16,6 +16,7 @@ const SimpleHero: React.FC<SimpleHeroProps> = ({ image, text }) => {
         alt={`Hero Image for  ${text}`}
         fill
         blurDataURL={image.blurDataURL}
+        loading="eager"
         placeholder="blur"
         style={{ objectFit: "cover" }}
         quality={100}
