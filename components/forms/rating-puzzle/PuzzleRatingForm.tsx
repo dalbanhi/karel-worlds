@@ -17,7 +17,6 @@ import {
 } from "@/components/ui/form";
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
-import { User } from "@prisma/client";
 
 import React from "react";
 import { Form } from "@/components/ui/form";
@@ -39,7 +38,6 @@ const PuzzleRatingForm: React.FC<PuzzleRatingFormProps> = ({
   puzzleId,
   currentUserID,
 }) => {
-  if (!puzzleId) return null;
   const onSubmit = async (data: z.infer<typeof contactSchema>) => {
     console.log(data);
   };
@@ -53,7 +51,7 @@ const PuzzleRatingForm: React.FC<PuzzleRatingFormProps> = ({
       message: "",
     },
   });
-
+  if (!puzzleId) return null;
   return (
     <Dialog
       open={open}

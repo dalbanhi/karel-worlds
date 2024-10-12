@@ -22,7 +22,6 @@ import { PuzzleWithMoreStuff } from "@/types/puzzleExtensions";
 import { buttonVariants } from "@/components/ui/button";
 import { ToastAction } from "@radix-ui/react-toast";
 import PuzzleRatingForm from "@/components/forms/rating-puzzle/PuzzleRatingForm";
-import { User } from "@prisma/client";
 
 interface PuzzleProps {
   worldDimensions: { width: number; height: number };

@@ -64,7 +64,7 @@ const RunnableWorld: React.FC<RunnableWorldProps> = ({
 
   //references for grid, interpreter and runLoop
   const runLoop = useRef<boolean>(false);
-  // const interpreter = useRef<typeof Interpreter | null>(null);
+  const interpreter = useRef<typeof Interpreter | null>(null);
   const gridRef = useRef<any>(null);
   const shouldCheckPuzzle = useRef<boolean>(false);
   const stepCodeRef = useRef<() => void>(() => {});
@@ -252,9 +252,7 @@ const RunnableWorld: React.FC<RunnableWorldProps> = ({
     [toast]
   );
   // interpreter.current = new Interpreter(rawCode, initApi);
-  const interpreter = useMemo(() => {
-    return new Interpreter(rawCode, initApi);
-  }, [rawCode, initApi]);
+  // const interpreter =
 
   const resetGridWithNewCode = () => {
     gridRef.current.resetGrid();
@@ -311,7 +309,7 @@ const RunnableWorld: React.FC<RunnableWorldProps> = ({
 
   const stepCode = useCallback(() => {
     let stack: any = [];
-    let ok = interpreter.step();
+    let ok = interpreter.current.step();
     //TODO: Add code highlighting?
     stack = interpreter.current.getStateStack();
     let stepAgain = !isLine(stack);
@@ -331,7 +329,7 @@ const RunnableWorld: React.FC<RunnableWorldProps> = ({
     }
   }, [interpreter, isLine]);
 
-  stepCodeRef.current = stepCode;
+  // stepCodeRef.current = stepCode;
 
   // Update the ref to ensure stepCode is up-to-date
   const [app, setApp] = useState<Application<ICanvas>>();
