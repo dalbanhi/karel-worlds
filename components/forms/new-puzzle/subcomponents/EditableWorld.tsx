@@ -147,7 +147,7 @@ const EditableWorld: React.FC<EditableWorldProps> = ({
 
   return (
     <section className="mt-4 flex w-full flex-col justify-center gap-2">
-      <h5 className="text-center font-semibold">{name}</h5>
+      <h3 className="text-center font-semibold">{name}</h3>
       <EditingShelf
         form={form}
         name={name}

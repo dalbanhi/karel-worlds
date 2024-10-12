@@ -54,8 +54,11 @@ const TagsSelector: React.FC<TagsSelectorProps> = ({ form }) => {
         render={({ field }) => {
           return (
             <div className="flex w-full items-center justify-center gap-2">
-              <FormLabel className="text-ring">Tags</FormLabel>
+              <FormLabel className="text-ring" id="tags-selector-label">
+                Tags
+              </FormLabel>
               <CreatableSelect
+                aria-labelledby="tags-selector-label"
                 isMulti
                 instanceId={"tags"}
                 classNamePrefix="react-select"

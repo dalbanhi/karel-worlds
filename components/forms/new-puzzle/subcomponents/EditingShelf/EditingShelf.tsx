@@ -28,12 +28,14 @@ const EditingShelf: React.FC<EditingShelfProps> = ({
         setWorldInfo={setWorldInfo}
         worldWidth={watchWorldWidth}
         worldHeight={watchWorldHeight}
+        name={name}
       />
       <GridElementsEditor
         worldInfo={worldInfo}
         setWorldInfo={setWorldInfo}
         worldWidth={watchWorldWidth}
         worldHeight={watchWorldHeight}
+        worldName={name}
       />
     </div>
   );

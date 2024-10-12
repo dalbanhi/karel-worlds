@@ -44,6 +44,7 @@ const DimensionSlider: React.FC<DimensionSliderProps> = ({
           </FormLabel>
           <FormControl>
             <Slider
+              aria-label={`world-dimension-slider-${fieldName}`}
               min={1}
               max={25}
               step={1}
@@ -72,9 +73,9 @@ const WorldsEditor: React.FC<WorldsEditorProps> = ({ form }) => {
   if (!startWorldInfo || !goalWorldInfo) return null;
   return (
     <section className="flex w-full flex-col items-center justify-center gap-2 p-2">
-      <h3 className="text-center text-lg font-semibold">
+      <h2 className="text-center text-lg font-semibold">
         All World Properties
-      </h3>
+      </h2>
       <div className="flex items-center justify-center gap-4">
         <DimensionSlider
           form={form}
