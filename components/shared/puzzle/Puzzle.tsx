@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { serialization, WorkspaceSvg, Events, getMainWorkspace } from "blockly";
 import "@/utils/custom/blocks/CustomBlocks";
 import { javascriptGenerator } from "blockly/javascript";
@@ -157,12 +157,12 @@ const PuzzleContent: React.FC<PuzzleProps> = ({
     return true;
   }
 
-  async function addSolvedPuzzle() {
+  const addSolvedPuzzle = useCallback(async () => {
     // add the puzzle to the user's solved puzzles
     if (!puzzleInfoFromDB?.id) return;
     if (!currentUserID) return;
     await addPuzzleToSolvedList(puzzleInfoFromDB?.id, currentUserID);
-  }
+  }, [puzzleInfoFromDB?.id, currentUserID]);
 
   useEffect(() => {
     if (shouldCheckSolution) {
@@ -234,7 +234,14 @@ const PuzzleContent: React.FC<PuzzleProps> = ({
       };
       checkPuzzleSolution();
     }
-  }, [goalWorldInfo, runningWorldInfo, shouldCheckSolution, toast]);
+  }, [
+    goalWorldInfo,
+    runningWorldInfo,
+    shouldCheckSolution,
+    toast,
+    addSolvedPuzzle,
+    currentUserID,
+  ]);
 
   return (
     <section className=" w-full flex-col items-center p-2">

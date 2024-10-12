@@ -77,7 +77,7 @@ const PuzzleRatingForm: React.FC<PuzzleRatingFormProps> = ({
               onSubmit={form.handleSubmit(onSubmit)}
               className="flex flex-col gap-2 p-4"
             >
-              <span className="flex flex-col w-full justify-center items-start gap-2">
+              <span className="flex w-full flex-col items-start justify-center gap-2">
                 <FormField
                   control={form.control}
                   name="rating"
@@ -125,7 +125,7 @@ const PuzzleRatingForm: React.FC<PuzzleRatingFormProps> = ({
                 control={form.control}
                 name="liked"
                 render={({ field }) => (
-                  <FormItem className="flex items-start flex-col">
+                  <FormItem className="flex flex-col items-start">
                     <span className="flex items-center gap-1">
                       {" "}
                       <FormLabel>Did you like the puzzle?</FormLabel>

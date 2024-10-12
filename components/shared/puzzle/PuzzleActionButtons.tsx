@@ -28,7 +28,7 @@ const PuzzleActionButtons: React.FC<PuzzleActionButtonsProps> = ({
           }}
           type="button"
           variant="default"
-          className="flex gap-1 items-center"
+          className="flex items-center gap-1"
         >
           {" "}
           Edit <Pencil1Icon />
@@ -45,7 +45,7 @@ const PuzzleActionButtons: React.FC<PuzzleActionButtonsProps> = ({
           }}
           type="button"
           variant="default"
-          className="flex gap-1 items-center"
+          className="flex items-center gap-1"
         >
           {" "}
           Rate <StarFilledIcon />
