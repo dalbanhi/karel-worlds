@@ -13,6 +13,7 @@ import {
 import { SortOptionType, TabType } from "@/types/puzzleDB";
 import { Prisma } from "@prisma/client";
 import { PuzzleWithMoreStuff } from "@/types/puzzleExtensions";
+import { puzzleRatingSchema } from "../validators/puzzleRating.schema";
 
 const config: Config = {
   dictionaries: [adjectives, nouns, nouns],
@@ -37,6 +38,83 @@ async function _getPuzzle(id: string) {
   } catch {
     throw new Error("Error getting puzzle");
   }
+}
+
+export async function addPuzzleToSolvedList(puzzleId: string, userId: string) {
+  try {
+    const user = await db.user.findUnique({
+      where: {
+        id: userId,
+      },
+      include: {
+        puzzlesSolved: true,
+      },
+    });
+
+    if (!user) {
+      throw new Error("User not found");
+    }
+
+    const puzzle = await db.puzzle.findUnique({
+      where: {
+        id: puzzleId,
+      },
+    });
+
+    if (!puzzle) {
+      throw new Error("Puzzle not found");
+    }
+
+    await db.user.update({
+      where: {
+        id: userId,
+      },
+      data: {
+        puzzlesSolved: {
+          connect: {
+            id: puzzleId,
+          },
+        },
+      },
+    });
+
+    revalidateTag("puzzles");
+  } catch (e: any) {
+    console.error(e);
+    throw new Error("Error adding puzzle to solved list");
+  }
+}
+
+export async function ratePuzzle(ratingData: any) {
+  puzzleRatingSchema.parse(ratingData);
+
+  //get the puzzle
+  const puzzle = await db.puzzle.findFirst({
+    where: {
+      id: ratingData.puzzleId,
+      solvedBy: {
+        some: {
+          id: ratingData.userId,
+        },
+      },
+    },
+    include: {
+      solvedBy: true,
+    },
+  });
+
+  //if the puzzle is not found, throw an error
+  if (!puzzle) {
+    throw new Error("Puzzle not found");
+  }
+
+  //update the rating and difficulty of the puzzle
+  //get the current average rating
+  const currentRating = puzzle.rating;
+  const currentDifficulty = puzzle.difficulty;
+
+  //get the length of the ratings array
+  const ratingsLength = puzzle.solvedBy.length;
 }
 
 export async function createPuzzle(puzzleData: any) {

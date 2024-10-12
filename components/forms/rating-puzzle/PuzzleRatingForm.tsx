@@ -41,6 +41,7 @@ const PuzzleRatingForm: React.FC<PuzzleRatingFormProps> = ({
 }) => {
   const onSubmit = async (data: z.infer<typeof puzzleRatingSchema>) => {
     console.log(data);
+    await ratePuzzle(data);
   };
 
   const form = useForm<z.infer<typeof puzzleRatingSchema>>({

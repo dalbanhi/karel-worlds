@@ -55,12 +55,6 @@ const MyDashboard = async ({
     redirect("/my-stuff?view=my-puzzles");
   }
 
-  // const baseRouteWithOtherParams = getBaseStringForNewRouteFromSearchParams(
-  //   "my-stuff",
-  //   searchParams,
-  //   "view"
-  // );
-
   const puzzlesToShow: PuzzleWithMoreStuff[] = JSON.parse(
     await getUserPuzzles(
       currentDBUser.id,

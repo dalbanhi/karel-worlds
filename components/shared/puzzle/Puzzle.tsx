@@ -22,6 +22,7 @@ import { PuzzleWithMoreStuff } from "@/types/puzzleExtensions";
 import { buttonVariants } from "@/components/ui/button";
 import { ToastAction } from "@radix-ui/react-toast";
 import PuzzleRatingForm from "@/components/forms/rating-puzzle/PuzzleRatingForm";
+import { addPuzzleToSolvedList } from "@/lib/actions/puzzles";
 
 interface PuzzleProps {
   worldDimensions: { width: number; height: number };
@@ -156,6 +157,13 @@ const PuzzleContent: React.FC<PuzzleProps> = ({
     return true;
   }
 
+  async function addSolvedPuzzle() {
+    // add the puzzle to the user's solved puzzles
+    if (!puzzleInfoFromDB?.id) return;
+    if (!currentUserID) return;
+    await addPuzzleToSolvedList(puzzleInfoFromDB?.id, currentUserID);
+  }
+
   useEffect(() => {
     if (shouldCheckSolution) {
       const checkPuzzleSolution = () => {
@@ -175,23 +183,32 @@ const PuzzleContent: React.FC<PuzzleProps> = ({
             runningWorldBeeperList
           );
           if (karelsEqual && beepersEqual) {
-            toast({
-              variant: "success",
-              title: "Puzzle Solved",
-              description: "You have successfully solved the puzzle!",
-              action: (
-                <ToastAction
-                  className={`text-ring ${buttonVariants({ variant: "outline" })}`}
-                  onClick={() => {
-                    console.log("rate the puzzle");
-                    setOpenRatingDialog(true);
-                  }}
-                  altText="Rate the Puzzle"
-                >
-                  Rate the Puzzle
-                </ToastAction>
-              ),
-            });
+            if (currentUserID) {
+              toast({
+                variant: "success",
+                title: "Puzzle Solved",
+                description: "You have successfully solved the puzzle!",
+                action: (
+                  <ToastAction
+                    className={`text-ring ${buttonVariants({ variant: "outline" })}`}
+                    onClick={() => {
+                      setOpenRatingDialog(true);
+                    }}
+                    altText="Rate the Puzzle"
+                  >
+                    Rate the Puzzle
+                  </ToastAction>
+                ),
+              });
+
+              addSolvedPuzzle();
+            } else {
+              toast({
+                variant: "success",
+                title: "Puzzle Solved",
+                description: "You have successfully solved the puzzle!",
+              });
+            }
           } else {
             if (!karelsEqual) {
               toast({
