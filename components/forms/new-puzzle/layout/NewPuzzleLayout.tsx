@@ -85,10 +85,6 @@ const NewPuzzleLayout: React.FC<NewPuzzleLayoutProps> = ({
 
   const onSubmitForm = async (data: z.infer<typeof puzzleSchema>) => {
     // Handle form submission
-    console.log("Form data submitted 2:");
-    console.log(data);
-    console.log("goalWorldInfo", goalWorldInfo);
-    console.log("startWorldInfo", startWorldInfo);
     data.startWorldInfo = startWorldInfo;
     data.goalWorldInfo = goalWorldInfo;
     const newPuzzle = await createPuzzle(data);
@@ -135,14 +131,8 @@ const NewPuzzleLayout: React.FC<NewPuzzleLayoutProps> = ({
 
   const watchValues = form.watch();
   useEffect(() => {
-    console.log(watchValues);
     sessionStorage.setItem("puzzleFormData", JSON.stringify(watchValues));
   }, [watchValues]);
-
-  const errors = form.formState.errors;
-  useEffect(() => {
-    console.log("Errors:", errors);
-  }, [errors, redirectToSignIn, toast]);
 
   const [showPreview, setShowPreview] = useState(false);
 
@@ -171,8 +161,6 @@ const NewPuzzleLayout: React.FC<NewPuzzleLayoutProps> = ({
     useState<worldInfoType>(initialStartWorld);
 
   useEffect(() => {
-    console.log("start world changed");
-    console.log("startWorldInfo", startWorldInfo);
     sessionStorage.setItem("startWorldInfo", JSON.stringify(startWorldInfo));
   }, [startWorldInfo]);
 
@@ -291,7 +279,6 @@ const NewPuzzleLayout: React.FC<NewPuzzleLayoutProps> = ({
                     className="flex w-fit gap-2"
                     variant={"gradient"}
                     onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
-                      console.log("Form data submitted 1:");
                       e.preventDefault();
                       if (isUserSignedIn()) {
                         form.handleSubmit(onSubmitForm)();

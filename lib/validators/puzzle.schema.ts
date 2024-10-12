@@ -6,7 +6,6 @@ const tagSchema = z.object({
 });
 
 export const puzzleSchema = z.object({
-  //   id: z.string().uuid(), // UUID validation for the 'id' field
   name: z
     .string()
     .min(1, { message: "Name must be at least 1 character long" })

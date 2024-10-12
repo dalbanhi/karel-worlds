@@ -41,20 +41,6 @@ const EditableWorld: React.FC<EditableWorldProps> = ({
   const worldHeight = form.watch("worldHeight");
   const canvasSize = useCanvasSize(worldWidth, worldHeight, false);
 
-  //   const [worldInfo, setWorldInfo] = useState<worldInfoType>({
-  //     karel: {
-  //       x: 0,
-  //       y: 0,
-  //       type: "karel",
-  //       direction: "east",
-  //       backpack: 0,
-  //       infiniteBackpack: false,
-  //       count: 1,
-  //       subtype: "karel",
-  //     },
-  //     gridElements: [],
-  //   });
-
   const karelImage = form.watch("karelImage");
   const beepersImage = form.watch("beepersImage");
   const backgroundImage = form.watch("backgroundImage");
@@ -76,7 +62,6 @@ const EditableWorld: React.FC<EditableWorldProps> = ({
     });
   }, [karelImage, beepersImage, backgroundImage, wallImage]);
 
-  // if (!worldContext) return null;
   const { worldInfo, setWorldInfo } = worldContext;
   const initialKarel = new KarelElement(
     worldInfo.karel.x,
@@ -119,11 +104,11 @@ const EditableWorld: React.FC<EditableWorldProps> = ({
       ];
     });
 
-    //   //add karel to the grid
+    //   add karel to the grid
     let boundKarelX = newKarel.x >= worldWidth ? worldWidth - 1 : newKarel.x;
     let boundKarelY = newKarel.y >= worldHeight ? worldHeight - 1 : newKarel.y;
 
-    // //only unshift if there is a beeper, otherwise, replace
+    // only unshift if there is a beeper, otherwise, replace
     if (newGrid[boundKarelX][boundKarelY][0].type === "beeper") {
       newGrid[boundKarelX][boundKarelY].unshift(
         new KarelElement(

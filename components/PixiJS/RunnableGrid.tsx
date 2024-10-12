@@ -124,7 +124,7 @@ const RunnableGrid = forwardRef<RunnableGridHandle, RunnableGridProps>(
         ];
       });
 
-      //   //add karel to the grid
+      //   add karel to the grid
       let boundKarelX =
         karel.x >= worldDimensions.width ? worldDimensions.width - 1 : karel.x;
       let boundKarelY =
@@ -132,7 +132,7 @@ const RunnableGrid = forwardRef<RunnableGridHandle, RunnableGridProps>(
           ? worldDimensions.height - 1
           : karel.y;
 
-      // //only unshift if there is a beeper, otherwise, replace
+      // only unshift if there is a beeper, otherwise, replace
       if (newGrid[boundKarelX][boundKarelY][0].type === "beeper") {
         newGrid[boundKarelX][boundKarelY].unshift(
           new KarelElement(
@@ -199,7 +199,7 @@ const RunnableGrid = forwardRef<RunnableGridHandle, RunnableGridProps>(
             ? worldDimensions.height - 1
             : initialKarel.y;
 
-        // //only unshift if there is a beeper, otherwise, replace
+        // only unshift if there is a beeper, otherwise, replace
         if (newGrid[boundKarelX][boundKarelY][0].type === "beeper") {
           newGrid[boundKarelX][boundKarelY].unshift(initialKarel);
         } else {
@@ -306,7 +306,7 @@ const RunnableGrid = forwardRef<RunnableGridHandle, RunnableGridProps>(
           throw new Error("Karel does not have any beepers left");
         }
 
-        // //check if there is already a beeper in the beeper list
+        // check if there is already a beeper in the beeper list
         let beeperExists = beepers.find(
           (beeper) => beeper.x === karel.x && beeper.y === karel.y
         );

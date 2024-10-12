@@ -21,16 +21,10 @@ const PuzzleSorterClientSelect: React.FC<PuzzleSorterClientSelectProps> = ({
   baseRoute,
 }) => {
   const router = useRouter();
-  // const baseURLWithOtherParams = buildRouteWithUpdatedParams(
-  //   baseRoute,
-  //   searchParams,
-
-  // );
   return (
     <Select
       value={searchParams.sort as string}
       onValueChange={(val) => {
-        console.log(`${val} selected`);
         const routeLink = buildRouteWithUpdatedParams(baseRoute, searchParams, {
           sort: val,
         });

@@ -251,8 +251,6 @@ const RunnableWorld: React.FC<RunnableWorldProps> = ({
     },
     [toast]
   );
-  // interpreter.current = new Interpreter(rawCode, initApi);
-  // const interpreter =
 
   const resetGridWithNewCode = () => {
     gridRef.current.resetGrid();
@@ -329,10 +327,7 @@ const RunnableWorld: React.FC<RunnableWorldProps> = ({
     }
   }, [interpreter, isLine]);
 
-  // stepCodeRef.current = stepCode;
-
   // Update the ref to ensure stepCode is up-to-date
-  //slider values for speed
   //slider values for speed
   const minSliderValue = 25;
   const stepValue = 25;

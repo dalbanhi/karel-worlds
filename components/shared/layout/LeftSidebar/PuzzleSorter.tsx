@@ -17,22 +17,6 @@ const PuzzleSorter: React.FC<PuzzleSorterProps> = ({
   if (searchParams === undefined || searchParams === null) {
     return null;
   }
-
-  // const currentTag = searchParams.tag as string;
-  // const currentView = searchParams.view as string;
-  // const currentSearch = searchParams.search as string;
-
-  // const baseURLWithTag = currentTag ? `${baseURL}tag=${currentTag}` : baseURL;
-  // const baseURLWithTagAndView = currentView
-  //   ? `${baseURLWithTag}&view=${currentView}`
-  //   : baseURLWithTag;
-  // const baseURLWithTagAndViewAndSearch = currentSearch
-  //   ? `${baseURLWithTagAndView}&search=${currentSearch}`
-  //   : baseURLWithTagAndView;
-
-  // const baseURLWithTagAndViewAndSearch =
-  //   getBaseStringForNewRouteFromSearchParams(baseRoute, searchParams, "sort");
-
   const selectedSort = searchParams.sort as string;
   return (
     <div className="flex h-fit w-full flex-col items-center rounded-none p-2 text-muted-foreground">

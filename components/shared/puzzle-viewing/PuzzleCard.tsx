@@ -97,16 +97,12 @@ const PuzzleCard: React.FC<PuzzleCardProps> = async ({
 }) => {
   const userAgent = headers().get("user-agent") || "";
   const mobileCheck = isMobile(userAgent);
-  // console.log("mobileCheck, should be rendering tooltip", mobileCheck);
   //check if the creator id of the puzzle is the same as the viewer id, if the viewer id is not the empty string
   const isCreator = viewerID !== "" ? viewerID === puzzleInfo.creatorId : false;
 
   const userImage = isCreator
     ? viewerImage
     : await getUserImage(puzzleInfo.creatorId);
-  // const userImage = "";
-  // console.log("puzzleInfo, ", puzzleInfo);
-  console.log("isMobile", mobileCheck);
 
   const descriptionExists = puzzleInfo.description !== "";
 
@@ -189,16 +185,6 @@ const PuzzleCard: React.FC<PuzzleCardProps> = async ({
           }}
         />
         <div className="flex w-full flex-col justify-start gap-1">
-          {/* {!mobileCheck && (
-            <TooltipProvider>
-              <Tooltip>
-                <TooltipTrigger className="underline">
-                  Description
-                </TooltipTrigger>
-                <TooltipContent></TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
-          )} */}
           <div className="flex justify-center">
             <ShowFullText isMobile={mobileCheck} trigger={"Description"}>
               <p

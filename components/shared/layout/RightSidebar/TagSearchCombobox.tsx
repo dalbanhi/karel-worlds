@@ -51,11 +51,6 @@ const DynamicTagList: React.FC<DynamicTagListProps> = ({
   searchParams,
 }) => {
   const router = useRouter();
-  // const baseURLWithSearchAndSort = getBaseStringForNewRouteFromSearchParams(
-  //   baseRoute,
-  //   searchParams,
-  //   "tag"
-  // );
   const [tagSearchTerm, setTagSearchTerm] = useState(
     Array.isArray(searchParams.tag)
       ? searchParams.tag[0]

@@ -52,16 +52,6 @@ const TagsSelector: React.FC<TagsSelectorProps> = ({ form }) => {
         control={form.control}
         name="tags"
         render={({ field }) => {
-          // const tagsToPass = field.value.map((item: any) => {
-          //   if (typeof item === "string") {
-          //     return { label: capitalizeFirstLetter(item), value: item };
-          //   } else {
-          //     return {
-          //       label: capitalizeFirstLetter(item.label),
-          //       value: item.value,
-          //     };
-          //   }
-          // });
           return (
             <div className="flex w-full items-center justify-center gap-2">
               <FormLabel className="text-ring">Tags</FormLabel>
@@ -71,13 +61,11 @@ const TagsSelector: React.FC<TagsSelectorProps> = ({ form }) => {
                 classNamePrefix="react-select"
                 className="w-full"
                 options={tagsToPass}
-                // defaultValue={}
                 isOptionDisabled={(option) => numSelectedOptions >= maxNumTags}
                 theme={(theme) => ({
                   ...theme,
                   borderRadius: 5,
                   colors: {
-                    // ...theme.colors,
                     //main bar color
                     neutral0: "hsl(var(--primary-foreground))",
                     //down arrow color when selected
@@ -113,7 +101,6 @@ const TagsSelector: React.FC<TagsSelectorProps> = ({ form }) => {
                   const selectedOptionsValues = selectedOptions.map(
                     (option) => option.value
                   );
-                  console.log("selectedOptions", selectedOptionsValues);
                   field.onChange(selectedOptionsValues);
                   setNumSelectedOptions(selectedOptions.length);
                 }}

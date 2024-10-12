@@ -316,35 +316,6 @@ async function _getAllPuzzles(
     orderBy,
   });
   return puzzles;
-
-  // const fakePuzzles: PuzzleWithMoreStuff[] = [
-  //   {
-  //     id: "example-id",
-  //     name: "Example Puzzle",
-  //     description: "This is an example puzzle.",
-  //     worldWidth: 10,
-  //     worldHeight: 10,
-  //     hints: ["Hint 1", "Hint 2"],
-  //     karelImage: "",
-  //     beeperImage: "",
-  //     wallImage: "",
-  //     backgroundImage: "",
-  //     startWorldInfo: {},
-  //     goalWorldInfo: {},
-  //     creatorId: "example-creator-id",
-  //     rating: 5,
-  //     difficulty: 3,
-  //     likedBy: [],
-  //     tags: [
-  //       { id: "1", name: "loops" },
-  //       { id: "2", name: "texas" },
-  //     ],
-  //     createdAt: new Date(),
-  //     updatedAt: new Date(),
-  //   },
-  // ];
-
-  // return fakePuzzles;
 }
 
 async function _getUserPuzzles(
@@ -414,9 +385,6 @@ export async function likeOrUnlikePuzzle(
   puzzleId: string,
   shouldLike: boolean
 ) {
-  console.log("user id ", userId);
-  console.log("puzzleID", puzzleId);
-  console.log("");
   try {
     // Ensure the puzzle and user exist
     const puzzleExists = await db.puzzle.findUnique({

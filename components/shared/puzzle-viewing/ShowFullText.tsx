@@ -23,7 +23,6 @@ const ShowFullText: React.FC<ShowFullTextProps> = ({
   isMobile,
   trigger,
 }) => {
-  console.log("isMobile in show full text: ", isMobile);
   return isMobile ? (
     <Popover>
       <PopoverTrigger className="underline">{trigger}</PopoverTrigger>
