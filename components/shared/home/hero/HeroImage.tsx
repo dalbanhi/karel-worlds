@@ -10,7 +10,7 @@ const HeroImage = () => {
       placeholder="blur"
       className="object-cover"
       fill
-      sizes="(max-width: 768px) 100vw, 50vw"
+      sizes="(max-width: 768px) 100vw"
       style={{ objectFit: "cover" }}
     />
   );
