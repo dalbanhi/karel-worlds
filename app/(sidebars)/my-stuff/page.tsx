@@ -60,6 +60,10 @@ const examplePuzzle1: Puzzle = {
   creatorId: "user_2lLy2QBFPFE2Ewry7L7hl2yqDyR",
   rating: 0,
   difficulty: 0,
+  totalRatings: 0,
+  totalRatingsSum: 0,
+  difficultyRating: 0,
+  difficultyRatingSum: 0,
 };
 
 const examplePuzzle2: Puzzle = {
@@ -97,6 +101,10 @@ const examplePuzzle2: Puzzle = {
   creatorId: "user_2lLy2QBFPFE2Ewry7L7hl2yqDyR",
   rating: 0,
   difficulty: 0,
+  totalRatings: 0,
+  totalRatingsSum: 0,
+  difficultyRating: 0,
+  difficultyRatingSum: 0,
 };
 
 const MyDashboard = async ({
