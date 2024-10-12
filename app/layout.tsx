@@ -11,7 +11,7 @@ export const metadata: Metadata = {
   },
   description: "A fun way to learn programming",
   icons: {
-    icon: "/public/images/icon.svg",
+    icon: "/images/icon.svg",
   },
 };
 

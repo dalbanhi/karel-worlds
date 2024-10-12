@@ -16,7 +16,7 @@ const StarRatingInteractive: React.FC<StarRatingInteractiveProps> = ({
 }) => {
   const [hoverValue, setHoverValue] = useState<number | null>(null);
   return (
-    <div
+    <span
       onMouseLeave={() => setHoverValue(null)} // Reset hover on mouse leave
       onBlur={onBlur} // Handle blur
       className="flex gap-1"
@@ -41,7 +41,7 @@ const StarRatingInteractive: React.FC<StarRatingInteractiveProps> = ({
           </span>
         );
       })}
-    </div>
+    </span>
   );
 };
 

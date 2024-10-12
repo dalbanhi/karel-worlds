@@ -27,7 +27,7 @@ const StarRatingDisplay: React.FC<{ rating: number; type: string }> = ({
   rating,
   type,
 }) => {
-  if (rating <= 0) {
+  if (rating < 0) {
     return <span className="italic text-warning-dark">No {type} yet. </span>;
   }
   return (

@@ -108,13 +108,57 @@ export async function ratePuzzle(ratingData: any) {
     throw new Error("Puzzle not found");
   }
 
-  //update the rating and difficulty of the puzzle
-  //get the current average rating
-  const currentRating = puzzle.rating;
-  const currentDifficulty = puzzle.difficulty;
+  //check if the user actually submitted a rating
+  let newTotalRatings = puzzle.totalRatings;
+  let newTotalRatingsSum = puzzle.totalRatingsSum;
+  if (ratingData.rating !== -1) {
+    newTotalRatings += 1;
+    newTotalRatingsSum += ratingData.rating;
+  }
 
-  //get the length of the ratings array
-  const ratingsLength = puzzle.solvedBy.length;
+  //check if the user actually submitted a difficulty
+  let newTotalDifficulties = puzzle.difficultyRating;
+  let newTotalDifficultiesSum = puzzle.difficultyRatingSum;
+  if (ratingData.difficulty !== -1) {
+    newTotalDifficulties += 1;
+    newTotalDifficultiesSum += ratingData.difficulty;
+  }
+
+  const newAverageRating = newTotalRatingsSum / newTotalRatings;
+
+  const newAverageDifficulty = newTotalDifficultiesSum / newTotalDifficulties;
+
+  const dataIfLiked = {
+    totalRatings: newTotalRatings,
+    totalRatingsSum: newTotalRatingsSum,
+    rating: newAverageRating,
+    difficultyRating: newTotalDifficulties,
+    difficultyRatingSum: newTotalDifficultiesSum,
+    difficulty: newAverageDifficulty,
+    likedBy: {
+      connect: {
+        id: ratingData.userId,
+      },
+    },
+  };
+
+  const dataIfDidNotLike = {
+    totalRatings: newTotalRatings,
+    totalRatingsSum: newTotalRatingsSum,
+    rating: newAverageRating,
+    difficultyRating: newTotalDifficulties,
+    difficultyRatingSum: newTotalDifficultiesSum,
+    difficulty: newAverageDifficulty,
+  };
+
+  try {
+    await db.puzzle.update({
+      where: { id: ratingData.puzzleId },
+      data: ratingData.liked ? dataIfLiked : dataIfDidNotLike,
+    });
+  } catch (e: any) {
+    throw new Error("Error rating puzzle: " + e.message);
+  }
 }
 
 export async function createPuzzle(puzzleData: any) {

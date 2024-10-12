@@ -26,6 +26,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import StarRatingInteractive from "./StarRatingInteractive";
 import { ratePuzzle } from "@/lib/actions/puzzles";
+import { useRouter } from "next/navigation";
 
 interface PuzzleRatingFormProps {
   open: boolean;
@@ -40,9 +41,12 @@ const PuzzleRatingForm: React.FC<PuzzleRatingFormProps> = ({
   puzzleId,
   currentUserID,
 }) => {
+  const router = useRouter();
   const onSubmit = async (data: z.infer<typeof puzzleRatingSchema>) => {
     console.log(data);
     await ratePuzzle(data);
+    setOpen(false);
+    router.push(`/my-stuff/?view=solved-puzzles`);
   };
 
   const form = useForm<z.infer<typeof puzzleRatingSchema>>({
@@ -73,7 +77,7 @@ const PuzzleRatingForm: React.FC<PuzzleRatingFormProps> = ({
               onSubmit={form.handleSubmit(onSubmit)}
               className="flex flex-col gap-2 p-4"
             >
-              <div className="flex flex-col w-full justify-center items-start gap-2">
+              <span className="flex flex-col w-full justify-center items-start gap-2">
                 <FormField
                   control={form.control}
                   name="rating"
@@ -116,13 +120,13 @@ const PuzzleRatingForm: React.FC<PuzzleRatingFormProps> = ({
                     </FormItem>
                   )}
                 />
-              </div>
+              </span>
               <FormField
                 control={form.control}
                 name="liked"
                 render={({ field }) => (
                   <FormItem className="flex items-start flex-col">
-                    <div className="flex items-center gap-1">
+                    <span className="flex items-center gap-1">
                       {" "}
                       <FormLabel>Did you like the puzzle?</FormLabel>
                       <FormControl>
@@ -131,7 +135,7 @@ const PuzzleRatingForm: React.FC<PuzzleRatingFormProps> = ({
                           onCheckedChange={field.onChange}
                         />
                       </FormControl>
-                    </div>
+                    </span>
 
                     <FormDescription className="text-xs">
                       {!field.value
