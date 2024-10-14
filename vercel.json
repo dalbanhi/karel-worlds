@@ -1,5 +1,3 @@
 {
-  "build": {
-    "command": "npm run migrate:deploy && npm run build"
-  }
+  "buildCommand": "npm run migrate:deploy && npm run build"
 }
