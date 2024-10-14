@@ -171,7 +171,8 @@ const ViewableWorld: React.FC<ViewableWorldProps> = ({
 
   return (
     <section className="flex flex-1 flex-col items-center justify-center gap-2 p-2">
-      <div className="flex h-full items-center justify-center">
+      <div className="flex h-full flex-col items-center justify-center gap-2">
+        <h2 className="text-sm font-semibold">Goal World</h2>
         <ShowHideArrow
           showGoal={showGoalWorld}
           setShowGoal={setShowGoalWorld}
