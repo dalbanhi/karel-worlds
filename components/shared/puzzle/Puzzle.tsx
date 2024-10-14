@@ -145,7 +145,18 @@ const PuzzleContent: React.FC<PuzzleProps> = ({
     if (beepers1.length !== beepers2.length) {
       return false;
     }
+    //sort the arrays by x and y
+    beepers1.sort((a, b) => {
+      return a.x - b.x || a.y - b.y;
+    });
+
+    beepers2.sort((a, b) => {
+      return a.x - b.x || a.y - b.y;
+    });
+
     for (let i = 0; i < beepers1.length; i++) {
+      const beeper1 = beepers1[i];
+      const beeper2 = beepers2[i];
       if (
         Number(beepers1[i].x) !== Number(beepers2[i].x) ||
         Number(beepers1[i].y) !== Number(beepers2[i].y) ||
