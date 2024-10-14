@@ -1,4 +1,4 @@
-export const maxTagsOnExplore = 2;
+export const maxTagsOnExplore = 5;
 
 export const sortOptions = [
   {

@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import { UseFormReturn } from "react-hook-form";
 import { z } from "zod";
 import EditingShelf from "@/components/forms/new-puzzle/subcomponents/EditingShelf/EditingShelf";
-import { puzzleImagesType, worldInfoType } from "@/types/karelWorld";
+import { puzzleImagesType } from "@/types/karelWorld";
 import { Stage, Container } from "@pixi/react";
 import Grid from "@/components/PixiJS/Grid";
 import { useCanvasSize } from "@/lib/hooks/useWindowSize";

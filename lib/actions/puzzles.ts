@@ -2,7 +2,6 @@
 import { unstable_cache as cache, revalidateTag } from "next/cache";
 import { puzzleSchema } from "../validators/puzzle.schema";
 import { db } from "../db";
-import examplePuzzle from "@/public/data/example-puzzle.json";
 
 import {
   uniqueUsernameGenerator,
@@ -12,7 +11,6 @@ import {
 } from "unique-username-generator";
 import { SortOptionType, TabType } from "@/types/puzzleDB";
 import { Prisma } from "@prisma/client";
-import { PuzzleWithMoreStuff } from "@/types/puzzleExtensions";
 import { puzzleRatingSchema } from "../validators/puzzleRating.schema";
 
 const config: Config = {

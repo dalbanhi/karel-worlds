@@ -1,5 +1,5 @@
 import { FormLabel, FormItem, FormControl } from "@/components/ui/form";
-import { minWorldSize, maxWorldSize } from "@/constants/example-puzzle";
+import { minWorldSize } from "@/constants/example-puzzle";
 import {
   Select,
   SelectTrigger,
