@@ -189,7 +189,6 @@ const NewPuzzleLayout: React.FC<NewPuzzleLayoutProps> = ({
     useState<worldInfoType>(initialGoalWorld);
 
   useEffect(() => {
-    console.log("goalWorldInfo", goalWorldInfo);
     sessionStorage.setItem("goalWorldInfo", JSON.stringify(goalWorldInfo));
   }, [goalWorldInfo, startWorldInfo]);
 
