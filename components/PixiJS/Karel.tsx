@@ -42,7 +42,7 @@ const Karel: React.FC<KarelProps> = ({
       angle={directions[karel.direction as keyof typeof directions]}
       zIndex={2}
       eventMode="static"
-      //TODO: Add onclick to edit the karel direction
+      //TO DO: Add onclick to edit the karel direction
       onclick={() => {}}
     />
   );

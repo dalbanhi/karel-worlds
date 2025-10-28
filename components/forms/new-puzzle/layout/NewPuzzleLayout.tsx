@@ -119,13 +119,13 @@ const NewPuzzleLayout: React.FC<NewPuzzleLayoutProps> = ({
         wallImage: "",
         tags: [],
         hints: [],
-        creatorId: currentUserID, // TODO: change to currentUserID
+        creatorId: currentUserID, // TO DO: change to currentUserID
       };
   const form = useForm<z.infer<typeof puzzleSchema>>({
     resolver: zodResolver(puzzleSchema),
     defaultValues: {
       ...initialFormValues,
-      creatorId: currentUserID, // TODO: change to currentUserID
+      creatorId: currentUserID, // TO DO: change to currentUserID
     },
   });
 

@@ -307,7 +307,7 @@ const RunnableWorld: React.FC<RunnableWorldProps> = ({
   const stepCode = useCallback(() => {
     let stack: any = [];
     let ok = interpreter.current.step();
-    //TODO: Add code highlighting?
+    //TO DO: Add code highlighting?
     stack = interpreter.current.getStateStack();
     let stepAgain = !isLine(stack);
     try {

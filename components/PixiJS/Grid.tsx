@@ -123,7 +123,7 @@ const Grid: React.FC<GridProps> = ({
                               radius={radius}
                               color={gridDotColor}
                               //   eventMode="static"
-                              //TODO: Add onclick to edit the grid
+                              //TO DO: Add onclick to edit the grid
                               // click={() => {}}
                               //   geometry={circle.current}
                               // zIndex={1}

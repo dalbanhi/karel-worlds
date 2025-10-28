@@ -90,7 +90,7 @@ const PuzzleContent: React.FC<PuzzleProps> = ({
   };
 
   const workspaceDidChange = (workspace: WorkspaceSvg) => {
-    //TODO: Add block highlighting
+    //TO DO: Add block highlighting
     // javascriptGenerator.STATEMENT_PREFIX = 'highlightBlock(%1);\n';
     // javascriptGenerator.addReservedWords('highlightBlock');
     //https://developers.google.com/blockly/reference/js/blockly.workspacesvg_class.highlightblock_1_method
@@ -101,7 +101,7 @@ const PuzzleContent: React.FC<PuzzleProps> = ({
 
     const currWorkspaceSave = serialization.workspaces.save(workspace);
     // setWorkspaceState(currWorkspaceSave);
-    //TODO: Save workspace state to local storage and for saving the code as it's being written / to translate back to JS
+    //TO DO: Save workspace state to local storage and for saving the code as it's being written / to translate back to JS
     // Blockly.serialization.workspaces.load(state, myWorkspace);
   };
 
