@@ -16,7 +16,6 @@ import { getCurrentUser } from "@/lib/auth/checkUser";
 import { SortOptionType, TabType } from "@/types/puzzleDB";
 import PuzzleList from "@/components/shared/puzzle-viewing/PuzzleList";
 import { buildRouteWithUpdatedParams } from "@/lib/utils/getCombinedSearchParams";
-import { Puzzle } from "@prisma/client";
 
 export const metadata: Metadata = {
   title: "My Stuff",
@@ -24,92 +23,6 @@ export const metadata: Metadata = {
     "A place to store your Karel Worlds puzzles and view your classes",
 };
 
-const exampleTag = {
-  name: "beginner",
-  color: "bg-green-500",
-};
-
-const examplePuzzle1: Puzzle = {
-  id: "1234",
-  createdAt: new Date(),
-  updatedAt: new Date(),
-  name: "My First Puzzle",
-  description: "This is a puzzle",
-  // tags: ["beginner", "loops"],
-  worldWidth: 2,
-  worldHeight: 2,
-  hints: ["Use the move() function to move Karel"],
-  karelImage: "",
-  beeperImage: "",
-  wallImage: "",
-  backgroundImage: "",
-  startWorldInfo: {
-    karel: {
-      x: 0,
-      y: 0,
-      direction: "east",
-    },
-    beepers: [],
-    walls: [],
-  },
-  goalWorldInfo: {
-    karel: {
-      x: 1,
-      y: 1,
-      direction: "east",
-    },
-    beepers: [],
-    walls: [],
-  },
-  creatorId: "user_2lLy2QBFPFE2Ewry7L7hl2yqDyR",
-  rating: 0,
-  difficulty: 0,
-  totalRatings: 0,
-  totalRatingsSum: 0,
-  difficultyRating: 0,
-  difficultyRatingSum: 0,
-};
-
-const examplePuzzle2: Puzzle = {
-  id: "1234",
-  createdAt: new Date(),
-  updatedAt: new Date(),
-  name: "My Second Puzzle",
-  description: "This is not a puzzle",
-  // tags: ["beginner", "loops"],
-  worldWidth: 4,
-  worldHeight: 4,
-  hints: ["Use the move() function to move Karel"],
-  karelImage: "",
-  beeperImage: "",
-  wallImage: "",
-  backgroundImage: "",
-  startWorldInfo: {
-    karel: {
-      x: 0,
-      y: 0,
-      direction: "east",
-    },
-    beepers: [],
-    walls: [],
-  },
-  goalWorldInfo: {
-    karel: {
-      x: 1,
-      y: 1,
-      direction: "east",
-    },
-    beepers: [],
-    walls: [],
-  },
-  creatorId: "user_2lLy2QBFPFE2Ewry7L7hl2yqDyR",
-  rating: 0,
-  difficulty: 0,
-  totalRatings: 0,
-  totalRatingsSum: 0,
-  difficultyRating: 0,
-  difficultyRatingSum: 0,
-};
 const availableTabs = [
   { name: "My Puzzles", value: "my-puzzles" },
   { name: "Liked Puzzles", value: "liked-puzzles" },
