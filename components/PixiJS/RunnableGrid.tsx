@@ -162,7 +162,7 @@ const RunnableGrid = forwardRef<RunnableGridHandle, RunnableGridProps>(
       //not callable by user code
       updateRunningWorld() {
         setRunningWorldInfo((prev: worldInfoType) => {
-          //TODO: combine the beepers and the wall arrays
+          //TO DO: combine the beepers and the wall arrays
           return {
             ...prev,
             karel: karel.toJSON(),

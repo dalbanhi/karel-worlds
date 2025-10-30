@@ -53,7 +53,6 @@ const ExplorePage: React.FC<ExplorePageProps> = async ({
     currentTag,
     currentSearchTerm
   );
-  console.log(allPuzzles);
   return (
     <SidebarLayout>
       <LeftSidebar

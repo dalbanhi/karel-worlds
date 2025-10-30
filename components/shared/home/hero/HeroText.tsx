@@ -14,7 +14,7 @@ const HeroText = () => {
       </h1>
       <p className="text-sm md:text-base">
         KarelWorlds is a fun, interactive platform for computer science
-        beginners to learn and practice key skills through creating and sharing
+        beginners to learn and practice key skills through creating & sharing
         puzzles.
       </p>
       <Link

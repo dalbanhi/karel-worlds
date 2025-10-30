@@ -48,7 +48,7 @@ const Beeper: React.FC<BeeperProps> = ({ x, y, width, height, beeper }) => {
         anchor={0.5}
         zIndex={4}
         // eventMode="static"
-        //TODO: Add onclick to edit the beeper count
+        //TO DO: Add onclick to edit the beeper count
         // onclick={() => {}}
       />
     </>

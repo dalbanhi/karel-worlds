@@ -7,7 +7,6 @@ interface PuzzleActionButtonsProps {
 }
 
 import { Button } from "@/components/ui/button";
-import Link from "next/link";
 import { Pencil1Icon, StarFilledIcon } from "@radix-ui/react-icons";
 import { toast } from "@/hooks/use-toast";
 

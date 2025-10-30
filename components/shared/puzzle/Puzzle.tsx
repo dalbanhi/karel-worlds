@@ -90,7 +90,7 @@ const PuzzleContent: React.FC<PuzzleProps> = ({
   };
 
   const workspaceDidChange = (workspace: WorkspaceSvg) => {
-    //TODO: Add block highlighting
+    //TO DO: Add block highlighting
     // javascriptGenerator.STATEMENT_PREFIX = 'highlightBlock(%1);\n';
     // javascriptGenerator.addReservedWords('highlightBlock');
     //https://developers.google.com/blockly/reference/js/blockly.workspacesvg_class.highlightblock_1_method
@@ -101,7 +101,7 @@ const PuzzleContent: React.FC<PuzzleProps> = ({
 
     const currWorkspaceSave = serialization.workspaces.save(workspace);
     // setWorkspaceState(currWorkspaceSave);
-    //TODO: Save workspace state to local storage and for saving the code as it's being written / to translate back to JS
+    //TO DO: Save workspace state to local storage and for saving the code as it's being written / to translate back to JS
     // Blockly.serialization.workspaces.load(state, myWorkspace);
   };
 
@@ -145,7 +145,18 @@ const PuzzleContent: React.FC<PuzzleProps> = ({
     if (beepers1.length !== beepers2.length) {
       return false;
     }
+    //sort the arrays by x and y
+    beepers1.sort((a, b) => {
+      return a.x - b.x || a.y - b.y;
+    });
+
+    beepers2.sort((a, b) => {
+      return a.x - b.x || a.y - b.y;
+    });
+
     for (let i = 0; i < beepers1.length; i++) {
+      const beeper1 = beepers1[i];
+      const beeper2 = beepers2[i];
       if (
         Number(beepers1[i].x) !== Number(beepers2[i].x) ||
         Number(beepers1[i].y) !== Number(beepers2[i].y) ||

@@ -8,6 +8,7 @@ import { Tags } from "@prisma/client";
 import { Separator } from "@/components/ui/separator";
 import dynamic from "next/dynamic";
 import { buildRouteWithUpdatedParams } from "@/lib/utils/getCombinedSearchParams";
+import { maxTagsOnExplore } from "@/constants/database";
 
 const TagSearchCombobox = dynamic(() => import("./TagSearchCombobox"), {
   ssr: false,
@@ -45,26 +46,29 @@ const TagsList: React.FC<TagsListProps> = ({ tags, searchParams }) => {
         <Separator />
         <Label className="text-sm text-ring">Filter by Tags</Label>
         <TagSearchCombobox baseRoute={baseRoute} searchParams={searchParams} />
-        <div className="flex flex-wrap items-center justify-center gap-2">
-          {topTags?.map((tag, index) => {
-            const tagURL = buildRouteWithUpdatedParams(
-              baseRoute,
-              searchParams,
-              {
-                tag: tag.name,
-              }
-            );
-            return (
-              <Link
-                data-state={searchParams.tag === tag.name ? "active" : ""}
-                className={` capitalize ${buttonVariants({ variant: "outline" })}`}
-                href={tagURL}
-                key={tag.id}
-              >
-                {tag.name}
-              </Link>
-            );
-          })}
+        <div className="flex flex-col items-center justify-center gap-2">
+          <h3 className="text-sm text-ring">Top {maxTagsOnExplore} Tags:</h3>
+          <div className="flex flex-wrap items-center justify-center gap-2">
+            {topTags?.map((tag, index) => {
+              const tagURL = buildRouteWithUpdatedParams(
+                baseRoute,
+                searchParams,
+                {
+                  tag: tag.name,
+                }
+              );
+              return (
+                <Link
+                  data-state={searchParams.tag === tag.name ? "active" : ""}
+                  className={` capitalize ${buttonVariants({ variant: "outline" })}`}
+                  href={tagURL}
+                  key={tag.id}
+                >
+                  {tag.name}
+                </Link>
+              );
+            })}
+          </div>
         </div>
       </div>
     </div>

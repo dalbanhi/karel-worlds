@@ -3,15 +3,7 @@
 import { puzzleSchema } from "@/lib/validators/puzzle.schema";
 import { UseFormReturn } from "react-hook-form";
 import { z } from "zod";
-import { Textarea } from "@/components/ui/textarea";
-import {
-  FormField,
-  FormItem,
-  FormLabel,
-  FormControl,
-  FormMessage,
-} from "@/components/ui/form";
-import { Input } from "postcss";
+
 import OptionalInfo from "./subcomponents/OptionalInfo";
 
 interface RightSidebarFormComponentProps {

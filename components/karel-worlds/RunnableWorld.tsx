@@ -12,9 +12,8 @@ import { Slider } from "@/components/ui/slider";
 import Image from "next/image";
 
 import Interpreter from "js-interpreter";
-import { toast, useToast } from "@/hooks/use-toast";
+import { useToast } from "@/hooks/use-toast";
 import { ToastAction } from "@/components/ui/toast";
-import { Application, autoDetectFormat, ICanvas } from "pixi.js";
 
 //from: https://overreacted.io/making-setinterval-declarative-with-react-hooks/
 function useInterval(callback: () => void, delay: number | null) {
@@ -308,7 +307,7 @@ const RunnableWorld: React.FC<RunnableWorldProps> = ({
   const stepCode = useCallback(() => {
     let stack: any = [];
     let ok = interpreter.current.step();
-    //TODO: Add code highlighting?
+    //TO DO: Add code highlighting?
     stack = interpreter.current.getStateStack();
     let stepAgain = !isLine(stack);
     try {

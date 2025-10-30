@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import LeftSidebarFormComponent from "@/components/forms/new-puzzle/LeftSidebarFormComponent";
 import RightSidebarFormComponent from "@/components/forms/new-puzzle/RightSidebarFormComponent";
 
-import { z } from "zod";
+import { set, z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { puzzleSchema } from "@/lib/validators/puzzle.schema";
 
@@ -119,13 +119,13 @@ const NewPuzzleLayout: React.FC<NewPuzzleLayoutProps> = ({
         wallImage: "",
         tags: [],
         hints: [],
-        creatorId: currentUserID, // TODO: change to currentUserID
+        creatorId: currentUserID, // TO DO: change to currentUserID
       };
   const form = useForm<z.infer<typeof puzzleSchema>>({
     resolver: zodResolver(puzzleSchema),
     defaultValues: {
       ...initialFormValues,
-      creatorId: currentUserID, // TODO: change to currentUserID
+      creatorId: currentUserID, // TO DO: change to currentUserID
     },
   });
 
@@ -190,7 +190,7 @@ const NewPuzzleLayout: React.FC<NewPuzzleLayoutProps> = ({
 
   useEffect(() => {
     sessionStorage.setItem("goalWorldInfo", JSON.stringify(goalWorldInfo));
-  }, [goalWorldInfo]);
+  }, [goalWorldInfo, startWorldInfo]);
 
   const worldWidth = form.watch("worldWidth");
   const worldHeight = form.watch("worldHeight");
@@ -216,6 +216,35 @@ const NewPuzzleLayout: React.FC<NewPuzzleLayoutProps> = ({
       wall: wallImage || "",
     });
   }, [karelImage, beepersImage, backgroundImage, wallImage]);
+
+  useEffect(() => {
+    //remove any beepers that are out of bounds
+    setGoalWorldInfo((prev) => {
+      return {
+        ...prev,
+        gridElements: prev.gridElements.filter(
+          (element) =>
+            element.x < worldWidth &&
+            element.y < worldHeight &&
+            element.x >= 0 &&
+            element.y >= 0
+        ),
+      };
+    });
+
+    setStartWorldInfo((prev) => {
+      return {
+        ...prev,
+        gridElements: prev.gridElements.filter(
+          (element) =>
+            element.x < worldWidth &&
+            element.y < worldHeight &&
+            element.x >= 0 &&
+            element.y >= 0
+        ),
+      };
+    });
+  }, [worldWidth, worldHeight]);
 
   useSessionClearOnSignOut();
 
